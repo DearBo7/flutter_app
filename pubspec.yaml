@@ -46,6 +46,11 @@ dependencies: # 应用或包依赖的其它包或插件
   # 汉字转拼音库 https://github.com/flutterchina/lpinyin
   lpinyin: ^1.0.7
 
+  # http请求框架
+  dio: ^2.1.16
+
+  # 吐丝
+  fluttertoast: ^3.1.0
 
 dev_dependencies: # 开发环境依赖的工具包（而不是flutter应用本身依赖的包）
   flutter_test:
