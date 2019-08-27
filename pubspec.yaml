@@ -52,6 +52,9 @@ dependencies: # 应用或包依赖的其它包或插件
   # 吐丝
   fluttertoast: ^3.1.0
 
+  # 日期选择
+  flutter_cupertino_date_picker: ^1.0.12
+
 dev_dependencies: # 开发环境依赖的工具包（而不是flutter应用本身依赖的包）
   flutter_test:
     sdk: flutter

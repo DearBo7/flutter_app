@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import '../../global/config.dart';
+import 'http_status_code.dart';
 import 'result_data.dart';
 import 'session_manager.dart';
 
@@ -25,6 +26,7 @@ class NetService {
   get(String url,
       {Map<String, dynamic> params,
       Map<String, dynamic> headers,
+      BuildContext context,
       bool showLoad: true}) async {
     return await request(url,
         method: Method.GET,
@@ -37,6 +39,7 @@ class NetService {
   post(String url,
       {Map<String, dynamic> params,
       Map<String, dynamic> headers,
+      BuildContext context,
       bool showLoad: true}) async {
     return await request(url,
         method: Method.POST,
@@ -69,6 +72,7 @@ class NetService {
       var file,
       String fileName,
       String fileSavePath,
+      BuildContext context,
       bool showLoad = false}) async {
     try {
       Response response;
@@ -76,8 +80,6 @@ class NetService {
       SessionManager sessionManager = SessionManager();
       if (headers != null) {
         sessionManager.options.headers = headers;
-      } else {
-        sessionManager.options.headers = null;
       }
       var baseUrl = await getBasicUrl();
       if (baseUrl != null) {
@@ -87,9 +89,9 @@ class NetService {
       // 打印网络日志
       StringBuffer requestParam = new StringBuffer();
       requestParam.write("$_TAG ");
-      requestParam.write("Url:");
-      requestParam.write(baseUrl);
-      requestParam.write(url);
+      requestParam.write("Url:${url}");
+      requestParam.write("\n");
+      requestParam.write("baseUrl:${baseUrl}");
       requestParam.write("\n");
       requestParam.write("$_TAG ");
       requestParam.write("params:");
@@ -120,9 +122,10 @@ class NetService {
           break;
       }
       return await handleDataSource(response, method, url: url);
-    } catch (exception) {
+    } on DioError catch (exception) {
       printLog("$_TAG net exception= " + exception.toString());
-      return ResultData("网络连接异常", false, url: url);
+      String msg = formatError(exception);
+      return ResultData(msg, false, url: url);
     }
   }
 
@@ -154,7 +157,8 @@ class NetService {
 
       //处理错误部分
       if (statusCode != 200) {
-        errorMsg = "网络请求错误,状态码:" + statusCode.toString();
+        errorMsg = HttpStatusCode.getHttpStatusMsg(statusCode);
+        //errorMsg = "网络请求错误,状态码:" + statusCode.toString();
         resultData = ResultData(errorMsg, false, url: url);
       } else {
         try {
@@ -173,6 +177,28 @@ class NetService {
 
   getBasicUrl() {
     return null;
+  }
+
+  /*
+   * error统一处理
+   */
+  String formatError(DioError e) {
+    if (e.type == DioErrorType.CONNECT_TIMEOUT) {
+      return "连接超时";
+    } else if (e.type == DioErrorType.SEND_TIMEOUT) {
+      // It occurs when url is sent timeout.
+      return "请求超时";
+    } else if (e.type == DioErrorType.RECEIVE_TIMEOUT) {
+      //It occurs when receiving timeout
+      return "响应超时";
+    } else if (e.type == DioErrorType.RESPONSE) {
+      // When the server response, but with a incorrect status, such as 404, 503...
+      return "连接出现异常";
+    } else if (e.type == DioErrorType.CANCEL) {
+      // When the request is cancelled, dio will throw a error with this type.
+      return "请求取消";
+    }
+    return "未知错误";
   }
 
   static void printLog(String log, {tag}) {

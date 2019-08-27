@@ -27,7 +27,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
 
   startTime() async {
     //设置启动图生效时间
-    var _duration = new Duration(seconds: 3);
+    var _duration = new Duration(seconds: 1);
     return new Timer(_duration, navigationPage);
   }
 

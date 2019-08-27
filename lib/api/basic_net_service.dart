@@ -29,6 +29,9 @@ class BasicNetService extends NetService {
     //if (params != null) {
     //  basicParam.addAll(params);
     //}
+    if (context == null) {
+      showLoad = false;
+    }
     ShowParam showParam;
     if (showLoad) {
       showParam = new ShowParam(
