@@ -55,6 +55,9 @@ dependencies: # 应用或包依赖的其它包或插件
   # 日期选择 https://github.com/wuzhendev/flutter-cupertino-date-picker
   flutter_cupertino_date_picker: ^1.0.12
 
+  # 下拉菜单 https://github.com/GanZhiXiong/gzx_dropdown_menu
+  gzx_dropdown_menu: ^1.0.1
+
   # 下拉刷新 https://github.com/xuelongqy/flutter_easyrefresh
   flutter_easyrefresh: ^2.0.3
 

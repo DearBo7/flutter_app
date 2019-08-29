@@ -30,4 +30,9 @@ class ApiUrl {
   static String getListStoreIn() {
     return getRestUrl() + "/default/listStoreIn";
   }
+
+  /// 获取所有原料列表
+  static String getListMaterial() {
+    return getRestUrl() + "/default/listMaterial";
+  }
 }

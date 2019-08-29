@@ -1,20 +1,20 @@
-class User {
+class UserEntity {
   int id;
   String userName;
   String userCode;
 
-  User({this.id, this.userName, this.userCode});
+  UserEntity({this.id, this.userName, this.userCode});
 
-  User.fromJson(Map<String, dynamic> json) {
+  UserEntity.fromJson(Map<String, dynamic> json) {
     id = json['Id'];
     userName = json['userName'];
     userCode = json['userCode'];
   }
 
-  static List<User> fromJsonList(dynamic mapList) {
-    List<User> list = List(mapList.length);
+  static List<UserEntity> fromJsonList(dynamic mapList) {
+    List<UserEntity> list = List(mapList.length);
     for (int i = 0; i < mapList.length; i++) {
-      list[i] = User.fromJson(mapList[i]);
+      list[i] = UserEntity.fromJson(mapList[i]);
     }
     return list;
   }

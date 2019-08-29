@@ -1,20 +1,20 @@
-class ProduceLine {
+class ProduceLineEntity {
   int id;
   String produceLineCode;
   String produceLineName;
 
-  ProduceLine({this.id, this.produceLineCode, this.produceLineName});
+  ProduceLineEntity({this.id, this.produceLineCode, this.produceLineName});
 
-  ProduceLine.fromJson(Map<String, dynamic> json) {
+  ProduceLineEntity.fromJson(Map<String, dynamic> json) {
     id = json['Id'];
     produceLineCode = json['produceLineCode'];
     produceLineName = json['produceLineName'];
   }
 
-  static List<ProduceLine> fromJsonList(dynamic mapList) {
-    List<ProduceLine> list = List(mapList.length);
+  static List<ProduceLineEntity> fromJsonList(dynamic mapList) {
+    List<ProduceLineEntity> list = List(mapList.length);
     for (int i = 0; i < mapList.length; i++) {
-      list[i] = ProduceLine.fromJson(mapList[i]);
+      list[i] = ProduceLineEntity.fromJson(mapList[i]);
     }
     return list;
   }

@@ -1,4 +1,4 @@
-class StoreIn {
+class StoreInEntity {
   String formulaName;
   String creator;
   String billCode;
@@ -6,7 +6,7 @@ class StoreIn {
   String produceLineName;
   String createDate;
 
-  StoreIn(
+  StoreInEntity(
       {this.formulaName,
       this.creator,
       this.billCode,
@@ -14,7 +14,7 @@ class StoreIn {
       this.produceLineName,
       this.createDate});
 
-  StoreIn.fromJson(Map<String, dynamic> json) {
+  StoreInEntity.fromJson(Map<String, dynamic> json) {
     formulaName = json['formulaName'];
     creator = json['creator'];
     billCode = json['billCode'];
@@ -23,10 +23,10 @@ class StoreIn {
     createDate = json['createDate'];
   }
 
-  static List<StoreIn> fromJsonList(dynamic mapList) {
-    List<StoreIn> list = List(mapList.length);
+  static List<StoreInEntity> fromJsonList(dynamic mapList) {
+    List<StoreInEntity> list = List(mapList.length);
     for (int i = 0; i < mapList.length; i++) {
-      list[i] = StoreIn.fromJson(mapList[i]);
+      list[i] = StoreInEntity.fromJson(mapList[i]);
     }
     return list;
   }

@@ -22,41 +22,41 @@ class ApiService extends BasicNetService {
   }
 
   ///获取用户列表
-  Future<List<User>> getListUser({BuildContext context}) async {
+  Future<List<UserEntity>> getListUser({BuildContext context}) async {
     ResultData resultData = await get(ApiUrl.getListUser(), context: context);
     resultData.toast();
     if (resultData.isSuccess()) {
-      return User.fromJsonList(resultData.data);
+      return UserEntity.fromJsonList(resultData.data);
     }
     return [];
   }
 
   /// 获取生产线列表
-  Future<List<ProduceLine>> getListProduceLine({BuildContext context}) async {
+  Future<List<ProduceLineEntity>> getListProduceLine({BuildContext context}) async {
     ResultData resultData =
         await get(ApiUrl.getListProduceLine(), context: context);
     resultData.toast();
     if (resultData.isSuccess()) {
-      return ProduceLine.fromJsonList(resultData.data);
+      return ProduceLineEntity.fromJsonList(resultData.data);
     }
     return [];
   }
 
   /// 获取配方列表
-  Future<List<Formula>> getListFormula({BuildContext context}) async {
+  Future<List<FormulaEntity>> getListFormula({BuildContext context}) async {
     ResultData resultData =
         await get(ApiUrl.getListFormula(), context: context);
     resultData.toast();
     if (resultData.isSuccess()) {
-      return Formula.fromJsonList(resultData.data);
+      return FormulaEntity.fromJsonList(resultData.data);
     }
     return [];
   }
 
   /// 获取领料单列表
   /// 参数：[startDate:,endDate:]必传,produceLineId,formulaId
-  Future<List<StoreIn>> getListStoreIn(String startDate, String endDate,
-      {int produceLineId, int formulaId,BuildContext context}) async {
+  Future<List<StoreInEntity>> getListStoreIn(String startDate, String endDate,
+      {int produceLineId, int formulaId, BuildContext context}) async {
     Map<String, dynamic> params = {};
     params["startDate"] = startDate;
     params["endDate"] = endDate;
@@ -69,7 +69,18 @@ class ApiService extends BasicNetService {
     ResultData resultData = await get(ApiUrl.getListStoreIn(), params: params);
     resultData.toast();
     if (resultData.isSuccess()) {
-      return StoreIn.fromJsonList(resultData.data);
+      return StoreInEntity.fromJsonList(resultData.data);
+    }
+    return [];
+  }
+
+  /// 获取所有原料
+  Future<List<MaterialEntity>> getListMaterial({BuildContext context}) async {
+    ResultData resultData =
+        await get(ApiUrl.getListMaterial(), context: context);
+    resultData.toast();
+    if (resultData.isSuccess()) {
+      return MaterialEntity.fromJsonList(resultData.data);
     }
     return [];
   }

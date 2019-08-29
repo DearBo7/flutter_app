@@ -184,7 +184,7 @@ class NetService {
    */
   String formatError(DioError e) {
     if (e.type == DioErrorType.CONNECT_TIMEOUT) {
-      return "连接超时";
+      return "连接服务器超时";
     } else if (e.type == DioErrorType.SEND_TIMEOUT) {
       // It occurs when url is sent timeout.
       return "请求超时";
@@ -193,10 +193,12 @@ class NetService {
       return "响应超时";
     } else if (e.type == DioErrorType.RESPONSE) {
       // When the server response, but with a incorrect status, such as 404, 503...
-      return "连接出现异常";
+      return "服务器内部错误";
     } else if (e.type == DioErrorType.CANCEL) {
       // When the request is cancelled, dio will throw a error with this type.
       return "请求取消";
+    } else if (e.type == DioErrorType.DEFAULT) {
+      return "连接服务器异常";
     }
     return "未知错误";
   }
@@ -217,10 +219,10 @@ class NetService {
   static void printBigLog(String tag, String log) {
     //log = TEST_POEM;
     bool print = isPrint();
-    const MAX_COUNT = 800;
+    const MAX_COUNT = 3000;
     if (print) {
       if (log != null && log.length > MAX_COUNT) {
-        // 超过1000就分次打印
+        // 超过 MAX_COUNT 就分次打印
         int len = log.length;
         int paragraphCount = ((len / MAX_COUNT) + 1).toInt();
         for (int i = 0; i < paragraphCount; i++) {

@@ -4,9 +4,9 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+import './src/text_style_util.dart';
 import '../api/api_service.dart';
 import '../utils/date_format.dart';
-import './src/text_style_util.dart';
 
 class StorageScreen extends StatefulWidget {
   @override
@@ -17,7 +17,7 @@ class _StorageScreenState extends State<StorageScreen> {
   //with AutomaticKeepAliveClientMixin
 
   //列表数据
-  final List<StoreIn> storeInList = [];
+  final List<StoreInEntity> storeInList = [];
 
   //产线
   final List<DropdownMenuItem<int>> _dropdownProduceLineList = [
@@ -52,7 +52,7 @@ class _StorageScreenState extends State<StorageScreen> {
     startDate = formatDateShort(DateTime.now().subtract(Duration(days: 31)));
     endDate = formatDateShort(DateTime.now());
 
-    List<ProduceLine> thisProduceLineList =
+    List<ProduceLineEntity> thisProduceLineList =
         await ApiService.getInstance().getListProduceLine();
     if (thisProduceLineList.length > 0) {
       setState(() {
@@ -63,7 +63,7 @@ class _StorageScreenState extends State<StorageScreen> {
 
     getStoreInList();
 
-    List<Formula> thisFormulaList =
+    List<FormulaEntity> thisFormulaList =
         await ApiService.getInstance().getListFormula();
     if (thisFormulaList.length > 0) {
       setState(() {
@@ -141,19 +141,31 @@ class _StorageScreenState extends State<StorageScreen> {
                         Text(FlutterI18n.translate(context, 'produceLineTitle'),
                             style: textGrey_18),
                         Expanded(
-                          child: DropdownButton(
-                            value: _dropdownProduceLineValue,
-                            items: _dropdownProduceLineList,
-                            hint: new Text(FlutterI18n.translate(context,
-                                'noDataProduceLine')), //当没有默认值的时候可以设置的提示
-                            elevation: 24, //设置阴影的高度
-                            onChanged: (value) {
-                              print("ProduceLine:value:${value}");
-                              setState(() {
-                                _dropdownProduceLineValue = value;
-                                _controller.callRefresh();
-                              });
-                            },
+                          child: Container(
+                            padding: EdgeInsets.only(left: 5.0, right: 5.0),
+                            margin: EdgeInsets.only(top: 2.5, bottom: 2.5),
+                            height: 35.0,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: Colors.grey[400], width: 0.5),
+                              borderRadius: new BorderRadius.vertical(
+                                  top: Radius.elliptical(3, 3),
+                                  bottom: Radius.elliptical(3, 3)),
+                            ),
+                            child: DropdownButton(
+                              value: _dropdownProduceLineValue,
+                              items: _dropdownProduceLineList,
+                              hint: new Text(FlutterI18n.translate(context,
+                                  'noDataProduceLine')), //当没有默认值的时候可以设置的提示
+                              underline: Container(),
+                              onChanged: (value) {
+                                print("ProduceLine:value:${value}");
+                                setState(() {
+                                  _dropdownProduceLineValue = value;
+                                  _controller.callRefresh();
+                                });
+                              },
+                            ),
                           ),
                         )
                       ],
@@ -164,12 +176,12 @@ class _StorageScreenState extends State<StorageScreen> {
                             style: textGrey_18),
                         Expanded(
                           child: Container(
-                            height: 35.0,
                             padding: EdgeInsets.only(left: 5, right: 5),
-                            margin: EdgeInsets.only(left: 10, right: 10),
+                            margin: EdgeInsets.only(top: 2.5, bottom: 2.5),
+                            height: 35.0,
                             decoration: BoxDecoration(
-                              border:
-                                  Border.all(color: Colors.grey, width: 0.5),
+                              border: Border.all(
+                                  color: Colors.grey[400], width: 0.5),
                               borderRadius: new BorderRadius.vertical(
                                   top: Radius.elliptical(3, 3),
                                   bottom: Radius.elliptical(3, 3)),
@@ -341,7 +353,7 @@ class _StorageScreenState extends State<StorageScreen> {
 
   //获取列表数据
   getStoreInList() async {
-    List<StoreIn> thisStoreInList = await ApiService.getInstance()
+    List<StoreInEntity> thisStoreInList = await ApiService.getInstance()
         .getListStoreIn(startDate, endDate,
             produceLineId: _dropdownProduceLineValue,
             formulaId: _dropdownFormulaValue,
@@ -400,7 +412,7 @@ class _StorageScreenState extends State<StorageScreen> {
   }
 
   //list 条目点击事件
-  void _clickListItem(StoreIn storeIn) {
+  void _clickListItem(StoreInEntity storeIn) {
     print("_clickListItem===>storeIn:${storeIn.id}");
   }
 }

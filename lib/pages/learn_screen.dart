@@ -1,240 +1,241 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/custom_widgets/dropdown_menu/index.dart';
+import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
+import 'package:lpinyin/lpinyin.dart';
 
+import '../api/api_service.dart';
+
+/// SizedBox(width: 20),//SizedBox 能强制子控件具有特定宽度、高度或两者都有,使子控件设置的宽高失效
 class LearnScreen extends StatefulWidget {
   @override
   _LearnScreenState createState() => _LearnScreenState();
 }
 
 class _LearnScreenState extends State<LearnScreen> {
-  List<String> _dropDownHeaderItemStrings = ['全城'];
-  List<SortCondition> _brandSortConditions = [];
-  List<SortCondition> _distanceSortConditions = [];
-  SortCondition _selectBrandSortCondition;
-  SortCondition _selectDistanceSortCondition;
-  DropdownMenuController _dropdownMenuController = DropdownMenuController();
+  //字体样式
+  final TextStyle _textGrey_14 = TextStyle(fontSize: 14.0, color: Colors.grey);
 
-  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+  //字体样式
+  final TextStyle _textGrey_18 = TextStyle(fontSize: 18.0, color: Colors.grey);
+
+  ///原料属性-----start-----
   GlobalKey _stackKey = GlobalKey();
+
+  //控制展开显示/隐藏
+  GZXDropdownMenuController _dropdownMenuController =
+      GZXDropdownMenuController();
+
+  String _dropDownHeaderItemTitle = "请选择原料";
+
+  int _selectTempFirstLevelIndex = -1;
+  int _selectFirstLevelIndex = -1;
+  int _selectSecondLevelIndex = -1;
+
+  final Map<String, List<MaterialEntity>> mapMaterialList = {}; //原料左右数据
+  final List<MaterialEntity> valueSecondLevelList = []; //原料右边value
+  final List<String> keyFirstLevelList = []; //原料左边key
+  MaterialEntity _selectMaterial; //选中的原料
+
+  ///原料属性-----end-----
 
   @override
   void initState() {
     super.initState();
-
-    _brandSortConditions.add(SortCondition(name: '全部', isSelected: true));
-    _brandSortConditions.add(SortCondition(name: '金逸影城', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '中影国际城', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '星美国际城', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '博纳国际城', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '大地影院', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '嘉禾影城', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '太平洋影城', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '万达影城', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '万达影城1', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '万达影城2', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '万达影城3', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '万达影城4', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '万达影城5', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '万达影城6', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '万达影城7', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '万达影城8', isSelected: false));
-    _brandSortConditions.add(SortCondition(name: '万达影城9', isSelected: false));
-    _selectBrandSortCondition = _brandSortConditions[0];
-
-    _distanceSortConditions.add(SortCondition(name: '距离近', isSelected: true));
-    _distanceSortConditions.add(SortCondition(name: '价格低', isSelected: false));
-    _selectDistanceSortCondition = _distanceSortConditions[0];
+    initData();
   }
 
   @override
   void dispose() {
-    _dropdownMenuController?.dispose();
     super.dispose();
+  }
+
+  void initData() async {
+    List<MaterialEntity> thisMaterialList =
+        await ApiService.getInstance().getListMaterial();
+    if (thisMaterialList.length > 0) {
+      //排序
+      thisMaterialList.sort((a, b) => a.materialName.compareTo(b.materialName));
+      /*thisMaterialList.sort((a, b) {
+        List<int> al =
+            PinyinHelper.getFirstWordPinyin(a.materialName.trim()).codeUnits;
+        List<int> bl =
+            PinyinHelper.getFirstWordPinyin(b.materialName.trim()).codeUnits;
+        for (int i = 0; i < al.length; i++) {
+          if (bl.length <= i) {
+            return 1;
+          }
+          if (al[i] > bl[i]) {
+            return 1;
+          } else if (al[i] < bl[i]) {
+            return -1;
+          }
+        }
+        return 0;
+      });*/
+      mapMaterialList["全部"] = thisMaterialList;
+      mapMaterialList["#"] = [];
+
+      //列表转成键值对,key(A-Z)-value分类
+      for (int i = 0; i < thisMaterialList.length; i++) {
+        var item = thisMaterialList[i];
+        String pinyinKey = PinyinHelper.getShortPinyin(
+            item.materialName.trim().substring(0, 1));
+        //不是A-Z就替换成 #
+        if (RegExp("[A-Z]").hasMatch(pinyinKey) ||
+            RegExp("[a-z]").hasMatch(pinyinKey)) {
+          pinyinKey = pinyinKey.toUpperCase();
+        } else {
+          pinyinKey = "#";
+        }
+        List<MaterialEntity> thisMapList = mapMaterialList[pinyinKey];
+        if (thisMapList != null) {
+          thisMapList.add(item);
+        } else {
+          mapMaterialList[pinyinKey] = [item];
+        }
+      }
+      if (mapMaterialList["#"].length == 0) {
+        mapMaterialList.remove("#");
+      }
+      setState(() {
+        keyFirstLevelList.addAll(mapMaterialList.keys.toList());
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        elevation: 0,
-        title: Text('学习'),
-      ),
-      backgroundColor: Colors.white,
-      endDrawer: Container(
-          margin: EdgeInsets.only(
-              left: MediaQuery.of(context).size.width / 4, top: 0),
-          color: Colors.white),
-      body: Stack(key: _stackKey, children: <Widget>[
-        Column(children: <Widget>[
-          // 下拉菜单头部
-          DropDownHeader(
-            // 下拉的头部项，目前每一项，只能自定义显示的文字、图标、图标大小修改
-            items: [
-              DropDownHeaderItem(_dropDownHeaderItemStrings[0]),
-            ],
-            // DropDownHeader对应第一父级Stack的key
-            stackKey: _stackKey,
-            // controller用于控制menu的显示或隐藏
-            controller: _dropdownMenuController,
-            // 当点击头部项的事件，在这里可以进行页面跳转或openEndDrawer
-            onItemTap: (index) {
-              if (index == 3) {
-                _scaffoldKey.currentState.openEndDrawer();
-                _dropdownMenuController.hide();
-              }
-            },
-            // 头部的高度
-            height: 60,
-            // 头部背景颜色
-            //color: Theme.of(context).primaryColor,
-            // 头部边框宽度
-            //borderWidth: 1,
-            // 头部边框颜色
-            //borderColor: Color(0xFFeeede6),
-            // 分割线高度
-            //dividerHeight: 20,
-            // 分割线颜色
-            //dividerColor: Color(0xFFeeede6),
-            // 文字样式
-            //style: TextStyle(color: Color(0xFF666666), fontSize: 13),
-            // 下拉时文字样式
-            dropDownStyle: TextStyle(
-              fontSize: 13,
-              color: Theme.of(context).primaryColor,
-            ),
-            // 图标大小
-            //iconSize: 20,
-            // 图标颜色
-            //iconColor: Color(0xFFafada7),
-            // 下拉时图标颜色
-            //iconDropDownColor: Theme.of(context).primaryColor,
-          ),
-          Expanded(
-            child: ListView.separated(
-                itemCount: 100,
-                separatorBuilder: (BuildContext context, int index) =>
-                    Divider(height: 1.0),
-                itemBuilder: (BuildContext context, int index) {
-                  return ListTile(leading: Text('test$index'), onTap: () {});
-                }),
-          ),
-        ]),
-        // 下拉菜单
-        DropDownMenu(
-            // controller用于控制menu的显示或隐藏
-            controller: _dropdownMenuController,
-            // 下拉菜单显示或隐藏动画时长
-            animationMilliseconds: 500,
-            // 下拉菜单，高度自定义，你想显示什么就显示什么，完全由你决定，你只需要在选择后调用_dropdownMenuController.hide();即可
-            menus: [
-              DropdownMenuBuilder(
-                  dropDownHeight: 40 * 8.0,
-                  dropDownWidget: _buildQuanChengWidget((selectValue) {
-                    _dropDownHeaderItemStrings[0] = selectValue;
-                    _dropdownMenuController.hide();
-                    setState(() {});
-                  })),
+      appBar: AppBar(),
+      body: Stack(
+        key: _stackKey,
+        children: <Widget>[
+          Column(children: <Widget>[
+            Row(children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(left: 5.0, right: 2.0),
+                child: Text("原料:", style: _textGrey_18),
+              ),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.all(5.0),
+                  child: GZXDropDownHeader(
+                      items: [GZXDropDownHeaderItem(_dropDownHeaderItemTitle)],
+                      // GZXDropDownHeader对应第一父级Stack的key
+                      stackKey: _stackKey,
+                      // controller用于控制menu的显示或隐藏
+                      controller: _dropdownMenuController,
+                      borderWidth: 1,
+                      borderColor: Colors.grey[400]),
+                ),
+              )
             ]),
-      ]),
+            Expanded(
+              child: ListView.separated(
+                  itemCount: 100,
+                  separatorBuilder: (BuildContext context, int index) =>
+                      Divider(height: 1.0),
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(leading: Text('test$index'), onTap: () {});
+                  }),
+            ),
+          ]),
+          GZXDropDownMenu(
+              // controller用于控制menu的显示或隐藏
+              controller: _dropdownMenuController,
+              // 下拉菜单显示或隐藏动画时长
+              animationMilliseconds: 500,
+              menus: [
+                GZXDropdownMenuBuilder(
+                    dropDownHeight: 40 * 10.0,
+                    dropDownWidget:
+                        _buildAddressWidget((selectValue, selectItem) {
+                      setState(() {
+                        _dropDownHeaderItemTitle = selectValue;
+                        _selectMaterial = selectItem;
+                        _dropdownMenuController.hide();
+                      });
+                    })),
+              ]),
+        ],
+      ),
     );
   }
 
-  int _selectTempFirstLevelIndex = 0;
-  int _selectFirstLevelIndex = 0;
-
-  int _selectSecondLevelIndex = -1;
-
-  _buildQuanChengWidget(void itemOnTap(String selectValue)) {
-//    List firstLevels = new List<int>.filled(15, 0);
-    List firstLevels = new List<String>.generate(15, (int index) {
-      if (index == 0) {
-        return '全部';
-      }
-      return '$index区';
-    });
-
-    List secondtLevels = new List<String>.generate(15, (int index) {
-      if (index == 0) {
-        return '全部';
-      }
-      return '$_selectTempFirstLevelIndex$index街道办';
-    });
-
-    return Row(children: <Widget>[
-      Expanded(
-        child: ListView(
-          children: firstLevels.map((item) {
-            int index = firstLevels.indexOf(item);
-            return GestureDetector(
-              onTap: () {
-                _selectTempFirstLevelIndex = index;
-
-                if (_selectTempFirstLevelIndex == 0) {
-                  itemOnTap('全城');
-                  return;
-                }
-                setState(() {});
-              },
-              child: Container(
-                  height: 60,
-                  color: _selectTempFirstLevelIndex == index
-                      ? Colors.grey[200]
-                      : Colors.white,
-                  alignment: Alignment.center,
-                  child: _selectTempFirstLevelIndex == index
-                      ? Text(
-                          '$item',
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        )
-                      : Text('$item')),
-            );
-          }).toList(),
-        ),
-      ),
-      Expanded(
-        child: Container(
-          color: Colors.grey[200],
-          child: _selectTempFirstLevelIndex == 0
-              ? Container()
-              : ListView(
-                  children: secondtLevels.map((item) {
-                    int index = secondtLevels.indexOf(item);
-                    return GestureDetector(
+  //原料下拉列表
+  _buildAddressWidget(
+      void itemOnTap(String selectValue, MaterialEntity selectItem)) {
+    return keyFirstLevelList.isEmpty
+        ? Container(
+            alignment: Alignment.center,
+            child: Text("暂无原料数据", style: TextStyle(color: Colors.red)))
+        : Row(
+            children: <Widget>[
+              Container(
+                width: 80,
+                child: ListView.builder(
+                    itemCount: keyFirstLevelList.length,
+                    itemBuilder: (context, index) {
+                      var itemKey = keyFirstLevelList[index];
+                      return GestureDetector(
                         onTap: () {
-                          _selectSecondLevelIndex = index;
-                          _selectFirstLevelIndex = _selectTempFirstLevelIndex;
-                          if (_selectSecondLevelIndex == 0) {
-                            itemOnTap(firstLevels[_selectFirstLevelIndex]);
-                          } else {
-                            itemOnTap(item);
-                          }
+                          setState(() {
+                            _selectTempFirstLevelIndex = index;
+                            valueSecondLevelList.clear();
+                            valueSecondLevelList
+                                .addAll(mapMaterialList[itemKey]);
+                          });
                         },
                         child: Container(
-                          height: 60,
-                          padding: EdgeInsets.only(left: 20),
-                          alignment: Alignment.centerLeft,
-                          child: _selectFirstLevelIndex ==
-                                      _selectTempFirstLevelIndex &&
-                                  _selectSecondLevelIndex == index
-                              ? Text('$item',
+                          height: 40,
+                          color: _selectTempFirstLevelIndex == index
+                              ? Colors.grey[200]
+                              : Colors.white,
+                          alignment: Alignment.center,
+                          child: _selectTempFirstLevelIndex == index
+                              ? Text("$itemKey",
                                   style: TextStyle(
-                                      color: Theme.of(context).primaryColor))
-                              : Text('$item'),
-                        ));
-                  }).toList(),
+                                    color: Theme.of(context).primaryColor,
+                                  ))
+                              : Text("$itemKey"),
+                        ),
+                      );
+                    }),
+              ),
+              Expanded(
+                child: Container(
+                  color: Colors.grey[200],
+                  child: mapMaterialList.isEmpty
+                      ? Container()
+                      : ListView(
+                          children: valueSecondLevelList.map((item) {
+                            int index = valueSecondLevelList.indexOf(item);
+                            return InkWell(
+                                onTap: () {
+                                  _selectSecondLevelIndex = index;
+                                  _selectFirstLevelIndex =
+                                      _selectTempFirstLevelIndex;
+                                  itemOnTap(item.materialName, item);
+                                },
+                                child: Container(
+                                  height: 40,
+                                  padding: EdgeInsets.only(left: 5.0),
+                                  alignment: Alignment.centerLeft,
+                                  child: Row(children: <Widget>[
+                                    _selectFirstLevelIndex ==
+                                                _selectTempFirstLevelIndex &&
+                                            _selectSecondLevelIndex == index
+                                        ? Text("${item.materialName}",
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColor))
+                                        : Text("${item.materialName}"),
+                                  ]),
+                                ));
+                          }).toList(),
+                        ),
                 ),
-        ),
-      )
-    ]);
+              )
+            ],
+          );
   }
-}
-
-class SortCondition {
-  String name;
-  bool isSelected;
-
-  SortCondition({this.name, this.isSelected}) {}
 }
