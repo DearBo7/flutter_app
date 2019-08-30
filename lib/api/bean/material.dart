@@ -1,4 +1,4 @@
-class MaterialEntity{
+class MaterialEntity {
   int id;
   String ocrKey;
   String materialName;
@@ -10,6 +10,11 @@ class MaterialEntity{
   double tareWeight;
   String materialTypeName;
 
+  /// 批号-原料列表显示
+  String materialBatch;
+  /// 原料列表显示
+  double storeQuantity;
+
   MaterialEntity(
       {this.ocrKey,
       this.materialName,
@@ -20,7 +25,8 @@ class MaterialEntity{
       this.materialCode,
       this.id,
       this.tareWeight,
-      this.materialTypeName});
+      this.materialTypeName,
+      this.materialBatch});
 
   MaterialEntity.fromJson(Map<String, dynamic> json) {
     ocrKey = json['ocrKey'];
@@ -33,6 +39,8 @@ class MaterialEntity{
     id = json['Id'];
     tareWeight = json['tareWeight'];
     materialTypeName = json['materialTypeName'];
+    materialBatch = json['materialBatch'];
+    storeQuantity = json['storeQuantity'];
   }
 
   static List<MaterialEntity> fromJsonList(dynamic mapList) {
@@ -55,6 +63,8 @@ class MaterialEntity{
     data['Id'] = this.id;
     data['tareWeight'] = this.tareWeight;
     data['materialTypeName'] = this.materialTypeName;
+    data['materialBatch'] = this.materialBatch;
+    data['storeQuantity'] = this.storeQuantity;
     return data;
   }
 }

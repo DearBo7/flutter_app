@@ -11,6 +11,7 @@ class ResultData {
   /// true 请求成功 false 请求失败
   bool result = true; // 客户端是否请求成功false: HTTP错误
   String url = "";
+  dynamic _resultData;
 
   ResultData(this.msg, this.result, {this.url = ""});
 
@@ -18,6 +19,14 @@ class ResultData {
     this.code = this.response["code"];
     this.msg = this.response["msg"];
     this.data = this.response["data"];
+  }
+
+  void setResultData<T>(T resultData) {
+    _resultData = resultData;
+  }
+
+  T getResultData<T>() {
+    return _resultData;
   }
 
   bool isFail() {

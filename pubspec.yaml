@@ -37,7 +37,7 @@ dependencies: # 应用或包依赖的其它包或插件
   # SP
   shared_preferences: ^0.5.3+2
 
-  # 加载提示组件 https://pub.flutter-io.cn/packages/flutter_spinkit
+  # 加载动画组件 https://pub.flutter-io.cn/packages/flutter_spinkit
   flutter_spinkit: ^4.0.0
 
   # 处理键盘事件 https://github.com/diegoveloper/flutter_keyboard_actions

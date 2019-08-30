@@ -4,9 +4,12 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+import './material_page.dart';
+import './src/empty_list_widget.dart';
 import './src/text_style_util.dart';
 import '../api/api_service.dart';
 import '../utils/date_format.dart';
+import '../utils/toast.dart';
 
 class StorageScreen extends StatefulWidget {
   @override
@@ -26,7 +29,7 @@ class _StorageScreenState extends State<StorageScreen> {
       value: -1,
     )
   ];
-  int _dropdownProduceLineValue = -1;
+  int _dropdownProduceLineValue = -1; //选中的产线id
 
   //配方
   final List<DropdownMenuItem<int>> _dropdownFormulaList = [
@@ -35,7 +38,14 @@ class _StorageScreenState extends State<StorageScreen> {
       value: -1,
     )
   ];
-  int _dropdownFormulaValue = -1;
+  int _dropdownFormulaValue = -1; //选中的配方id
+
+  final String dateFormat = "yyyy年-MM月-dd日";
+
+  final DateTimePickerTheme _dateTimePickerTheme = DateTimePickerTheme(
+      cancel: Text("取消", style: TextStyle(color: Colors.red)),
+      confirm: Text("确定", style: TextStyle(color: Colors.blue)),
+      showTitle: true);
 
   //日期
   String startDate;
@@ -49,7 +59,8 @@ class _StorageScreenState extends State<StorageScreen> {
   }
 
   void initData() async {
-    startDate = formatDateShort(DateTime.now().subtract(Duration(days: 31)));
+    startDate =
+        formatDateShort(DateTime.now().subtract(Duration(days: 31 * 2)));
     endDate = formatDateShort(DateTime.now());
 
     List<ProduceLineEntity> thisProduceLineList =
@@ -61,8 +72,6 @@ class _StorageScreenState extends State<StorageScreen> {
       });
     }
 
-    getStoreInList();
-
     List<FormulaEntity> thisFormulaList =
         await ApiService.getInstance().getListFormula();
     if (thisFormulaList.length > 0) {
@@ -71,15 +80,7 @@ class _StorageScreenState extends State<StorageScreen> {
             .add(DropdownMenuItem(child: Text(d.formulaName), value: d.id)));
       });
     }
-    print("formulaList: ${thisFormulaList.length}");
   }
-
-  final String dateFormat = "yyyy年-MM月-dd日";
-
-  final DateTimePickerTheme _dateTimePickerTheme = DateTimePickerTheme(
-      cancel: Text("取消", style: TextStyle(color: Colors.red)),
-      confirm: Text("确定", style: TextStyle(color: Colors.blue)),
-      showTitle: true);
 
   @override
   void initState() {
@@ -107,7 +108,7 @@ class _StorageScreenState extends State<StorageScreen> {
                     Row(
                       children: <Widget>[
                         Text(FlutterI18n.translate(context, 'dateTitle'),
-                            style: textGrey_18),
+                            style: textStyleGrey_18),
                         Expanded(
                             child: Row(
                           mainAxisAlignment: MainAxisAlignment.center, //居中显示
@@ -117,17 +118,17 @@ class _StorageScreenState extends State<StorageScreen> {
                               onTap: () => _clickDate(true),
                               child: Row(
                                 children: <Widget>[
-                                  Text(startDate, style: textGrey_18),
+                                  Text(startDate, style: textStyleGrey_18),
                                   Icon(Icons.date_range, color: Colors.blue)
                                 ],
                               ),
                             ),
-                            Text("~", style: textGrey_18),
+                            Text("~", style: textStyleGrey_18),
                             InkWell(
                               onTap: () => _clickDate(false),
                               child: Row(
                                 children: <Widget>[
-                                  Text(endDate, style: textGrey_18),
+                                  Text(endDate, style: textStyleGrey_18),
                                   Icon(Icons.date_range, color: Colors.blue)
                                 ],
                               ),
@@ -139,7 +140,7 @@ class _StorageScreenState extends State<StorageScreen> {
                     Row(
                       children: <Widget>[
                         Text(FlutterI18n.translate(context, 'produceLineTitle'),
-                            style: textGrey_18),
+                            style: textStyleGrey_18),
                         Expanded(
                           child: Container(
                             padding: EdgeInsets.only(left: 5.0, right: 5.0),
@@ -161,8 +162,10 @@ class _StorageScreenState extends State<StorageScreen> {
                               onChanged: (value) {
                                 print("ProduceLine:value:${value}");
                                 setState(() {
-                                  _dropdownProduceLineValue = value;
-                                  _controller.callRefresh();
+                                  if (_dropdownProduceLineValue != value) {
+                                    _dropdownProduceLineValue = value;
+                                    _controller.callRefresh();
+                                  }
                                 });
                               },
                             ),
@@ -173,7 +176,7 @@ class _StorageScreenState extends State<StorageScreen> {
                     Row(
                       children: <Widget>[
                         Text(FlutterI18n.translate(context, 'formulaTitle'),
-                            style: textGrey_18),
+                            style: textStyleGrey_18),
                         Expanded(
                           child: Container(
                             padding: EdgeInsets.only(left: 5, right: 5),
@@ -195,8 +198,10 @@ class _StorageScreenState extends State<StorageScreen> {
                               onChanged: (value) {
                                 print("Formula:value:${value}");
                                 setState(() {
-                                  _dropdownFormulaValue = value;
-                                  _controller.callRefresh();
+                                  if (_dropdownFormulaValue != value) {
+                                    _dropdownFormulaValue = value;
+                                    _controller.callRefresh();
+                                  }
                                 });
                               },
                             ),
@@ -212,7 +217,7 @@ class _StorageScreenState extends State<StorageScreen> {
                 firstRefreshWidget: _firstRefreshWidget(),
                 enableControlFinishRefresh: true, //是否开启控制结束刷新
                 controller: _controller, //控制刷新控制器
-                emptyWidget: storeInList.isEmpty ? _emptyWidget() : null,
+                emptyWidget: storeInList.isEmpty ? EmptyListWidget() : null,
                 bottomBouncing: false, //底部回弹,默认true
                 child: _buildListView(),
                 header: ClassicalHeader(
@@ -232,7 +237,7 @@ class _StorageScreenState extends State<StorageScreen> {
                   infoColor: Colors.white70,
                 ),
                 onRefresh: () async {
-                  await Future.delayed(Duration(seconds: 1), () {
+                  await Future.delayed(Duration(milliseconds: 300), () {
                     getStoreInList();
                   });
                 },
@@ -267,17 +272,16 @@ class _StorageScreenState extends State<StorageScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text("${storeIn.billCode}-${storeIn.produceLineName}",
-                          style:
-                              TextStyle(fontSize: 18.0, color: Colors.black)),
-                      Text("${storeIn.creator}", style: textGrey_14)
+                          style: textStyleBlack_18),
+                      Text("${storeIn.creator}", style: textStyleGrey_14)
                     ],
                   ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween, //左右平分
                     children: <Widget>[
-                      Text("${storeIn.formulaName}", style: textGrey_14),
-                      Text("${storeIn.createDate}", style: textGrey_14)
+                      Text("${storeIn.formulaName}", style: textStyleGrey_14),
+                      Text("${storeIn.createDate}", style: textStyleGrey_14)
                     ],
                   )
                 ],
@@ -321,51 +325,21 @@ class _StorageScreenState extends State<StorageScreen> {
     );
   }
 
-  //空列表显示Widget
-  Widget _emptyWidget() {
-    return Container(
-      height: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-            child: SizedBox(),
-            flex: 2,
-          ),
-          SizedBox(
-            width: 100.0,
-            height: 100.0,
-            child: Image.asset('assets/images/empty.jpeg'),
-          ),
-          Text(
-            FlutterI18n.translate(context, 'noData'),
-            style: TextStyle(fontSize: 16.0, color: Colors.grey[400]),
-          ),
-          Expanded(
-            child: SizedBox(),
-            flex: 3,
-          ),
-        ],
-      ),
-    );
-  }
-
   //获取列表数据
   getStoreInList() async {
     List<StoreInEntity> thisStoreInList = await ApiService.getInstance()
         .getListStoreIn(startDate, endDate,
             produceLineId: _dropdownProduceLineValue,
-            formulaId: _dropdownFormulaValue,
-            context: context);
-    if (thisStoreInList.length > 0) {
-      setState(() {
-        if (storeInList.length > 0) {
-          storeInList.clear();
-        }
+            formulaId: _dropdownFormulaValue);
+    setState(() {
+      if (storeInList.length > 0) {
+        storeInList.clear();
+      }
+      if (thisStoreInList.length > 0) {
         storeInList.addAll(thisStoreInList);
-      });
-    }
+      }
+    });
+
     _controller.resetLoadState();
     _controller.finishRefresh();
   }
@@ -412,7 +386,27 @@ class _StorageScreenState extends State<StorageScreen> {
   }
 
   //list 条目点击事件
-  void _clickListItem(StoreInEntity storeIn) {
-    print("_clickListItem===>storeIn:${storeIn.id}");
+  void _clickListItem(StoreInEntity storeIn) async {
+    //同步方式
+    /*final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MaterialPage(storeIn: storeIn)));
+    if (result != null) {
+      Scaffold.of(context)
+          .showSnackBar(SnackBar(content: Text("返回结果:$result")));
+    }*/
+    //异步方式
+    Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MaterialPage(storeIn: storeIn)))
+        .then((result) {
+      if (result != null) {
+        Toast.show(context, "异步方式-返回结果:$result");
+      }
+    }).catchError((error) {
+      print("error===>$error");
+    });
   }
 }

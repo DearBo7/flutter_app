@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-import './dialog_param.dart';
+import 'dialog_param.dart';
+
+export 'dialog_param.dart';
 
 // ignore: must_be_immutable
 class LoadingDialog extends Dialog {
-  String text;
   BuildContext context;
   ShowParam showParam;
 
-  LoadingDialog({Key key, @required this.text, this.showParam})
-      : super(key: key);
+  LoadingDialog({Key key, @required this.showParam}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -56,11 +56,8 @@ class LoadingDialog extends Dialog {
         context: context, //BuildContext对象
         barrierDismissible: param.barrierDismissible,
         builder: (BuildContext context) {
-          LoadingDialog dialog = new LoadingDialog(
-            showParam: param,
-          );
           return WillPopScope(
-            child: dialog,
+            child: LoadingDialog(showParam: param),
             onWillPop: () async {
               if (param.barrierDismissible) {
                 param.dispose = true;
@@ -111,8 +108,8 @@ class LoadingTextDialog extends Dialog {
                     top: 20.0,
                   ),
                   child: new Text(
-                    text,
-                    style: new TextStyle(fontSize: 12.0),
+                    text ?? '加载中...',
+                    style: new TextStyle(fontSize: 14.0),
                   ),
                 ),
               ],
@@ -124,19 +121,16 @@ class LoadingTextDialog extends Dialog {
   }
 
   static Future<void> showLoadingDialog(BuildContext context, ShowParam param) {
-    if (param.show == null) return null;
-    if (!param.show) return null;
+    if (context == null || param.show == null || !param.show) {
+      return null;
+    }
     return showDialog<Null>(
         context: context, //BuildContext对象
         barrierDismissible: param.barrierDismissible,
         builder: (BuildContext context) {
-          LoadingTextDialog dialog = new LoadingTextDialog(
-            //调用对话框
-            text: param.text ?? '正在获取详情...',
-            showParam: param,
-          );
           return WillPopScope(
-            child: dialog,
+            child: LoadingTextDialog(
+                text: param.text ?? '加载中...', showParam: param),
             onWillPop: () async {
               if (param.barrierDismissible == true) {
                 param.dispose = true;
@@ -151,16 +145,15 @@ class LoadingTextDialog extends Dialog {
 class LoadingDialogUtil {
   static Future<void> showLoadingDialog(BuildContext context, ShowParam param) {
     bool show = param?.show;
-    if (show == null || !show) return Future.value();
+    if (context == null || show == null || !show) {
+      return Future.value();
+    }
     return showDialog<Null>(
         context: context, //BuildContext对象
         barrierDismissible: param.barrierDismissible,
         builder: (BuildContext context) {
-          LoadingDialog dialog = new LoadingDialog(
-            showParam: param,
-          );
           return WillPopScope(
-            child: dialog,
+            child: LoadingDialog(showParam: param),
             onWillPop: () async {
               if (param.barrierDismissible) {
                 param.dispose = true;
@@ -173,19 +166,15 @@ class LoadingDialogUtil {
 
   static Future<void> showTextLoadingDialog(
       BuildContext context, ShowParam param) {
-    if (param.show == null) return null;
-    if (!param.show) return null;
+    if (context == null || param.show == null || !param.show) {
+      return null;
+    }
     return showDialog<Null>(
         context: context, //BuildContext对象
         barrierDismissible: param.barrierDismissible,
         builder: (BuildContext context) {
-          LoadingTextDialog dialog = new LoadingTextDialog(
-            //调用对话框
-            text: param.text ?? '正在获取详情...',
-            showParam: param,
-          );
           return WillPopScope(
-            child: dialog,
+            child: LoadingTextDialog(text: param.text, showParam: param),
             onWillPop: () async {
               if (param.barrierDismissible == true) {
                 param.dispose = true;

@@ -32,7 +32,8 @@ class ApiService extends BasicNetService {
   }
 
   /// 获取生产线列表
-  Future<List<ProduceLineEntity>> getListProduceLine({BuildContext context}) async {
+  Future<List<ProduceLineEntity>> getListProduceLine(
+      {BuildContext context}) async {
     ResultData resultData =
         await get(ApiUrl.getListProduceLine(), context: context);
     resultData.toast();
@@ -56,7 +57,10 @@ class ApiService extends BasicNetService {
   /// 获取领料单列表
   /// 参数：[startDate:,endDate:]必传,produceLineId,formulaId
   Future<List<StoreInEntity>> getListStoreIn(String startDate, String endDate,
-      {int produceLineId, int formulaId, BuildContext context}) async {
+      {int produceLineId,
+      int formulaId,
+      BuildContext context,
+      bool showLoad}) async {
     Map<String, dynamic> params = {};
     params["startDate"] = startDate;
     params["endDate"] = endDate;
@@ -66,7 +70,8 @@ class ApiService extends BasicNetService {
     if (formulaId != null && formulaId > 0) {
       params["formulaId"] = formulaId;
     }
-    ResultData resultData = await get(ApiUrl.getListStoreIn(), params: params);
+    ResultData resultData = await get(ApiUrl.getListStoreIn(),
+        params: params, context: context, showLoad: showLoad);
     resultData.toast();
     if (resultData.isSuccess()) {
       return StoreInEntity.fromJsonList(resultData.data);
@@ -83,5 +88,18 @@ class ApiService extends BasicNetService {
       return MaterialEntity.fromJsonList(resultData.data);
     }
     return [];
+  }
+
+  /// 获取领料单明细接口-根据StoreInId
+  Future<ResultData> getGetStoreInListByStoreInId(int storeInId,
+      {BuildContext context}) async {
+    Map<String, dynamic> params = {"id": storeInId};
+    ResultData resultData = await get(ApiUrl.getGetStoreInListByStoreInId(),
+        params: params, context: context);
+    resultData.toast();
+    resultData.setResultData(resultData.isSuccess()
+        ? MaterialEntity.fromJsonList(resultData.data)
+        : []);
+    return resultData;
   }
 }

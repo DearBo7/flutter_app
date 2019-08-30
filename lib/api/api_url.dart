@@ -35,4 +35,10 @@ class ApiUrl {
   static String getListMaterial() {
     return getRestUrl() + "/default/listMaterial";
   }
+
+  /// 获取领料单明细接口-by2019年5月28日15:24:23 新增
+  /// 参数：id=1
+  static String getGetStoreInListByStoreInId() {
+    return getRestUrl() + "/default/getStoreInListByStoreInId";
+  }
 }

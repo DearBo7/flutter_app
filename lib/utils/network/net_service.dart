@@ -32,6 +32,7 @@ class NetService {
         method: Method.GET,
         params: params,
         headers: headers,
+        context: context,
         showLoad: showLoad);
   }
 
@@ -45,6 +46,7 @@ class NetService {
         method: Method.POST,
         params: params,
         headers: headers,
+        context: context,
         showLoad: showLoad);
   }
 
@@ -73,7 +75,7 @@ class NetService {
       String fileName,
       String fileSavePath,
       BuildContext context,
-      bool showLoad = false}) async {
+      bool showLoad: false}) async {
     try {
       Response response;
 

@@ -1,14 +1,13 @@
-library basicnetservice;
-
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 
 import '../utils/network/net_service.dart';
-import '../widget/dialog_param.dart';
-import '../widget/loading_dialog.dart';
+import '../widget/loading/loading_dialog.dart';
+import '../widget/loading/progressui.dart';
 
-export '../utils/network/net_service.dart';
+export '../utils/network/result_data.dart';
 
 class BasicNetService extends NetService {
   BasicNetService();
@@ -22,7 +21,7 @@ class BasicNetService extends NetService {
       String fileName,
       String fileSavePath,
       BuildContext context,
-      bool showLoad = false}) async {
+      bool showLoad: false}) async {
     /// 传参进行统一处理, 加上基本参数
     //Map<String, dynamic> basicParam = await getBasicParam();
     //basicParam["timeStamp"] = (new DateTime.now().millisecondsSinceEpoch ~/ 1000).toString();
@@ -34,9 +33,8 @@ class BasicNetService extends NetService {
     }
     ShowParam showParam;
     if (showLoad) {
-      showParam = new ShowParam(
-          show: showLoad, barrierDismissible: false, showBackground: false);
-      LoadingDialogUtil.showLoadingDialog(context, showParam);
+      showParam = new ShowParam(show: showLoad);
+      LoadingDialogUtil.showTextLoadingDialog(context, showParam);
     }
 
     ResultData resultData = await super.request(url,
