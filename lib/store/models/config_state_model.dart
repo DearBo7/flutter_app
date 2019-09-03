@@ -4,13 +4,13 @@ import 'package:flutter/foundation.dart' show ChangeNotifier;
 import '../../page_index.dart';
 
 class ConfigInfo {
-  int theme = Colors.red.value;
+  int theme = Colors.purple[300].value;
   int local = 0;
 }
 
 class ConfigModel extends ConfigInfo with ChangeNotifier {
   Future $getTheme() async {
-    int _theme = SpUtil.getInt('theme', defValue: Colors.red.value);
+    int _theme = SpUtil.getInt('theme', defValue: theme);
     print('config get Theme $_theme');
     if (null != _theme && 0 != _theme) {
       $setTheme(_theme);

@@ -60,7 +60,7 @@ class _StorageScreenState extends State<StorageScreen> {
 
   void initData() async {
     startDate =
-        formatDateShort(DateTime.now().subtract(Duration(days: 31 * 2)));
+        formatDateShort(DateTime.now().subtract(Duration(days: 31 * 3)));
     endDate = formatDateShort(DateTime.now());
 
     List<ProduceLineEntity> thisProduceLineList =
@@ -98,7 +98,15 @@ class _StorageScreenState extends State<StorageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
+        appBar: PreferredSize(
+          child: Container(
+            color: Theme.of(context).primaryColor,
+            child: IconButton(icon: Icon(Icons.add), onPressed: () {
+              _clickListItem(StoreInEntity(id: 1));
+            }),
+          ),
+          preferredSize: Size(double.infinity, 20.0),
+        ),
         body: Column(
           children: <Widget>[
             Container(

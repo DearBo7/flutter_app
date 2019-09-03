@@ -105,7 +105,12 @@ class _LearnScreenState extends State<LearnScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: PreferredSize(
+        child: Container(
+          color: Theme.of(context).primaryColor,
+        ),
+        preferredSize: Size(double.infinity, 0.0),
+      ),
       body: Stack(
         key: _stackKey,
         children: <Widget>[
@@ -167,7 +172,7 @@ class _LearnScreenState extends State<LearnScreen> {
     return keyFirstLevelList.isEmpty
         ? Container(
             alignment: Alignment.center,
-            child: Text("暂无原料数据", style: TextStyle(color: Colors.red)))
+            child: Text("暂无原料数据", style: TextStyle(color: Theme.of(context).primaryColor)))
         : Row(
             children: <Widget>[
               Container(

@@ -40,7 +40,7 @@ class AppTheme {
   static getThemeData(int color) {
     //print('getThemeData===================================$color');
     ThemeData themData =
-        ThemeData(primaryColor: Color(color == 0 ? Colors.red.value : color));
+        ThemeData(primaryColor: Color(color == 0 ? Colors.purpleAccent.value : color));
     return themData;
   }
 }
