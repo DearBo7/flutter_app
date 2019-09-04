@@ -1,16 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/utils/route_util.dart';
+import '../../utils/route_util.dart';
 
 import 'home_page.dart';
 
-class SplashScreenPage extends StatefulWidget {
+class SplashPage extends StatefulWidget {
   @override
-  _SplashScreenPageState createState() => _SplashScreenPageState();
+  _SplashPageState createState() => _SplashPageState();
 }
 
-class _SplashScreenPageState extends State<SplashScreenPage> {
+class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();

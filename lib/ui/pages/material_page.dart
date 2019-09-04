@@ -2,14 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/api/bean/bean_index.dart';
-import 'package:flutter_app/utils/toast.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../api/api_service.dart';
-import '../res/styles.dart';
-import '../utils/file_utils.dart';
+import '../../public_index.dart';
+import '../../utils/file_utils.dart';
 import '../widget/empty/empty_list_widget.dart';
 import '../widget/loading/loading_dialog.dart';
 

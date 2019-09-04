@@ -4,12 +4,10 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import './material_page.dart';
+import '../../public_index.dart';
+import '../../utils/date_format.dart';
 import '../widget/empty/empty_list_widget.dart';
-import '../api/api_service.dart';
-import '../res/styles.dart';
-import '../utils/date_format.dart';
-import '../utils/toast.dart';
+import 'material_page.dart';
 
 class StorageScreen extends StatefulWidget {
   @override
@@ -17,8 +15,6 @@ class StorageScreen extends StatefulWidget {
 }
 
 class _StorageScreenState extends State<StorageScreen> {
-  //with AutomaticKeepAliveClientMixin
-
   //列表数据
   final List<StoreInEntity> storeInList = [];
 
@@ -154,7 +150,8 @@ class _StorageScreenState extends State<StorageScreen> {
                         Expanded(
                           child: Container(
                             padding: EdgeInsets.only(left: 5.0, right: 5.0),
-                            margin: EdgeInsets.only(top: 2.5, bottom: 2.5),
+                            margin: EdgeInsets.only(
+                                left: 5.0, top: 2.5, bottom: 2.5),
                             height: 35.0,
                             decoration: BoxDecoration(
                               border: Border.all(
@@ -190,7 +187,8 @@ class _StorageScreenState extends State<StorageScreen> {
                         Expanded(
                           child: Container(
                             padding: EdgeInsets.only(left: 5, right: 5),
-                            margin: EdgeInsets.only(top: 2.5, bottom: 2.5),
+                            margin: EdgeInsets.only(
+                                left: 5.0, top: 2.5, bottom: 2.5),
                             height: 35.0,
                             decoration: BoxDecoration(
                               border: Border.all(

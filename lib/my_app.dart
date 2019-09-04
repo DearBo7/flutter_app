@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n_delegate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'page_index.dart';
-import 'splash_screen_page.dart';
+import 'public_index.dart';
+import 'ui/pages/splash_page.dart';
 
 class MyApp extends StatelessWidget {
   MyApp({Key key}) : super(key: key);
@@ -23,9 +23,12 @@ class MyApp extends StatelessWidget {
         /// 右上角显示一个debug的图标
         debugShowCheckedModeBanner: false,
 
+        //路由配置
+        //onGenerateRoute: Router.generateRoute,
+
         /// 主页
         home: Builder(builder: (context) {
-          return SplashScreenPage();
+          return SplashPage();
         }),
         localizationsDelegates: [
           FlutterI18nDelegate(

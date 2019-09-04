@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'navigation/bubble_bottom_bar.dart';
-import 'pages/learn_screen.dart';
-import 'pages/my_screen.dart';
-import 'pages/storage_screen.dart';
-import 'utils/toast.dart';
+import '../../utils/toast.dart';
+import '../widget/navigation/bubble_bottom_bar.dart';
+import '../widget/wrap_keep_state.dart';
+import 'learn_page.dart';
+import 'my_page.dart';
+import 'storage_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -12,9 +13,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _currentIndex;
+  int _childIndex;
 
-  List<Widget> childrenWidgetList = [];
+  List<Widget> childWidgetList = [];
+
+  var _pageController = PageController();
 
   /// 上次点击时间
   DateTime _lastPressedAt;
@@ -22,11 +25,11 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _currentIndex = 0;
-    childrenWidgetList
-      ..add(StorageScreen())
-      ..add(LearnScreen())
-      ..add(MyScreen());
+    _childIndex = 0;
+    childWidgetList
+      ..add(WrapKeepState(StorageScreen()))
+      ..add(WrapKeepState(LearnPage()))
+      ..add(WrapKeepState(MyPage()));
   }
 
   @override
@@ -34,16 +37,29 @@ class _HomePageState extends State<HomePage> {
     return WillPopScope(
         onWillPop: _onBackPressed,
         child: Scaffold(
-          //body: childrenWidgetList[_currentIndex],
-          //IndexedStack 能保留当前不被销毁
-          body: IndexedStack(
-            index: _currentIndex,
-            children: childrenWidgetList,
+          //IndexedStack 能保留当前不被销毁(初始会全部加载)
+          /*body: IndexedStack(
+            index: _childIndex,
+            children: childWidgetList,
+          ),*/
+          //能保留当前不被销毁,PageView + with AutomaticKeepAliveClientMixin,然后重写：bool get wantKeepAlive => true(初始只会加载当前页)
+          body: PageView.builder(
+            itemBuilder: (ctx, index) => childWidgetList[index],
+            itemCount: childWidgetList.length,
+            controller: _pageController,
+            physics: NeverScrollableScrollPhysics(), // 禁止滑动
+            onPageChanged: (index) {
+              setState(() {
+                _childIndex = index;
+              });
+            },
           ),
           bottomNavigationBar: BubbleBottomBar(
             opacity: 0.2,
-            currentIndex: _currentIndex,
-            onTap: (index) => setState(() => _currentIndex = index),
+            currentIndex: _childIndex,
+            onTap: (index) {
+              _pageController.jumpToPage(index);
+            },
             borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
             elevation: 8,
             items: <BubbleBottomBarItem>[
@@ -88,9 +104,8 @@ class _HomePageState extends State<HomePage> {
   /// 监听返回键，点击两下退出程序
   Future<bool> _onBackPressed() async {
     if (_lastPressedAt == null ||
-        DateTime.now().difference(_lastPressedAt) > Duration(seconds: 2)) {
-      print("点击时间");
-      //两次点击间隔超过2秒则重新计时
+        DateTime.now().difference(_lastPressedAt) > Duration(seconds: 1)) {
+      //两次点击间隔超过1秒则重新计时
       _lastPressedAt = DateTime.now();
       Toast.show(context, "再按一次退出",
           duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show ChangeNotifier;
 
-import '../../page_index.dart';
+import '../../public_index.dart';
 
 class ConfigModel extends ChangeNotifier {
   int _theme = Colors.purple[300].value;

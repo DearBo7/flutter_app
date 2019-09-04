@@ -2,21 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
 import 'package:lpinyin/lpinyin.dart';
 
-import '../api/api_service.dart';
+import '../../api/api_service.dart';
+import '../../res/styles.dart';
+import 'src/app_bar_preferred.dart';
 
 /// SizedBox(width: 20),//SizedBox 能强制子控件具有特定宽度、高度或两者都有,使子控件设置的宽高失效
-class LearnScreen extends StatefulWidget {
+class LearnPage extends StatefulWidget {
   @override
-  _LearnScreenState createState() => _LearnScreenState();
+  _LearnPageState createState() => _LearnPageState();
 }
 
-class _LearnScreenState extends State<LearnScreen> {
-  //字体样式
-  final TextStyle _textGrey_14 = TextStyle(fontSize: 14.0, color: Colors.grey);
-
-  //字体样式
-  final TextStyle _textGrey_18 = TextStyle(fontSize: 18.0, color: Colors.grey);
-
+class _LearnPageState extends State<LearnPage> {
   ///原料属性-----start-----
   GlobalKey _stackKey = GlobalKey();
 
@@ -41,11 +37,6 @@ class _LearnScreenState extends State<LearnScreen> {
   void initState() {
     super.initState();
     initData();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   void initData() async {
@@ -105,12 +96,7 @@ class _LearnScreenState extends State<LearnScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        child: Container(
-          color: Theme.of(context).primaryColor,
-        ),
-        preferredSize: Size(double.infinity, 0.0),
-      ),
+      appBar: AppBarPreferred.getPreferredSize(context),
       body: Stack(
         key: _stackKey,
         children: <Widget>[
@@ -118,7 +104,7 @@ class _LearnScreenState extends State<LearnScreen> {
             Row(children: <Widget>[
               Container(
                 margin: EdgeInsets.only(left: 5.0, right: 2.0),
-                child: Text("原料:", style: _textGrey_18),
+                child: Text("原料:", style: TextStyles.textGrey18),
               ),
               Expanded(
                 child: Container(
@@ -172,7 +158,8 @@ class _LearnScreenState extends State<LearnScreen> {
     return keyFirstLevelList.isEmpty
         ? Container(
             alignment: Alignment.center,
-            child: Text("暂无原料数据", style: TextStyle(color: Theme.of(context).primaryColor)))
+            child: Text("暂无原料数据",
+                style: TextStyle(color: Theme.of(context).primaryColor)))
         : Row(
             children: <Widget>[
               Container(

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'my_app.dart';
-import 'page_index.dart';
+import 'public_index.dart';
 
 /*void main() => runApp(MyApp());
 

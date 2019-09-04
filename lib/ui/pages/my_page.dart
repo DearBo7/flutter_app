@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 
-class MyScreen extends StatefulWidget {
+import 'src/app_bar_preferred.dart';
+
+class MyPage extends StatefulWidget {
   @override
-  _MyScreenState createState() => _MyScreenState();
+  _MyPageState createState() => _MyPageState();
 }
 
-class _MyScreenState extends State<MyScreen> {
+class _MyPageState extends State<MyPage>{
+
   //计数器
   int _counter = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("我的"),
-      ),
+      appBar: AppBarPreferred.getPreferredSize(context),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
