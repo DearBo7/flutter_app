@@ -3,13 +3,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/api/bean/bean_index.dart';
+import 'package:flutter_app/utils/toast.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../widget/empty/empty_list_widget.dart';
 import '../api/api_service.dart';
 import '../res/styles.dart';
 import '../utils/file_utils.dart';
+import '../widget/empty/empty_list_widget.dart';
 import '../widget/loading/loading_dialog.dart';
 
 class MaterialPage extends StatefulWidget {
@@ -89,70 +90,90 @@ class _MaterialPageState extends State<MaterialPage> {
       body: Container(
         child: Column(
           children: <Widget>[
-            Container(
+            Padding(
               padding: EdgeInsets.all(10.0),
               child: Column(
                 children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Text("名称:", style: TextStyles.textGrey18),
-                      Expanded(
-                        child: Container(
-                          padding: EdgeInsets.fromLTRB(5.0, 2.0, 5.0, 2.0),
-                          margin: EdgeInsets.only(left: 10.0, bottom: 10.0),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[350],
-                            border:
-                                Border.all(color: Colors.grey[400], width: 0.5),
-                            borderRadius: new BorderRadius.vertical(
-                                top: Radius.elliptical(3, 3),
-                                bottom: Radius.elliptical(3, 3)),
+                  Container(
+                    margin: EdgeInsets.only(top: 5.0, bottom: 10.0),
+                    child: Row(
+                      children: <Widget>[
+                        Text("名称:", style: TextStyles.textGrey18),
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.all(5.0),
+                            margin: EdgeInsets.only(left: 10.0),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              border: Border.all(
+                                  color: Colors.grey[400], width: 0.5),
+                              borderRadius:
+                                  new BorderRadius.all(Radius.circular(3.0)),
+                            ),
+                            child:
+                                Text("名称", style: TextStyle(color: Colors.red)),
                           ),
-                          child:
-                              Text("名称", style: TextStyle(color: Colors.red)),
-                        ),
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   ),
-                  Row(
-                    children: <Widget>[
-                      Text("批次:", style: TextStyles.textGrey18),
-                      Expanded(
-                        child: Container(
-                          padding: EdgeInsets.fromLTRB(5.0, 2.0, 5.0, 2.0),
-                          margin: EdgeInsets.only(left: 10.0, bottom: 10.0),
-                          decoration: BoxDecoration(
-                            border:
-                                Border.all(color: Colors.grey[400], width: 0.5),
-                            borderRadius: new BorderRadius.vertical(
-                                top: Radius.elliptical(3, 3),
-                                bottom: Radius.elliptical(3, 3)),
+                  Container(
+                    margin: EdgeInsets.only(top: 5.0, bottom: 10.0),
+                    child: Row(
+                      children: <Widget>[
+                        Text("批次:", style: TextStyles.textGrey18),
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.all(5.0),
+                            margin: EdgeInsets.only(left: 10.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: Colors.grey[400], width: 0.5),
+                              borderRadius:
+                                  new BorderRadius.all(Radius.circular(3.0)),
+                            ),
+                            child: Text("批次内容"),
                           ),
-                          child: Text("批次内容"),
-                        ),
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   ),
-                  Row(
-                    children: <Widget>[
-                      Text("包数:", style: TextStyles.textGrey18),
-                      Expanded(
-                        child: Container(
-                          padding: EdgeInsets.fromLTRB(5.0, 2.0, 5.0, 2.0),
-                          margin: EdgeInsets.only(left: 10.0),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[350],
-                            border:
-                                Border.all(color: Colors.grey[400], width: 0.5),
-                            borderRadius: new BorderRadius.vertical(
-                                top: Radius.elliptical(3, 3),
-                                bottom: Radius.elliptical(3, 3)),
+                  Container(
+                    margin: EdgeInsets.only(top: 5.0, bottom: 5.0),
+                    child: Row(
+                      children: <Widget>[
+                        Text("包数:", style: TextStyles.textGrey18),
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.all(5.0),
+                            margin: EdgeInsets.only(left: 10.0),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              border: Border.all(
+                                  color: Colors.grey[400], width: 0.5),
+                              borderRadius:
+                                  new BorderRadius.all(Radius.circular(3.0)),
+                            ),
+                            child:
+                                Text("1", style: TextStyle(color: Colors.red)),
                           ),
-                          child: Text("1", style: TextStyle(color: Colors.red)),
-                        ),
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   ),
+                  Center(
+                    child: RaisedButton(
+                      onPressed: () {
+                        Toast.show(context, "RaisedButton");
+                      },
+                      color: Theme.of(context).primaryColor,
+                      textColor: Theme.of(context).primaryColor.value ==
+                              Colors.white.value
+                          ? Colors.black
+                          : Colors.white,
+                      child: Text("提交"),
+                    ),
+                  )
                 ],
               ),
             ),

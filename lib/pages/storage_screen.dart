@@ -107,7 +107,7 @@ class _StorageScreenState extends State<StorageScreen> {
                   _clickListItem(StoreInEntity(id: 1));
                 }),
           ),
-          preferredSize: Size(double.infinity, 20.0),
+          preferredSize: Size(double.infinity, 50.0),
         ),
         body: Column(
           children: <Widget>[
