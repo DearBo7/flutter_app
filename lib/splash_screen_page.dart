@@ -14,8 +14,10 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
   @override
   void initState() {
     super.initState();
+    /*Timer.run(() {
+      navigationPage();
+    });*/
     startTime();
-    //checkFirstSeen(context); //报错
   }
 
   @override
@@ -27,28 +29,10 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
 
   startTime() async {
     //设置启动图生效时间
-    return new Timer(Duration(seconds: 1), navigationPage);
+    return new Timer(Duration(milliseconds: 500), navigationPage);
   }
 
   void navigationPage() {
     pushAndRemovePage(context, HomePage());
-  }
-
-  Future checkFirstSeen(context) async {
-    //Navigator.of(context).pushReplacementNamed('/home');
-    /*SharedPreferences _prefs = await SharedPreferences.getInstance();
-    bool _seen = _prefs.getBool("first_open") ?? false;
-    bool isLogin = _prefs.getBool("isLogin") ?? false;
-
-    if (_seen) {
-      if (isLogin) {
-        pushAndRemovePage(context, HomePage());
-      } else {
-        pushAndRemovePage(context, LoginPage());
-      }
-    } else {
-      _prefs.setBool("first_open", true);
-      pushAndRemovePage(context, IntroSlidePage());
-    }*/
   }
 }

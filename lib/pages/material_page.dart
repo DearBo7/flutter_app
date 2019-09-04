@@ -4,12 +4,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/api/bean/bean_index.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:flutter_luban/flutter_luban.dart';
 import 'package:image_picker/image_picker.dart';
 
-import './src/empty_list_widget.dart';
-import './src/text_style_util.dart';
+import '../widget/empty/empty_list_widget.dart';
 import '../api/api_service.dart';
+import '../res/styles.dart';
 import '../utils/file_utils.dart';
 import '../widget/loading/loading_dialog.dart';
 
@@ -96,7 +95,7 @@ class _MaterialPageState extends State<MaterialPage> {
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      Text("名称:", style: textStyleGrey_18),
+                      Text("名称:", style: TextStyles.textGrey18),
                       Expanded(
                         child: Container(
                           padding: EdgeInsets.fromLTRB(5.0, 2.0, 5.0, 2.0),
@@ -117,7 +116,7 @@ class _MaterialPageState extends State<MaterialPage> {
                   ),
                   Row(
                     children: <Widget>[
-                      Text("批次:", style: textStyleGrey_18),
+                      Text("批次:", style: TextStyles.textGrey18),
                       Expanded(
                         child: Container(
                           padding: EdgeInsets.fromLTRB(5.0, 2.0, 5.0, 2.0),
@@ -136,7 +135,7 @@ class _MaterialPageState extends State<MaterialPage> {
                   ),
                   Row(
                     children: <Widget>[
-                      Text("包数:", style: textStyleGrey_18),
+                      Text("包数:", style: TextStyles.textGrey18),
                       Expanded(
                         child: Container(
                           padding: EdgeInsets.fromLTRB(5.0, 2.0, 5.0, 2.0),
@@ -191,13 +190,16 @@ class _MaterialPageState extends State<MaterialPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text("${material.materialName}", style: textStyleBlack_18),
-                    Text("${material.storeQuantity}", style: textStyleGrey_14)
+                    Text("${material.materialName}",
+                        style: TextStyles.textBlack18),
+                    Text("${material.storeQuantity}",
+                        style: TextStyles.textGrey14)
                   ],
                 ),
                 Row(
                   children: <Widget>[
-                    Text("${material.materialBatch}", style: textStyleGrey_14),
+                    Text("${material.materialBatch}",
+                        style: TextStyles.textGrey14),
                   ],
                 )
               ],
@@ -211,11 +213,11 @@ class _MaterialPageState extends State<MaterialPage> {
   Future getCameraImage() async {
     ShowParam showParam;
     LoadingDialogUtil.showTextLoadingDialog(
-      context, showParam = new ShowParam());
+        context, showParam = new ShowParam());
     File image = await ImagePicker.pickImage(source: ImageSource.camera);
     if (image != null) {
       String orcFilePath = await FileUtils.getOrcFilePath();
-      File result = await  FlutterImageCompress.compressAndGetFile(
+      File result = await FlutterImageCompress.compressAndGetFile(
         image.path,
         orcFilePath,
         quality: 50,
@@ -227,13 +229,15 @@ class _MaterialPageState extends State<MaterialPage> {
         _imageFile = result;
         showParam.pop();
       });
-    }else{
+    } else {
       showParam.pop();
     }
   }
 
   Widget _previewImage() {
-    return _imageFile != null ? Image(image: FileImageEx(_imageFile)) : Text("请拍照.");
+    return _imageFile != null
+        ? Image(image: FileImageEx(_imageFile))
+        : Text("请拍照.");
   }
 
   testStartTime(ShowParam showParam, {int seconds: 3}) async {
@@ -243,19 +247,20 @@ class _MaterialPageState extends State<MaterialPage> {
 
 class FileImageEx extends FileImage {
   int fileSize;
-  FileImageEx(File file, { double scale = 1.0 })
-    : assert(file != null),
-      assert(scale != null),
-      super(file, scale: scale) {
+
+  FileImageEx(File file, {double scale = 1.0})
+      : assert(file != null),
+        assert(scale != null),
+        super(file, scale: scale) {
     fileSize = file.lengthSync();
   }
 
   @override
   bool operator ==(dynamic other) {
-    if (other.runtimeType != runtimeType)
-      return false;
+    if (other.runtimeType != runtimeType) return false;
     final FileImageEx typedOther = other;
-    return file?.path == typedOther.file?.path && scale == typedOther.scale && fileSize == typedOther.fileSize;
+    return file?.path == typedOther.file?.path &&
+        scale == typedOther.scale &&
+        fileSize == typedOther.fileSize;
   }
-
 }

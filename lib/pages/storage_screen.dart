@@ -5,9 +5,9 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import './material_page.dart';
-import './src/empty_list_widget.dart';
-import './src/text_style_util.dart';
+import '../widget/empty/empty_list_widget.dart';
 import '../api/api_service.dart';
+import '../res/styles.dart';
 import '../utils/date_format.dart';
 import '../utils/toast.dart';
 
@@ -101,9 +101,11 @@ class _StorageScreenState extends State<StorageScreen> {
         appBar: PreferredSize(
           child: Container(
             color: Theme.of(context).primaryColor,
-            child: IconButton(icon: Icon(Icons.add), onPressed: () {
-              _clickListItem(StoreInEntity(id: 1));
-            }),
+            child: IconButton(
+                icon: Icon(Icons.add),
+                onPressed: () {
+                  _clickListItem(StoreInEntity(id: 1));
+                }),
           ),
           preferredSize: Size(double.infinity, 20.0),
         ),
@@ -116,7 +118,7 @@ class _StorageScreenState extends State<StorageScreen> {
                     Row(
                       children: <Widget>[
                         Text(FlutterI18n.translate(context, 'dateTitle'),
-                            style: textStyleGrey_18),
+                            style: TextStyles.textGrey18),
                         Expanded(
                             child: Row(
                           mainAxisAlignment: MainAxisAlignment.center, //居中显示
@@ -126,17 +128,17 @@ class _StorageScreenState extends State<StorageScreen> {
                               onTap: () => _clickDate(true),
                               child: Row(
                                 children: <Widget>[
-                                  Text(startDate, style: textStyleGrey_18),
+                                  Text(startDate, style: TextStyles.textGrey18),
                                   Icon(Icons.date_range, color: Colors.blue)
                                 ],
                               ),
                             ),
-                            Text("~", style: textStyleGrey_18),
+                            Text("~", style: TextStyles.textGrey18),
                             InkWell(
                               onTap: () => _clickDate(false),
                               child: Row(
                                 children: <Widget>[
-                                  Text(endDate, style: textStyleGrey_18),
+                                  Text(endDate, style: TextStyles.textGrey18),
                                   Icon(Icons.date_range, color: Colors.blue)
                                 ],
                               ),
@@ -148,7 +150,7 @@ class _StorageScreenState extends State<StorageScreen> {
                     Row(
                       children: <Widget>[
                         Text(FlutterI18n.translate(context, 'produceLineTitle'),
-                            style: textStyleGrey_18),
+                            style: TextStyles.textGrey18),
                         Expanded(
                           child: Container(
                             padding: EdgeInsets.only(left: 5.0, right: 5.0),
@@ -184,7 +186,7 @@ class _StorageScreenState extends State<StorageScreen> {
                     Row(
                       children: <Widget>[
                         Text(FlutterI18n.translate(context, 'formulaTitle'),
-                            style: textStyleGrey_18),
+                            style: TextStyles.textGrey18),
                         Expanded(
                           child: Container(
                             padding: EdgeInsets.only(left: 5, right: 5),
@@ -280,16 +282,18 @@ class _StorageScreenState extends State<StorageScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text("${storeIn.billCode}-${storeIn.produceLineName}",
-                          style: textStyleBlack_18),
-                      Text("${storeIn.creator}", style: textStyleGrey_14)
+                          style: TextStyles.textBlack18),
+                      Text("${storeIn.creator}", style: TextStyles.textGrey14)
                     ],
                   ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween, //左右平分
                     children: <Widget>[
-                      Text("${storeIn.formulaName}", style: textStyleGrey_14),
-                      Text("${storeIn.createDate}", style: textStyleGrey_14)
+                      Text("${storeIn.formulaName}",
+                          style: TextStyles.textGrey14),
+                      Text("${storeIn.createDate}",
+                          style: TextStyles.textGrey14)
                     ],
                   )
                 ],
