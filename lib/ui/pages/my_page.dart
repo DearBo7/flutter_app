@@ -134,7 +134,7 @@ class UserListWidget extends StatelessWidget {
             ListTile(
               title: Text("版本号"),
               leading: Icon(Icons.error_outline, color: iconColor),
-              trailing: FutureBuilder<String>(
+              trailing: FutureBuilder<String>(//异步加载
                 future: PlatformUtils.getAppVersion(),
                 builder: (context, snapshot) {
                   return Text(snapshot.hasData ? snapshot.data : "");
