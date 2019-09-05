@@ -6,28 +6,18 @@ class EmptyListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        height: double.infinity,
-        width: double.infinity,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Expanded(
-              child: SizedBox(),
-              flex: 2,
-            ),
             SizedBox(
-              width: 150.0,
+              width: 160.0,
               height: 150.0,
               child: Image.asset('assets/images/empty.png'),
             ),
             Text(
               FlutterI18n.translate(context, 'noData'),
-              style: TextStyle(fontSize: 16.0, color: Colors.grey[400]),
-            ),
-            Expanded(
-              child: SizedBox(),
-              flex: 3,
+              style: TextStyle(fontSize: 18.0, color: Colors.grey),
             ),
           ],
         ),

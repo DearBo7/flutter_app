@@ -1,5 +1,6 @@
 {
   "appName": "智慧仓储",
+  "logout": "退出登录",
   "style": "样式",
   "more": "更多",
   "refresh": "刷新",
@@ -37,5 +38,6 @@
   "produceLineTitle":"产线:",
   "formulaTitle":"配方:",
   "noDataProduceLine":"暂无产线数据...",
-  "noDataFormula":"暂无配方数据..."
+  "noDataFormula":"暂无配方数据...",
+  "noLogin":"未登录"
 }

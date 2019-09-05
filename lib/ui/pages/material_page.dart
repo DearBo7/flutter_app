@@ -54,7 +54,7 @@ class _MaterialPageState extends State<MaterialPage> {
       appBar: AppBar(
         title: Text("原料列表"),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, size: 32.0),
+          icon: Icon(CustomIcon.back, size: 32.0),
           onPressed: () {
             Navigator.pop(context, widget.storeIn.id);
           },
@@ -63,11 +63,11 @@ class _MaterialPageState extends State<MaterialPage> {
         actions: <Widget>[
           IconButton(
               icon: Icon(
-                Icons.settings_overscan,
+                CustomIcon.scan,
                 size: 32.0,
               ),
               onPressed: () async {
-                //Toast.show(context, "拍照", duration: Toast.LENGTH_SHORT);
+                Toast.show(context, "拍照");
                 //String orcPath = await FileUtils.getOrcFilePath();
                 //Toast.show(context, orcPath);
                 getCameraImage();
@@ -175,7 +175,7 @@ class _MaterialPageState extends State<MaterialPage> {
               ),
             ),
             Container(
-              height: 320.0,
+              height: 250.0,
               child: _previewImage(),
             ),
             Expanded(

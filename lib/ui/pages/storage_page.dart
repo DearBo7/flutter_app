@@ -8,6 +8,7 @@ import '../../public_index.dart';
 import '../../utils/date_format.dart';
 import '../widget/empty/empty_list_widget.dart';
 import 'material_page.dart';
+import 'src/app_bar_preferred.dart';
 
 class StorageScreen extends StatefulWidget {
   @override
@@ -94,7 +95,7 @@ class _StorageScreenState extends State<StorageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
+        /*appBar: PreferredSize(
           child: Container(
             color: Theme.of(context).primaryColor,
             child: IconButton(
@@ -104,7 +105,8 @@ class _StorageScreenState extends State<StorageScreen> {
                 }),
           ),
           preferredSize: Size(double.infinity, 50.0),
-        ),
+        ),*/
+        appBar: AppBarPreferred.getPreferredSize(context),
         body: Column(
           children: <Widget>[
             Container(

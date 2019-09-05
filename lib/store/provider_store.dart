@@ -1,6 +1,5 @@
-import 'package:provider/provider.dart';
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'index.dart';
 
@@ -11,6 +10,7 @@ class Store {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(builder: (_) => ConfigModel()),
+        ChangeNotifierProvider(builder: (_) => UserModel())
       ],
       child: child,
     );
