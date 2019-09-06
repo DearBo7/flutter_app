@@ -1,5 +1,7 @@
+import 'dart:math';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:package_info/package_info.dart';
 
 import '../../public_index.dart';
 import '../../utils/platform_utils.dart';
@@ -10,14 +12,6 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> {
-  PackageInfo _packageInfo;
-
-  @override
-  void initState() {
-    super.initState();
-    initData();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +24,7 @@ class _MyPageState extends State<MyPage> {
                   builder: (context, model, child) => Offstage(
                         offstage: !model.hasUser,
                         child: IconButton(
-                          tooltip: FlutterI18n.translate(context, 'logout'),
+                          tooltip: S.of(context).logout,
                           icon: Icon(Icons.exit_to_app),
                           onPressed: () {
                             //退出登录
@@ -41,7 +35,8 @@ class _MyPageState extends State<MyPage> {
                       ))
             ],
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            expandedHeight: 220, //高度
+            expandedHeight: 220,
+            //高度
             flexibleSpace: UserHeaderWidget(),
             pinned: false, //滑动超出后不显示
           ),
@@ -49,10 +44,6 @@ class _MyPageState extends State<MyPage> {
         ],
       ),
     );
-  }
-
-  void initData() async {
-    _packageInfo = await PackageInfo.fromPlatform();
   }
 }
 
@@ -100,7 +91,7 @@ class UserHeaderWidget extends StatelessWidget {
                       Text(
                         model.hasUser
                             ? model.user.userName
-                            : FlutterI18n.translate(context, 'noLogin'),
+                            : S.of(context).noLogin,
                         style: Theme.of(context)
                             .textTheme
                             .title
@@ -116,6 +107,8 @@ class UserHeaderWidget extends StatelessWidget {
 
 ///底部
 class UserListWidget extends StatelessWidget {
+  final Future<String> _futureBuilderFuture = PlatformUtils.getAppVersion();
+
   @override
   Widget build(BuildContext context) {
     var iconColor = Theme.of(context).accentColor;
@@ -123,6 +116,32 @@ class UserListWidget extends StatelessWidget {
         contentPadding: const EdgeInsets.symmetric(horizontal: 20),
         child: SliverList(
           delegate: SliverChildListDelegate([
+            ListTile(
+              title: Text("模式"),
+              onTap: () {
+                Store.value<ConfigModel>(context).switchTheme(
+                    brightness: Theme.of(context).brightness == Brightness.light
+                        ? Brightness.dark
+                        : Brightness.light);
+              },
+              leading: Transform.rotate(
+                angle: -pi,
+                child: Icon(
+                  Theme.of(context).brightness == Brightness.light
+                      ? Icons.brightness_2
+                      : Icons.brightness_5,
+                  color: iconColor,
+                ),
+              ),
+              trailing: CupertinoSwitch(
+                  activeColor: Theme.of(context).accentColor,
+                  value: Theme.of(context).brightness == Brightness.dark,
+                  onChanged: (value) {
+                    Store.value<ConfigModel>(context).switchTheme(
+                        brightness: value ? Brightness.dark : Brightness.light);
+                  }),
+            ),
+            SettingThemeWidget(),
             ListTile(
               onTap: () {
                 Toast.show(context, "设置");
@@ -134,8 +153,9 @@ class UserListWidget extends StatelessWidget {
             ListTile(
               title: Text("版本号"),
               leading: Icon(Icons.error_outline, color: iconColor),
-              trailing: FutureBuilder<String>(//异步加载
-                future: PlatformUtils.getAppVersion(),
+              trailing: FutureBuilder<String>(
+                //异步加载
+                future: _futureBuilderFuture,
                 builder: (context, snapshot) {
                   return Text(snapshot.hasData ? snapshot.data : "");
                 },
@@ -143,6 +163,71 @@ class UserListWidget extends StatelessWidget {
             ),
           ]),
         ));
+  }
+}
+
+class SettingThemeWidget extends StatelessWidget {
+  SettingThemeWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return ExpansionTile(
+      title: Text("主题"),
+      leading: Icon(
+        Icons.color_lens,
+        color: Theme.of(context).accentColor,
+      ),
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Wrap(
+            spacing: 5,
+            runSpacing: 5,
+            children: <Widget>[
+              ...Colors.primaries.map((color) {
+                return Material(
+                  color: color,
+                  child: InkWell(
+                    onTap: () {
+                      var model = Store.value<ConfigModel>(context);
+                      var brightness = Theme.of(context).brightness;
+                      model.switchTheme(
+                          brightness: brightness, themeColor: color);
+                    },
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                    ),
+                  ),
+                );
+              }).toList(),
+              Material(
+                child: InkWell(
+                  onTap: () {
+                    var model = Store.value<ConfigModel>(context);
+                    var brightness = Theme.of(context).brightness;
+                    model.switchRandomTheme(brightness: brightness);
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        border:
+                            Border.all(color: Theme.of(context).accentColor)),
+                    width: 40,
+                    height: 40,
+                    child: Text(
+                      "?",
+                      style: TextStyle(
+                          fontSize: 20, color: Theme.of(context).accentColor),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }
 

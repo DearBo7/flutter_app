@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../../public_index.dart';
@@ -56,9 +55,9 @@ class _StorageScreenState extends State<StorageScreen> {
   }
 
   void initData() async {
-    startDate =
-        formatDateShort(DateTime.now().subtract(Duration(days: 31 * 3)));
-    endDate = formatDateShort(DateTime.now());
+    startDate = DateFormat.formatDateShort(
+        DateTime.now().subtract(Duration(days: 31 * 3)));
+    endDate = DateFormat.formatDateShort(DateTime.now());
 
     List<ProduceLineEntity> thisProduceLineList =
         await ApiService.getInstance().getListProduceLine();
@@ -115,11 +114,12 @@ class _StorageScreenState extends State<StorageScreen> {
                   children: <Widget>[
                     Row(
                       children: <Widget>[
-                        Text(FlutterI18n.translate(context, 'dateTitle'),
+                        Text(S.of(context).dateTitle,
                             style: TextStyles.textGrey18),
                         Expanded(
                             child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center, //居中显示
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          //居中显示
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             InkWell(
@@ -147,7 +147,7 @@ class _StorageScreenState extends State<StorageScreen> {
                     ),
                     Row(
                       children: <Widget>[
-                        Text(FlutterI18n.translate(context, 'produceLineTitle'),
+                        Text(S.of(context).produceLineTitle,
                             style: TextStyles.textGrey18),
                         Expanded(
                           child: Container(
@@ -165,8 +165,8 @@ class _StorageScreenState extends State<StorageScreen> {
                             child: DropdownButton(
                               value: _dropdownProduceLineValue,
                               items: _dropdownProduceLineList,
-                              hint: new Text(FlutterI18n.translate(context,
-                                  'noDataProduceLine')), //当没有默认值的时候可以设置的提示
+                              hint: new Text(S.of(context).noDataProduceLine),
+                              //当没有默认值的时候可以设置的提示
                               underline: Container(),
                               onChanged: (value) {
                                 print("ProduceLine:value:${value}");
@@ -184,7 +184,7 @@ class _StorageScreenState extends State<StorageScreen> {
                     ),
                     Row(
                       children: <Widget>[
-                        Text(FlutterI18n.translate(context, 'formulaTitle'),
+                        Text(S.of(context).formulaTitle,
                             style: TextStyles.textGrey18),
                         Expanded(
                           child: Container(
@@ -202,9 +202,9 @@ class _StorageScreenState extends State<StorageScreen> {
                             child: DropdownButton(
                               value: _dropdownFormulaValue,
                               items: _dropdownFormulaList,
-                              hint: new Text(FlutterI18n.translate(
-                                  context, 'noDataFormula')),
-                              underline: Container(), //去掉下划线
+                              hint: new Text(S.of(context).noDataFormula),
+                              underline: Container(),
+                              //去掉下划线
                               onChanged: (value) {
                                 print("Formula:value:${value}");
                                 setState(() {
@@ -223,25 +223,29 @@ class _StorageScreenState extends State<StorageScreen> {
                 )),
             Expanded(
               child: EasyRefresh(
-                firstRefresh: true, //是否首次刷新
+                firstRefresh: true,
+                //是否首次刷新
                 firstRefreshWidget: _firstRefreshWidget(),
-                enableControlFinishRefresh: true, //是否开启控制结束刷新
-                controller: _controller, //控制刷新控制器
+                enableControlFinishRefresh: true,
+                //是否开启控制结束刷新
+                controller: _controller,
+                //控制刷新控制器
                 emptyWidget: storeInList.isEmpty ? EmptyListWidget() : null,
-                bottomBouncing: false, //底部回弹,默认true
+                bottomBouncing: false,
+                //底部回弹,默认true
                 child: _buildListView(),
                 header: ClassicalHeader(
-                  enableHapticFeedback: true, //开启震动反馈,
-                  float: true, //是否浮动
-                  refreshText: FlutterI18n.translate(context, 'pullToRefresh'),
-                  refreshReadyText:
-                      FlutterI18n.translate(context, 'releaseToRefresh'),
-                  refreshingText: FlutterI18n.translate(context, 'refreshing'),
-                  refreshedText: FlutterI18n.translate(context, 'refreshed'),
-                  refreshFailedText:
-                      FlutterI18n.translate(context, 'refreshFailed'),
-                  noMoreText: FlutterI18n.translate(context, 'noMore'),
-                  infoText: FlutterI18n.translate(context, 'updateAt'),
+                  enableHapticFeedback: true,
+                  //开启震动反馈,
+                  float: true,
+                  //是否浮动
+                  refreshText: S.of(context).pullToRefresh,
+                  refreshReadyText: S.of(context).releaseToRefresh,
+                  refreshingText: S.of(context).refreshing,
+                  refreshedText: S.of(context).refreshed,
+                  refreshFailedText: S.of(context).refreshFailed,
+                  noMoreText: S.of(context).noMore,
+                  infoText: S.of(context).updateAt,
                   textColor: Colors.white,
                   bgColor: Colors.black87,
                   infoColor: Colors.white70,
@@ -328,7 +332,7 @@ class _StorageScreenState extends State<StorageScreen> {
                 ),
               ),
               Container(
-                child: Text(FlutterI18n.translate(context, 'loading')),
+                child: Text(S.of(context).loading),
               )
             ],
           ),
@@ -369,9 +373,9 @@ class _StorageScreenState extends State<StorageScreen> {
           pickerTheme: _dateTimePickerTheme,
           onConfirm: (dateTime, List<int> index) {
         setState(() {
-          String strDate = formatDateShort(dateTime);
+          String strDate = DateFormat.formatDateShort(dateTime);
           if (strDate != startDate) {
-            startDate = formatDateShort(dateTime);
+            startDate = DateFormat.formatDateShort(dateTime);
             _controller.callRefresh();
           }
         });
@@ -387,9 +391,9 @@ class _StorageScreenState extends State<StorageScreen> {
           pickerTheme: _dateTimePickerTheme,
           onConfirm: (dateTime, List<int> index) {
         setState(() {
-          String strDate = formatDateShort(dateTime);
+          String strDate = DateFormat.formatDateShort(dateTime);
           if (strDate != endDate) {
-            endDate = formatDateShort(dateTime);
+            endDate = DateFormat.formatDateShort(dateTime);
             _controller.callRefresh();
           }
         });

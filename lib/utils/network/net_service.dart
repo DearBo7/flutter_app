@@ -89,16 +89,8 @@ class NetService {
       }
 
       // 打印网络日志
-      StringBuffer requestParam = new StringBuffer();
-      requestParam.write("$_TAG ");
-      requestParam.write("Url:${url}");
-      requestParam.write("\n");
-      requestParam.write("baseUrl:${baseUrl}");
-      requestParam.write("\n");
-      requestParam.write("$_TAG ");
-      requestParam.write("params:");
-      requestParam.write(json.encode(params));
-      printLog(requestParam.toString());
+      printLog(
+          " \n$_TAG baseUrl：$baseUrl,method:【$method】\n$_TAG Url: $url ,params:${json.encode(params)}");
 
       switch (method) {
         case Method.GET:
@@ -125,7 +117,7 @@ class NetService {
       }
       return await handleDataSource(response, method, url: url);
     } on DioError catch (exception) {
-      printLog("$_TAG net exception= " + exception.toString());
+      printLog("$_TAG net exception= ${exception.toString()}");
       String msg = formatError(exception);
       return ResultData(msg, false, url: url);
     }
@@ -137,7 +129,7 @@ class NetService {
     String errorMsg = "";
     int statusCode;
     statusCode = response.statusCode;
-    printLog("$_TAG statusCode:" + statusCode.toString());
+    printLog("$_TAG statusCode:【${statusCode.toString()}】");
     if (method == Method.DOWNLOAD) {
       if (statusCode == 200) {
         /// 下载成功
@@ -154,7 +146,8 @@ class NetService {
         data = json.decode(response.data);
       }
       if (isPrint()) {
-        printBigLog("$_TAG data: ", json.encode(data));
+        printLog("$_TAG data: ${json.encode(data)}");
+        //printBigLog("$_TAG data: ", json.encode(data));
       }
 
       //处理错误部分
@@ -206,8 +199,7 @@ class NetService {
   }
 
   static void printLog(String log, {tag}) {
-    bool print = isPrint();
-    if (print) {
+    if (isPrint()) {
       String tagLog;
       if (tag != null) {
         tagLog = tag + log;

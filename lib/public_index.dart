@@ -1,4 +1,4 @@
-export 'package:flutter_i18n/flutter_i18n.dart';
+export 'generated/i18n.dart';
 export 'api/api_service.dart';
 
 export 'global/config.dart';

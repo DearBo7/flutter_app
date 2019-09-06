@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
+import '../../../generated/i18n.dart';
 
 class EmptyListWidget extends StatelessWidget {
   @override
@@ -16,7 +16,7 @@ class EmptyListWidget extends StatelessWidget {
               child: Image.asset('assets/images/empty.png'),
             ),
             Text(
-              FlutterI18n.translate(context, 'noData'),
+              S.of(context).noData,
               style: TextStyle(fontSize: 18.0, color: Colors.grey),
             ),
           ],

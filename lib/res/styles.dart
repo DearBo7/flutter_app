@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -48,11 +49,50 @@ class Gaps {
 }
 
 class AppTheme {
-  static getThemeData(int color) {
+  static getThemeDataByColor(int color) {
     //print('getThemeData===================================$color');
     ThemeData themData = ThemeData(
         primaryColor: Color(color == 0 ? Colors.purpleAccent.value : color));
     return themData;
+  }
+
+  /// 根据主题 明暗 和 颜色 生成对应的主题
+  static getThemeData(Brightness brightness, MaterialColor themeColor) {
+    var isDark = Brightness.dark == brightness;
+    var accentColor = isDark ? themeColor[700] : themeColor;
+    ThemeData themeData = ThemeData(
+        brightness: brightness,
+        // 主题颜色属于亮色系还是属于暗色系(eg:dark时,AppBarTitle文字及状态栏文字的颜色为白色,反之为黑色)
+        primaryColorBrightness: Brightness.dark,
+        accentColorBrightness: Brightness.dark,
+        primarySwatch: themeColor,
+        accentColor: accentColor);
+
+    themeData = themeData.copyWith(
+      brightness: brightness,
+      accentColor: accentColor,
+      appBarTheme: themeData.appBarTheme.copyWith(elevation: 0),
+      splashColor: themeColor.withAlpha(50),
+      hintColor: themeData.hintColor.withAlpha(90),
+      errorColor: Colors.red,
+      cursorColor: accentColor,
+      textSelectionColor: accentColor.withAlpha(60),
+      textSelectionHandleColor: accentColor.withAlpha(60),
+      toggleableActiveColor: accentColor,
+      chipTheme: themeData.chipTheme.copyWith(
+        pressElevation: 0,
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        labelStyle: themeData.textTheme.caption,
+        backgroundColor: themeData.chipTheme.backgroundColor.withOpacity(0.1),
+      ),
+      cupertinoOverrideTheme: CupertinoThemeData(
+          primaryColor: themeColor,
+          brightness: brightness,
+          textTheme: CupertinoTextThemeData(brightness: Brightness.light)),
+      inputDecorationTheme: ThemeHelper.inputDecorationTheme(themeData),
+    );
+
+    return themeData;
   }
 }
 
@@ -106,6 +146,7 @@ class TextStyles {
   static TextStyle textWhite16 = textStyle(fontSize: Dimens.font_sp16);
   static TextStyle textGreyC16 =
       textStyle(fontSize: Dimens.font_sp16, color: greyCColor);
+
   //不是主要内容显示
   static TextStyle textGrey16 =
       textStyle(fontSize: Dimens.font_sp16, color: Colors.grey);
@@ -123,6 +164,7 @@ class TextStyles {
   //输入框前面的描述信息
   static TextStyle textGrey18 =
       TextStyle(fontSize: Dimens.font_sp18, color: Colors.grey);
+
   //主要内容显示
   static TextStyle textBlack18 =
       TextStyle(fontSize: Dimens.font_sp18, color: Colors.black);
@@ -144,4 +186,31 @@ class TextStyles {
 
   static TextStyle textBoldWhile40 =
       textStyle(fontSize: Dimens.font_sp40, fontWeight: FontWeight.w400);
+}
+
+class ThemeHelper {
+  static InputDecorationTheme inputDecorationTheme(ThemeData theme) {
+    var primaryColor = theme.primaryColor;
+    var dividerColor = theme.dividerColor;
+    var errorColor = theme.errorColor;
+    var disabledColor = theme.disabledColor;
+
+    var width = 0.5;
+
+    return InputDecorationTheme(
+      hintStyle: TextStyle(fontSize: 14),
+      errorBorder: UnderlineInputBorder(
+          borderSide: BorderSide(width: width, color: errorColor)),
+      focusedErrorBorder: UnderlineInputBorder(
+          borderSide: BorderSide(width: 0.7, color: errorColor)),
+      focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(width: width, color: primaryColor)),
+      enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(width: width, color: dividerColor)),
+      border: UnderlineInputBorder(
+          borderSide: BorderSide(width: width, color: dividerColor)),
+      disabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(width: width, color: disabledColor)),
+    );
+  }
 }
