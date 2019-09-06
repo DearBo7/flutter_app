@@ -47,10 +47,10 @@ class ConfigModel extends ChangeNotifier {
 
     notifyListeners();
     // 模式
-    SpUtil.setInt(kThemeBrightnessIndex, brightness.index);
+    SpUtil.setInt(kThemeBrightnessIndex, _brightness.index);
 
     //主题颜色
-    int index = Colors.primaries.indexOf(themeColor);
+    int index = Colors.primaries.indexOf(_themeColor);
     SpUtil.setInt(kThemeColorIndex, index);
   }
 

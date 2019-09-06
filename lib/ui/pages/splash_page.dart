@@ -5,6 +5,16 @@ import '../../utils/route_util.dart';
 
 import 'home_page.dart';
 
+/// 用于项目初始化之前显示的页面
+class SplashImage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Image.asset("assets/images/splash.png", fit: BoxFit.fill),
+    );
+  }
+}
+
 class SplashPage extends StatefulWidget {
   @override
   _SplashPageState createState() => _SplashPageState();

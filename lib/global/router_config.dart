@@ -9,9 +9,9 @@ class RouteName {
   static const String splash = 'splash';
 
   //static const String home = '/';
-  static const String homePage = 'homePage';
-  static const String learnPage = 'learnPage';
-  static const String myPage = 'myPage';
+  //static const String homePage = 'homePage';
+  //static const String learnPage = 'learnPage';
+  //static const String myPage = 'myPage';
 //static const String setting = 'setting';
 }
 
@@ -20,12 +20,12 @@ class Router {
     switch (settings.name) {
       case RouteName.splash:
         return CupertinoPageRoute(builder: (_) => SplashPage());
-      case RouteName.homePage:
+      /*case RouteName.homePage:
         return CupertinoPageRoute(builder: (_) => HomePage());
       case RouteName.learnPage:
         return CupertinoPageRoute(builder: (_) => LearnPage());
       case RouteName.myPage:
-        return CupertinoPageRoute(builder: (_) => MyPage());
+        return CupertinoPageRoute(builder: (_) => MyPage());*/
 
       default:
         return CupertinoPageRoute(

@@ -9,7 +9,9 @@ class Store {
     /// 返回多个状态
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(builder: (_) => ConfigModel()),
+        ChangeNotifierProvider<ConfigModel>.value(value: ConfigModel()),
+        //ChangeNotifierProvider<UserModel>.value(value: UserModel()),
+        //ChangeNotifierProvider(builder: (_) => ConfigModel()),
         ChangeNotifierProvider(builder: (_) => UserModel())
       ],
       child: child,

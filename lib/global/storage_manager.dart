@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:localstorage/localstorage.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../utils/sp_util.dart';
 
@@ -20,11 +21,13 @@ class StorageManager {
   ///
   /// 由于是同步操作会导致阻塞,所以应尽量减少存储容量
   static init() async {
+    debugPrint('StorageManager--init');
     // async 异步操作
     // sync 同步操作
     temporaryDirectory = await getTemporaryDirectory();
     spUtil = await SpUtil.getInstance();
     localStorage = LocalStorage('LocalStorage');
     await localStorage.ready;
+    debugPrint('StorageManager--end');
   }
 }
