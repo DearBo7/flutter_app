@@ -32,7 +32,8 @@ class ResultData {
   bool isFail() {
     bool success = result && code == 1;
     if (!success) {
-      mDebugPrint("Not success for $url:$result,code:$code,msg:$msg");
+      mDebugPrint(
+          "ResultData-[isFail]->Not error for $url:$result,code:$code,msg:$msg");
     }
     return !success;
   }
@@ -40,7 +41,8 @@ class ResultData {
   bool isSuccess() {
     bool success = result && code == 1;
     if (!success) {
-      mDebugPrint("Not success for $url:$result,code:$code,msg:$msg");
+      mDebugPrint(
+          "ResultData-[isSuccess]->Not success for $url:$result,code:$code,msg:$msg");
     }
     return success;
   }
@@ -48,11 +50,10 @@ class ResultData {
   /// 失败情况下弹提示
   bool toast() {
     if (isFail()) {
-      Fluttertoast.showToast(msg: msg);
-      return true;
-    } else {
+      Fluttertoast.showToast(msg: msg ?? "请求失败,未返回错误提示.");
       return false;
     }
+    return isSuccess();
   }
 
   mDebugPrint(String log) {

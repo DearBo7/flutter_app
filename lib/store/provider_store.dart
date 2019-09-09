@@ -10,9 +10,10 @@ class Store {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<ConfigModel>.value(value: ConfigModel()),
-        //ChangeNotifierProvider<UserModel>.value(value: UserModel()),
-        //ChangeNotifierProvider(builder: (_) => ConfigModel()),
-        ChangeNotifierProvider(builder: (_) => UserModel())
+        ChangeNotifierProvider(builder: (_) => UserModel()),
+        ChangeNotifierProvider(builder: (_) => SettingModel()),
+        ChangeNotifierProvider(builder: (_) => PrintModel()),
+        ChangeNotifierProvider(builder: (_) => LoginModel())
       ],
       child: child,
     );

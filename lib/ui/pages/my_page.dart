@@ -117,7 +117,7 @@ class UserListWidget extends StatelessWidget {
         child: SliverList(
           delegate: SliverChildListDelegate([
             ListTile(
-              title: Text("模式"),
+              title: Text(S.of(context).darkMode),
               onTap: () {
                 Store.value<ConfigModel>(context).switchTheme(
                     brightness: Theme.of(context).brightness == Brightness.light
@@ -144,14 +144,14 @@ class UserListWidget extends StatelessWidget {
             SettingThemeWidget(),
             ListTile(
               onTap: () {
-                Toast.show(context, "设置");
+                popNewPage(context, RouteName.setting);
               },
-              title: Text("设置"),
+              title: Text(S.of(context).setting),
               leading: Icon(Icons.settings, color: iconColor),
               trailing: Icon(Icons.chevron_right),
             ),
             ListTile(
-              title: Text("版本号"),
+              title: Text(S.of(context).version),
               leading: Icon(Icons.error_outline, color: iconColor),
               trailing: FutureBuilder<String>(
                 //异步加载
@@ -166,13 +166,14 @@ class UserListWidget extends StatelessWidget {
   }
 }
 
+/// 设置主题
 class SettingThemeWidget extends StatelessWidget {
-  SettingThemeWidget();
+  //SettingThemeWidget();
 
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
-      title: Text("主题"),
+      title: Text(S.of(context).theme),
       leading: Icon(
         Icons.color_lens,
         color: Theme.of(context).accentColor,
@@ -189,10 +190,9 @@ class SettingThemeWidget extends StatelessWidget {
                   color: color,
                   child: InkWell(
                     onTap: () {
-                      var model = Store.value<ConfigModel>(context);
-                      var brightness = Theme.of(context).brightness;
-                      model.switchTheme(
-                          brightness: brightness, themeColor: color);
+                      Store.value<ConfigModel>(context).switchTheme(
+                          brightness: Theme.of(context).brightness,
+                          themeColor: color);
                     },
                     child: Container(
                       width: 40,
@@ -204,9 +204,8 @@ class SettingThemeWidget extends StatelessWidget {
               Material(
                 child: InkWell(
                   onTap: () {
-                    var model = Store.value<ConfigModel>(context);
-                    var brightness = Theme.of(context).brightness;
-                    model.switchRandomTheme(brightness: brightness);
+                    Store.value<ConfigModel>(context).switchRandomTheme(
+                        brightness: Theme.of(context).brightness);
                   },
                   child: Container(
                     alignment: Alignment.center,

@@ -21,11 +21,22 @@ class ApiService extends BasicNetService {
     return _apiService;
   }
 
+  /// 登录
+  Future<UserEntity> getLogin(String userName, String pwd,
+      {BuildContext context}) async {
+    Map<String, dynamic> params = {"userName": userName, "pwd": pwd};
+    ResultData resultData =
+        await post(ApiUrl.getLoginUrl(), params: params, context: context);
+    if (resultData.toast()) {
+      return UserEntity.fromJson(resultData.data);
+    }
+    return null;
+  }
+
   ///获取用户列表
   Future<List<UserEntity>> getListUser({BuildContext context}) async {
     ResultData resultData = await get(ApiUrl.getListUser(), context: context);
-    resultData.toast();
-    if (resultData.isSuccess()) {
+    if (resultData.toast()) {
       return UserEntity.fromJsonList(resultData.data);
     }
     return [];
@@ -36,8 +47,7 @@ class ApiService extends BasicNetService {
       {BuildContext context}) async {
     ResultData resultData =
         await get(ApiUrl.getListProduceLine(), context: context);
-    resultData.toast();
-    if (resultData.isSuccess()) {
+    if (resultData.toast()) {
       return ProduceLineEntity.fromJsonList(resultData.data);
     }
     return [];
@@ -47,8 +57,7 @@ class ApiService extends BasicNetService {
   Future<List<FormulaEntity>> getListFormula({BuildContext context}) async {
     ResultData resultData =
         await get(ApiUrl.getListFormula(), context: context);
-    resultData.toast();
-    if (resultData.isSuccess()) {
+    if (resultData.toast()) {
       return FormulaEntity.fromJsonList(resultData.data);
     }
     return [];
@@ -72,8 +81,7 @@ class ApiService extends BasicNetService {
     }
     ResultData resultData = await get(ApiUrl.getListStoreIn(),
         params: params, context: context, showLoad: showLoad);
-    resultData.toast();
-    if (resultData.isSuccess()) {
+    if (resultData.toast()) {
       return StoreInEntity.fromJsonList(resultData.data);
     }
     return [];
@@ -83,8 +91,7 @@ class ApiService extends BasicNetService {
   Future<List<MaterialEntity>> getListMaterial({BuildContext context}) async {
     ResultData resultData =
         await get(ApiUrl.getListMaterial(), context: context);
-    resultData.toast();
-    if (resultData.isSuccess()) {
+    if (resultData.toast()) {
       return MaterialEntity.fromJsonList(resultData.data);
     }
     return [];

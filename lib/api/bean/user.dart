@@ -2,13 +2,15 @@ class UserEntity {
   int id;
   String userName;
   String userCode;
+  String department;
 
-  UserEntity({this.id, this.userName, this.userCode});
+  UserEntity({this.id, this.userName, this.userCode,this.department});
 
   UserEntity.fromJson(Map<String, dynamic> json) {
     id = json['Id'];
     userName = json['userName'];
     userCode = json['userCode'];
+    department = json['department'];
   }
 
   static List<UserEntity> fromJsonList(dynamic mapList) {
@@ -24,6 +26,7 @@ class UserEntity {
     data['Id'] = this.id;
     data['userName'] = this.userName;
     data['userCode'] = this.userCode;
+    data['department'] = this.department;
     return data;
   }
 }

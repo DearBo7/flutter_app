@@ -28,9 +28,11 @@ class S implements WidgetsLocalizations {
   String get city => "City";
   String get completeLoad => "Load done";
   String get completeRefresh => "Refresh done";
+  String get darkMode => "Dark Mode";
   String get dateTitle => "Date:";
   String get email => "E-Mail";
   String get emptyWidget => "Empty widget";
+  String get fieldNotNull => "not empty";
   String get firstRefresh => "First refresh";
   String get formulaTitle => "Formula:";
   String get loadFailed => "Load failed";
@@ -39,6 +41,7 @@ class S implements WidgetsLocalizations {
   String get loaded => "Load completed";
   String get loading => "Loading...";
   String get logout => "Sign Out";
+  String get materialList => "Material List";
   String get me => "Me";
   String get more => "More";
   String get name => "Name";
@@ -47,6 +50,7 @@ class S implements WidgetsLocalizations {
   String get noDataProduceLine => "No Produce Line data...";
   String get noLogin => "Not logged in";
   String get noMore => "No more";
+  String get password => "Password";
   String get phone => "Phone";
   String get produceLineTitle => "ProduceLine:";
   String get pullToRefresh => "Pull to refresh";
@@ -58,8 +62,13 @@ class S implements WidgetsLocalizations {
   String get releaseToLoad => "Release to load";
   String get releaseToRefresh => "Release to refresh";
   String get send => "Send";
+  String get setting => "Setting";
+  String get signIn => "Sign Up";
   String get style => "Style";
+  String get theme => "Theme";
   String get updateAt => "Update at %T";
+  String get userName => "Username";
+  String get version => "Version";
 }
 
 class $en extends S {
@@ -81,6 +90,8 @@ class $zh_CN extends S {
   @override
   String get emptyWidget => "空视图";
   @override
+  String get materialList => "原料列表";
+  @override
   String get autoLoad => "自动加载";
   @override
   String get noDataFormula => "暂无配方数据...";
@@ -88,6 +99,8 @@ class $zh_CN extends S {
   String get updateAt => "上次更新 %T";
   @override
   String get releaseToLoad => "释放加载";
+  @override
+  String get setting => "设置";
   @override
   String get noDataProduceLine => "暂无产线数据...";
   @override
@@ -97,6 +110,8 @@ class $zh_CN extends S {
   @override
   String get noLogin => "未登录";
   @override
+  String get password => "密码";
+  @override
   String get refreshFailed => "刷新失败";
   @override
   String get pushToLoad => "拉动加载";
@@ -104,6 +119,10 @@ class $zh_CN extends S {
   String get releaseToRefresh => "释放立即刷新";
   @override
   String get me => "我";
+  @override
+  String get theme => "色彩主题";
+  @override
+  String get fieldNotNull => "不能为空";
   @override
   String get completeRefresh => "完成刷新";
   @override
@@ -125,6 +144,10 @@ class $zh_CN extends S {
   @override
   String get loading => "正在加载...";
   @override
+  String get userName => "用户名";
+  @override
+  String get version => "版本号";
+  @override
   String get firstRefresh => "首次刷新";
   @override
   String get completeLoad => "完成加载";
@@ -133,6 +156,8 @@ class $zh_CN extends S {
   @override
   String get refreshing => "正在刷新...";
   @override
+  String get signIn => "登录";
+  @override
   String get name => "名字";
   @override
   String get formulaTitle => "配方:";
@@ -140,6 +165,8 @@ class $zh_CN extends S {
   String get style => "样式";
   @override
   String get noData => "暂无数据...";
+  @override
+  String get darkMode => "黑夜模式";
   @override
   String get produceLineTitle => "产线:";
   @override

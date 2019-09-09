@@ -1,5 +1,5 @@
-import '../../global/storage_manager.dart';
 import '../../api/bean/user.dart';
+import '../../global/storage_manager.dart';
 import '../../provider/view_state_model.dart';
 
 class UserModel extends ViewStateModel {

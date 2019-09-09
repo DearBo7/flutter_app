@@ -1,6 +1,7 @@
 {
   "appName": "AppName",
   "logout": "Sign Out",
+  "noLogin": "Not logged in",
   "style": "Style",
   "more": "More",
   "refresh": "Refresh",
@@ -24,6 +25,10 @@
   "autoLoadDescribe": "Automatically refresh the slide to the bottom",
   "firstRefresh": "First refresh",
   "emptyWidget": "Empty widget",
+  "darkMode": "Dark Mode",
+  "theme": "Theme",
+  "setting": "Setting",
+  "version": "Version",
   "name": "Name",
   "age": "Age",
   "city": "City",
@@ -31,11 +36,16 @@
   "email": "E-Mail",
   "send": "Send",
   "me": "Me",
+  "fieldNotNull": "not empty",
+  "userName": "Username",
+  "password": "Password",
+  "signIn": "Sign Up",
   "noData": "No data...",
-  "dateTitle":"Date:",
-  "produceLineTitle":"ProduceLine:",
-  "formulaTitle":"Formula:",
-  "noDataProduceLine":"No Produce Line data...",
-  "noDataFormula":"No Formula data...",
-  "noLogin":"Not logged in"
+  "dateTitle": "Date:",
+  "produceLineTitle": "ProduceLine:",
+  "formulaTitle": "Formula:",
+  "noDataProduceLine": "No Produce Line data...",
+  "noDataFormula": "No Formula data...",
+  "materialList": "Material List"
+
 }

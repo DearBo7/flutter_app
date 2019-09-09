@@ -108,6 +108,10 @@ class TextStyles {
         fontWeight: fontWeight);
   }
 
+  static TextStyle text12 = TextStyle(fontSize: Dimens.font_sp12);
+  static TextStyle text14 = TextStyle(fontSize: Dimens.font_sp14);
+  static TextStyle text16 = TextStyle(fontSize: Dimens.font_sp16);
+  static TextStyle text18 = TextStyle(fontSize: Dimens.font_sp18);
   static TextStyle textRed12 = textStyle(color: Colors.red);
   static TextStyle textBlue12 = textStyle(color: Colors.blueAccent);
   static TextStyle textWhite12 = textStyle();
@@ -130,6 +134,8 @@ class TextStyles {
       textStyle(fontSize: Dimens.font_sp14, color: Colors.grey);
   static TextStyle textDark14 =
       textStyle(fontSize: Dimens.font_sp14, color: grey3Color);
+  static TextStyle textBlack14 =
+      textStyle(fontSize: Dimens.font_sp14, color: Colors.black);
   static TextStyle textBoldDark14 = textStyle(
       fontSize: Dimens.font_sp14,
       color: Colors.black,
@@ -146,6 +152,8 @@ class TextStyles {
   static TextStyle textWhite16 = textStyle(fontSize: Dimens.font_sp16);
   static TextStyle textGreyC16 =
       textStyle(fontSize: Dimens.font_sp16, color: greyCColor);
+  static TextStyle textBlack16 =
+  textStyle(fontSize: Dimens.font_sp16, color: Colors.black);
 
   //不是主要内容显示
   static TextStyle textGrey16 =

@@ -90,6 +90,9 @@ dependencies: # 应用或包依赖的其它包或插件
   # 更新应用 https://pub.flutter-io.cn/packages/ota_update
   #ota_update: ^2.0.1
 
+  # 输入框 https://github.com/Ali-Azmoud/spinner_input (本地以复制源码)
+  #spinner_input: ^0.1.2
+
 dev_dependencies: # 开发环境依赖的工具包（而不是flutter应用本身依赖的包）
   flutter_test:
     sdk: flutter

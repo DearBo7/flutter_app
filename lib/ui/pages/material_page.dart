@@ -52,7 +52,7 @@ class _MaterialPageState extends State<MaterialPage> {
     //initData();
     return Scaffold(
       appBar: AppBar(
-        title: Text("原料列表"),
+        title: Text(S.of(context).materialList),
         leading: IconButton(
           icon: Icon(CustomIcon.back, size: 32.0),
           onPressed: () {
@@ -174,10 +174,10 @@ class _MaterialPageState extends State<MaterialPage> {
                 ],
               ),
             ),
-            Container(
+            /*Container(
               height: 250.0,
               child: _previewImage(),
-            ),
+            ),*/
             Expanded(
               child: Container(
                 decoration: BoxDecoration(

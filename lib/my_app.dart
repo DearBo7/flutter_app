@@ -38,12 +38,12 @@ class MyApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
 
               //路由配置
-              //onGenerateRoute: Router.generateRoute,
+              onGenerateRoute: Router.generateRoute,
 
               /// 主页
-              home: Builder(builder: (context) {
+              /*home: Builder(builder: (context) {
                   return SplashPage();
-                }),
+                }),*/
 
               /// localizationsDelegates 列表中的元素时生成本地化集合的工厂
               localizationsDelegates: [
@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
                 S.delegate,
               ],
               supportedLocales: S.delegate.supportedLocales,
-              //initialRoute: RouteName.splash,
+              initialRoute: RouteName.splash,
             );
           }));
         });
