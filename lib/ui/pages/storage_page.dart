@@ -155,7 +155,7 @@ class _StorageScreenState extends State<StorageScreen> {
                               value: _dropdownProduceLineValue,
                               items: _dropdownProduceLineList,
                               disabledHint: new Text(S.of(context).noDataProduceLine),
-                              isDense: true,
+                              //isDense: true,
                               isExpanded: true,
                               //当没有默认值的时候可以设置的提示
                               underline: Container(),
@@ -193,7 +193,7 @@ class _StorageScreenState extends State<StorageScreen> {
                               value: _dropdownFormulaValue,
                               items: _dropdownFormulaList,
                               disabledHint: new Text(S.of(context).noDataFormula),
-                              isDense: true,
+                              //isDense: true,
                               isExpanded: true,
                               //去掉下划线
                               underline: Container(),
