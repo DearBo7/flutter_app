@@ -1,10 +1,12 @@
-class UserEntity {
+import 'base/input_select_entity.dart';
+
+class UserEntity extends InputSelectEntity {
   int id;
   String userName;
   String userCode;
   String department;
 
-  UserEntity({this.id, this.userName, this.userCode,this.department});
+  UserEntity({this.id, this.userName, this.userCode, this.department});
 
   UserEntity.fromJson(Map<String, dynamic> json) {
     id = json['Id'];
@@ -28,5 +30,15 @@ class UserEntity {
     data['userCode'] = this.userCode;
     data['department'] = this.department;
     return data;
+  }
+
+  @override
+  String getShowLabel() {
+    return this.userName;
+  }
+
+  @override
+  String getShowValue() {
+    return this.userCode;
   }
 }

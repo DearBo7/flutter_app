@@ -1,19 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/ui/pages/login_page.dart';
 
 import '../ui/pages/page_index.dart';
 import '../ui/pages/setting_page.dart';
 
 class RouteName {
-  //static const String login = 'login';
+  static const String login = 'login';
+
   //static const String register = 'register';
   static const String splash = 'splash';
   static const String setting = 'setting';
 
   //static const String home = '/';
-  //static const String homePage = 'homePage';
-  //static const String learnPage = 'learnPage';
-  //static const String myPage = 'myPage';
+  static const String homePage = 'homePage';
+//static const String learnPage = 'learnPage';
+//static const String myPage = 'myPage';
 //static const String setting = 'setting';
 }
 
@@ -22,14 +24,12 @@ class Router {
     switch (settings.name) {
       case RouteName.splash:
         return CupertinoPageRoute(builder: (_) => SplashPage());
+      case RouteName.login:
+        return CupertinoPageRoute(builder: (_) => LoginPage());
       case RouteName.setting:
         return CupertinoPageRoute(builder: (_) => SettingPage());
-      /*case RouteName.homePage:
+      case RouteName.homePage:
         return CupertinoPageRoute(builder: (_) => HomePage());
-      case RouteName.learnPage:
-        return CupertinoPageRoute(builder: (_) => LearnPage());
-      case RouteName.myPage:
-        return CupertinoPageRoute(builder: (_) => MyPage());*/
 
       default:
         return CupertinoPageRoute(

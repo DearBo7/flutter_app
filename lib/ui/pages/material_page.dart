@@ -97,16 +97,8 @@ class _MaterialPageState extends State<MaterialPage> {
                       children: <Widget>[
                         Text("名称:", style: TextStyles.textGrey18),
                         Expanded(
-                          child: Container(
-                            padding: EdgeInsets.all(5.0),
-                            margin: EdgeInsets.only(left: 10.0),
-                            decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              border: Border.all(
-                                  color: Colors.grey[400], width: 0.5),
-                              borderRadius:
-                                  new BorderRadius.all(Radius.circular(3.0)),
-                            ),
+                          child: MaterialContainer(
+                            backgroundColor: Colors.grey[300],
                             child:
                                 Text("名称", style: TextStyle(color: Colors.red)),
                           ),
@@ -120,15 +112,7 @@ class _MaterialPageState extends State<MaterialPage> {
                       children: <Widget>[
                         Text("批次:", style: TextStyles.textGrey18),
                         Expanded(
-                          child: Container(
-                            padding: EdgeInsets.all(5.0),
-                            margin: EdgeInsets.only(left: 10.0),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.grey[400], width: 0.5),
-                              borderRadius:
-                                  new BorderRadius.all(Radius.circular(3.0)),
-                            ),
+                          child: MaterialContainer(
                             child: Text("批次内容"),
                           ),
                         )
@@ -141,16 +125,8 @@ class _MaterialPageState extends State<MaterialPage> {
                       children: <Widget>[
                         Text("包数:", style: TextStyles.textGrey18),
                         Expanded(
-                          child: Container(
-                            padding: EdgeInsets.all(5.0),
-                            margin: EdgeInsets.only(left: 10.0),
-                            decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              border: Border.all(
-                                  color: Colors.grey[400], width: 0.5),
-                              borderRadius:
-                                  new BorderRadius.all(Radius.circular(3.0)),
-                            ),
+                          child: MaterialContainer(
+                            backgroundColor: Colors.grey[300],
                             child:
                                 Text("1", style: TextStyle(color: Colors.red)),
                           ),
@@ -208,8 +184,7 @@ class _MaterialPageState extends State<MaterialPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text("${material.materialName}",
-                        style: TextStyles.textBlack18),
+                    Text("${material.materialName}", style: TextStyles.text18),
                     Text("${material.storeQuantity}",
                         style: TextStyles.textGrey14)
                   ],
@@ -280,5 +255,25 @@ class FileImageEx extends FileImage {
     return file?.path == typedOther.file?.path &&
         scale == typedOther.scale &&
         fileSize == typedOther.fileSize;
+  }
+}
+
+class MaterialContainer extends StatelessWidget {
+  MaterialContainer({this.child, this.backgroundColor});
+
+  final Widget child;
+  final Color backgroundColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        padding: EdgeInsets.all(5.0),
+        margin: EdgeInsets.only(left: 10.0),
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          border: Border.all(color: Colors.grey[400], width: 0.5),
+          borderRadius: new BorderRadius.all(Radius.circular(3.0)),
+        ),
+        child: child);
   }
 }

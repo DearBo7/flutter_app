@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../utils/route_util.dart';
-import 'login_page.dart';
 
 /// 用于项目初始化之前显示的页面
 class SplashImage extends StatelessWidget {
@@ -43,6 +42,7 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   void navigationPage() {
-    pushAndRemovePage(context, LoginPage());
+    RouteUtils.pushRouteNameAndRemovePage(context, RouteName.login);
+    //pushAndRemovePage(context, LoginPage());
   }
 }

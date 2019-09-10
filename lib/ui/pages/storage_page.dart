@@ -94,17 +94,6 @@ class _StorageScreenState extends State<StorageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        /*appBar: PreferredSize(
-          child: Container(
-            color: Theme.of(context).primaryColor,
-            child: IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () {
-                  _clickListItem(StoreInEntity(id: 1));
-                }),
-          ),
-          preferredSize: Size(double.infinity, 50.0),
-        ),*/
         appBar: AppBarPreferred.getPreferredSize(context),
         body: Column(
           children: <Widget>[
@@ -165,11 +154,12 @@ class _StorageScreenState extends State<StorageScreen> {
                             child: DropdownButton(
                               value: _dropdownProduceLineValue,
                               items: _dropdownProduceLineList,
-                              hint: new Text(S.of(context).noDataProduceLine),
+                              disabledHint: new Text(S.of(context).noDataProduceLine),
+                              isDense: true,
+                              isExpanded: true,
                               //当没有默认值的时候可以设置的提示
                               underline: Container(),
                               onChanged: (value) {
-                                print("ProduceLine:value:${value}");
                                 setState(() {
                                   if (_dropdownProduceLineValue != value) {
                                     _dropdownProduceLineValue = value;
@@ -202,9 +192,11 @@ class _StorageScreenState extends State<StorageScreen> {
                             child: DropdownButton(
                               value: _dropdownFormulaValue,
                               items: _dropdownFormulaList,
-                              hint: new Text(S.of(context).noDataFormula),
-                              underline: Container(),
+                              disabledHint: new Text(S.of(context).noDataFormula),
+                              isDense: true,
+                              isExpanded: true,
                               //去掉下划线
+                              underline: Container(),
                               onChanged: (value) {
                                 print("Formula:value:${value}");
                                 setState(() {
@@ -286,7 +278,7 @@ class _StorageScreenState extends State<StorageScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text("${storeIn.billCode}-${storeIn.produceLineName}",
-                          style: TextStyles.textBlack18),
+                          style: TextStyles.text18),
                       Text("${storeIn.creator}", style: TextStyles.textGrey14)
                     ],
                   ),

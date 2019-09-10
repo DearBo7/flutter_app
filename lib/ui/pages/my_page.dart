@@ -27,9 +27,38 @@ class _MyPageState extends State<MyPage> {
                           tooltip: S.of(context).logout,
                           icon: Icon(Icons.exit_to_app),
                           onPressed: () {
-                            //退出登录
-                            Toast.show(context, "退出登录");
-                            Store.value<UserModel>(context).clearUser();
+                            showDialog(
+                                context: context,
+                                //弹出框外不能取消
+                                barrierDismissible: false,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text("提示"),
+                                    //内容
+                                    content: Text("是否退出登录?"),
+                                    actions: <Widget>[
+                                      //操作按钮数组
+                                      FlatButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text('取消'),
+                                      ),
+                                      FlatButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                          Store.value<UserModel>(context)
+                                              .clearUser();
+                                          Store.value<LoginModel>(context)
+                                              .setAutoLogin(false);
+                                          RouteUtils.pushRouteNameAndRemovePage(
+                                              context, RouteName.login);
+                                        },
+                                        child: Text('确定'),
+                                      ),
+                                    ],
+                                  );
+                                });
                           },
                         ),
                       ))
@@ -144,7 +173,7 @@ class UserListWidget extends StatelessWidget {
             SettingThemeWidget(),
             ListTile(
               onTap: () {
-                popNewPage(context, RouteName.setting);
+                RouteUtils.pushRouteNameNewPage(context, RouteName.setting);
               },
               title: Text(S.of(context).setting),
               leading: Icon(Icons.settings, color: iconColor),

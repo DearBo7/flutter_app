@@ -1,47 +1,56 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+export '../global/router_config.dart' show RouteName;
 
-void pushAndRemovePage(BuildContext context, Widget routePage) {
-  Navigator.of(context).pushAndRemoveUntil(
-    MaterialPageRoute(builder: (context) => routePage),
-    (route) => route == null,
-  );
-}
+class RouteUtils {
+  ///pushAndRemoveUntil和pushNamedAndRemoveUntil效果一样，跳转页面并销毁当前页面，route == null 为销毁当前
+  static void pushAndRemovePage(BuildContext context, Widget routePage) {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => routePage),
+      (route) => route == null,
+    );
+  }
 
-void pushNewPage(BuildContext context, Widget routePage, {Function callBack}) {
-  Navigator.push(context, MaterialPageRoute(builder: (context) => routePage))
-      .then((value) {
-    if (value != null) {
-      callBack(value);
-    }
-  });
-}
+  static void pushRouteNameAndRemovePage(
+      BuildContext context, String routeName) {
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(routeName, (route) => route == null);
+  }
 
-void pushNewPageBack(BuildContext context, Widget routePage,
-    {Function callBack}) {
-  Navigator.of(context)
-      .push(CupertinoPageRoute(builder: (context) => routePage))
-      .then((data) {
-    if (data != null) {
-      callBack(data);
-    }
-  });
-}
+  static void pushNewPage(BuildContext context, Widget routePage,
+      {Function callBack}) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => routePage))
+        .then((value) {
+      if (value != null) {
+        callBack(value);
+      }
+    });
+  }
 
-void popNewPage(BuildContext context, String routeName) {
-  Navigator.pushNamed(context, routeName);
-}
+  static void pushNewPageBack(BuildContext context, Widget routePage,
+      {Function callBack}) {
+    Navigator.of(context)
+        .push(CupertinoPageRoute(builder: (context) => routePage))
+        .then((data) {
+      if (data != null) {
+        callBack(data);
+      }
+    });
+  }
 
-/*void popAndPushNewPage(BuildContext context, String routeName) {
-  Navigator.popAndPushNamed(context, routeName);
-}*/
+  /// push和pushNamed运行效果相同
+  static void pushRouteNameNewPage(BuildContext context, String routeName) {
+    Navigator.pushNamed(context, routeName);
+  }
 
-void pushReplacement(BuildContext context, Widget routePage) {
-  Navigator.pushReplacement(
-      context, MaterialPageRoute(builder: (context) => routePage));
-}
+  ///pushReplacement和pushReplacementNamed一样，调用方式不同
+  static void pushReplacement(BuildContext context, Widget routePage) {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => routePage));
+  }
 
-/// 跳转后不能返回
-void pushReplacementName(BuildContext context, String routeName) {
-  Navigator.pushReplacementNamed(context, routeName);
+  static void pushRouteNameReplacementName(
+      BuildContext context, String routeName) {
+    Navigator.pushReplacementNamed(context, routeName);
+  }
 }
