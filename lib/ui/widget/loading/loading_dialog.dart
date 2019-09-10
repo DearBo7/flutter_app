@@ -59,9 +59,9 @@ class LoadingDialog extends Dialog {
           return WillPopScope(
             child: LoadingDialog(showParam: param),
             onWillPop: () async {
-              if (param.barrierDismissible) {
+              /*if (param.barrierDismissible) {
                 param.dispose = true;
-              }
+              }*/
               return Future.value(param.barrierDismissible);
             },
           );
@@ -132,9 +132,9 @@ class LoadingTextDialog extends Dialog {
             child: LoadingTextDialog(
                 text: param.text ?? '加载中...', showParam: param),
             onWillPop: () async {
-              if (param.barrierDismissible == true) {
+              /*if (param.barrierDismissible == true) {
                 param.dispose = true;
-              }
+              }*/
               return Future.value(param.barrierDismissible);
             },
           );
@@ -155,9 +155,9 @@ class LoadingDialogUtil {
           return WillPopScope(
             child: LoadingDialog(showParam: param),
             onWillPop: () async {
-              if (param.barrierDismissible) {
+              /*if (param.barrierDismissible) {
                 param.dispose = true;
-              }
+              }*/
               return Future.value(param.barrierDismissible);
             },
           );
@@ -176,9 +176,9 @@ class LoadingDialogUtil {
           return WillPopScope(
             child: LoadingTextDialog(text: param.text, showParam: param),
             onWillPop: () async {
-              if (param.barrierDismissible == true) {
+              /*if (param.barrierDismissible == true) {
                 param.dispose = true;
-              }
+              }*/
               return Future.value(param.barrierDismissible);
             },
           );
