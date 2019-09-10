@@ -33,7 +33,7 @@ class BasicNetService extends NetService {
     ShowParam showParam;
     if (showLoad) {
       showParam = new ShowParam(show: showLoad);
-      LoadingDialogUtil.showTextLoadingDialog(context, showParam);
+      await LoadingDialogUtil.showTextLoadingDialog(context, showParam);
     }
 
     ResultData resultData = await super.request(url,
