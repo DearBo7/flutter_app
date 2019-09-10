@@ -127,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                                 });
                               },
                               validator: (text) {
-                                // text 初始化加载时,这个为null
+                                //todo text 初始化加载时,然后设置value值，验证时这个为null?
                                 print(
                                     "validator===>text:$text,_userCodeValue:$_userCodeValue");
                                 return _userCodeValue == null ||
