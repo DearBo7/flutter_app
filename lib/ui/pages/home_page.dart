@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../utils/toast.dart';
+import '../../utils/toast_utils.dart';
 import '../widget/navigation/bubble_bottom_bar.dart';
 import '../widget/wrap_keep_state.dart';
 import 'learn_page.dart';
@@ -47,7 +47,8 @@ class _HomePageState extends State<HomePage> {
             itemBuilder: (ctx, index) => childWidgetList[index],
             itemCount: childWidgetList.length,
             controller: _pageController,
-            physics: NeverScrollableScrollPhysics(), // 禁止滑动
+            physics: NeverScrollableScrollPhysics(),
+            // 禁止滑动
             onPageChanged: (index) {
               setState(() {
                 _childIndex = index;
@@ -107,8 +108,7 @@ class _HomePageState extends State<HomePage> {
         DateTime.now().difference(_lastPressedAt) > Duration(seconds: 1)) {
       //两次点击间隔超过1秒则重新计时
       _lastPressedAt = DateTime.now();
-      Toast.show(context, "再按一次退出",
-          duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+      ToastUtil.show("再按一次退出");
       return false;
     }
     return true;

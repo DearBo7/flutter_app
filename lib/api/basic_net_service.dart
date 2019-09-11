@@ -30,12 +30,10 @@ class BasicNetService extends NetService {
     if (context == null) {
       showLoad = false;
     }
-    ShowParam showParam;
+    CustomizeLoadingDialog loadingDialog;
     if (showLoad) {
-      showParam = new ShowParam(show: showLoad);
-      LoadingDialogUtil.showTextLoadingDialog(context, showParam);
+      loadingDialog = CustomizeLoadingDialog(context).show(isShowText: true);
     }
-
     ResultData resultData = await super.request(url,
         method: method,
         params: params,
@@ -43,10 +41,9 @@ class BasicNetService extends NetService {
         file: file,
         fileName: fileName,
         fileSavePath: fileSavePath);
-    if (showParam != null) {
-      showParam.pop();
+    if (loadingDialog != null) {
+      loadingDialog.hide();
     }
-
     /// 当apiToken 过期或者错误时的提示码
     //if (0 == resultData.code && context != null) {
     // 退出登录并跳转到登录界面

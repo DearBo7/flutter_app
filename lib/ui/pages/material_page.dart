@@ -67,7 +67,7 @@ class _MaterialPageState extends State<MaterialPage> {
                 size: 32.0,
               ),
               onPressed: () async {
-                Toast.show(context, "拍照");
+                ToastUtil.show("拍照");
                 //String orcPath = await FileUtils.getOrcFilePath();
                 //Toast.show(context, orcPath);
                 getCameraImage();
@@ -76,11 +76,6 @@ class _MaterialPageState extends State<MaterialPage> {
                 if (result != null) {
 
                 }*/
-
-                /*ShowParam showParam;
-                LoadingDialogUtil.showTextLoadingDialog(
-                    context, showParam = new ShowParam());
-                testStartTime(showParam);*/
               })
         ],
       ),
@@ -137,7 +132,7 @@ class _MaterialPageState extends State<MaterialPage> {
                   Center(
                     child: RaisedButton(
                       onPressed: () {
-                        Toast.show(context, "RaisedButton");
+                        ToastUtil.show("RaisedButton");
                       },
                       color: Theme.of(context).primaryColor,
                       textColor: Theme.of(context).primaryColor.value ==
@@ -204,9 +199,10 @@ class _MaterialPageState extends State<MaterialPage> {
   }
 
   Future getCameraImage() async {
-    ShowParam showParam;
-    LoadingDialogUtil.showTextLoadingDialog(
-        context, showParam = new ShowParam());
+    var loadingDialog=CustomizeLoadingDialog(context).show();
+    //ShowParam showParam;
+    /*LoadingDialogUtil.showTextLoadingDialog(
+        context, showParam = new ShowParam());*/
     File image = await ImagePicker.pickImage(source: ImageSource.camera);
     if (image != null) {
       String orcFilePath = await FileUtils.getOrcFilePath();
@@ -218,12 +214,14 @@ class _MaterialPageState extends State<MaterialPage> {
       if (result != null) {
         //image.deleteSync();
       }
+      loadingDialog.hide();
       setState(() {
         _imageFile = result;
-        showParam.pop();
+        //showParam.pop();
       });
     } else {
-      showParam.pop();
+      //showParam.pop();
+      loadingDialog.hide();
     }
   }
 
@@ -231,10 +229,6 @@ class _MaterialPageState extends State<MaterialPage> {
     return _imageFile != null
         ? Image(image: FileImageEx(_imageFile))
         : Text("请拍照.");
-  }
-
-  testStartTime(ShowParam showParam, {int seconds: 3}) async {
-    return new Timer(Duration(seconds: seconds), () => showParam.pop());
   }
 }
 

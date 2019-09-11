@@ -89,9 +89,13 @@ class UserHeaderWidget extends StatelessWidget {
                   onTap: model.hasUser
                       ? null
                       : () {
-                          Toast.show(context, "登录");
+                          Store.value<LoginModel>(context).setAutoLogin(false);
+                          RouteUtils.pushRouteNameAndRemovePage(
+                              context, RouteName.login);
+
+                          /*ToastUtil.show("登录");
                           Store.value<UserModel>(context).saveUser(UserEntity(
-                              id: 1, userName: "管理员", userCode: "admin"));
+                              id: 1, userName: "管理员", userCode: "admin"));*/
                         },
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

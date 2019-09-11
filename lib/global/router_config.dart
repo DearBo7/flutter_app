@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/ui/pages/login_page.dart';
+import 'package:flutter_app/ui/widget/page_route_anim.dart';
 
 import '../ui/pages/page_index.dart';
 import '../ui/pages/setting_page.dart';
@@ -23,7 +24,7 @@ class Router {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case RouteName.splash:
-        return CupertinoPageRoute(builder: (_) => SplashPage());
+        return NoAnimRouteBuilder(SplashPage());
       case RouteName.login:
         return CupertinoPageRoute(builder: (_) => LoginPage());
       case RouteName.setting:

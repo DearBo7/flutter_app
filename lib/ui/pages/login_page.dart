@@ -34,19 +34,19 @@ class _LoginPageState extends State<LoginPage> {
   // 记住密码
   bool _rememberPwdFlag = false;
 
+  GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
     Timer.run(() {
-      initData();
-
       /// 加载用户信息
       getUserList();
     });
   }
 
   /// 初始化数据
-  void initData() {
+  void initLoginData() {
     var loginModel = Store.value<LoginModel>(context);
     // 这里 和不setState效果一样.
     setState(() {
@@ -55,6 +55,10 @@ class _LoginPageState extends State<LoginPage> {
       _userCodeValue = loginModel.userCode;
       _passwordController.text = loginModel.pwd;
     });
+    //当前勾选了自动登录
+    if (_autoLoginFlag) {
+      login();
+    }
   }
 
   @override
@@ -67,6 +71,7 @@ class _LoginPageState extends State<LoginPage> {
             child: Container(
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
+              //width: double.infinity,
               decoration: BoxDecoration(
                 //border: Border.all(color: Colors.amber),
                 gradient: LinearGradient(
@@ -78,13 +83,14 @@ class _LoginPageState extends State<LoginPage> {
               ),
               child: Column(
                 children: <Widget>[
-                  SizedBox(height: 50),
+                  SizedBox(height: 45),
 
                   /// login图片
                   LoginLogo(),
                   //登录输入框
                   LoginFormContainer(
                     child: Form(
+                      key: _formKey,
                       //在请求的时候,阻止点击返回
                       onWillPop: () async {
                         //如果不是在请求时,判断是否返回两次
@@ -94,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
                                   Duration(seconds: 1)) {
                             //两次点击间隔超过1秒则重新计时
                             _lastPressedAt = DateTime.now();
-                            Toast.show(context, "再按一次退出");
+                            ToastUtil.show("再按一次退出");
                             return false;
                           }
                           return true;
@@ -111,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                               decoration: InputDecoration(
                                 prefixIcon: Icon(Icons.person_outline,
                                     color: Theme.of(context).accentColor,
-                                    size: 20),
+                                    size: 22),
                                 //hintStyle: TextStyle(fontSize: 14),
                               ).applyDefaults(
                                   Theme.of(context).inputDecorationTheme),
@@ -184,9 +190,9 @@ class _LoginPageState extends State<LoginPage> {
                               ],
                             ),
                           ),
-                          LoginButton(_userCodeValue, _passwordController.text,
-                              autoLoginFlag: _autoLoginFlag,
-                              rememberPwdFlag: _rememberPwdFlag),
+                          LoginButton(
+                            onPressed: login,
+                          ),
                         ],
                       ),
                     ),
@@ -211,21 +217,45 @@ class _LoginPageState extends State<LoginPage> {
           await ApiService.getInstance().getListUser(context: context);
       if (thisUserList.length > 0) {
         loginModel.setUserList(thisUserList);
-      } else {
-        return;
       }
     }
-    List<DropdownMenuItem<String>> thisDropdownMenuItemList = thisUserList
-        .map(
-          (value) => DropdownMenuItem<String>(
-            value: value.getShowValue(),
-            child: Text(value.getShowLabel()),
-          ),
-        )
-        .toList();
-    setState(() {
-      dropdownMenuItemList.addAll(thisDropdownMenuItemList);
-    });
+    if (thisUserList != null) {
+      List<DropdownMenuItem<String>> thisDropdownMenuItemList = thisUserList
+          .map(
+            (value) => DropdownMenuItem<String>(
+              value: value.getShowValue(),
+              child: Text(value.getShowLabel()),
+            ),
+          )
+          .toList();
+      setState(() {
+        dropdownMenuItemList.addAll(thisDropdownMenuItemList);
+      });
+      initLoginData();
+    }
+  }
+
+  //登录
+  void login() async {
+    if (_formKey.currentState.validate()) {
+      String password = _passwordController.text;
+      UserEntity userEntity = await Store.value<LoginModel>(context)
+          .login(_userCodeValue, password);
+      if (userEntity != null) {
+        Store.value<UserModel>(context).saveUser(userEntity);
+        var loginModel = Store.value<LoginModel>(context);
+        if (_rememberPwdFlag || _autoLoginFlag) {
+          loginModel.setUserInfo(userEntity.userName, _userCodeValue, password);
+        }
+        loginModel.setAutoLogin(_autoLoginFlag);
+        loginModel.setRememberPwd(_rememberPwdFlag);
+        //pushAndRemovePage(context, HomePage());
+        RouteUtils.pushRouteNameAndRemovePage(context, RouteName.homePage);
+        ToastUtil.show("登录成功");
+      } else {
+        //ToastUtil.show("登录失败");
+      }
+    }
   }
 }
 
@@ -238,7 +268,7 @@ class LoginLogo extends StatelessWidget {
       tag: "login Logo",
       child: Image.asset(
         "assets/images/login_logo.png",
-        height: 200,
+        height: 190,
         width: 250,
         fit: BoxFit.fitWidth,
         /*color: theme.brightness == Brightness.dark
@@ -258,7 +288,7 @@ class LoginFormContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 25),
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
       decoration: ShapeDecoration(
         shape: RoundedRectangleBorder(
@@ -278,17 +308,18 @@ class LoginFormContainer extends StatelessWidget {
 }
 
 class LoginButton extends StatelessWidget {
-  final String userCode;
-  final String password;
+  final VoidCallback onPressed;
+
+  //final String userCode;
+  //final String password;
 
   // 自动登录
-  final bool autoLoginFlag;
+  //final bool autoLoginFlag;
 
   // 记住密码
-  final bool rememberPwdFlag;
+  //final bool rememberPwdFlag;
 
-  LoginButton(this.userCode, this.password,
-      {this.autoLoginFlag: false, this.rememberPwdFlag: false});
+  LoginButton({this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -303,29 +334,7 @@ class LoginButton extends StatelessWidget {
                   .title
                   .copyWith(wordSpacing: 6),
             ),
-      onPressed: model.busy
-          ? null
-          : () async {
-              if (Form.of(context).validate()) {
-                UserEntity userEntity = await model.login(userCode, password);
-                if (userEntity != null) {
-                  Store.value<UserModel>(context).saveUser(userEntity);
-                  var loginModel = Store.value<LoginModel>(context);
-                  if (rememberPwdFlag || autoLoginFlag) {
-                    loginModel.setUserInfo(
-                        userEntity.userName, userCode, password);
-                  }
-                  loginModel.setAutoLogin(autoLoginFlag);
-                  loginModel.setRememberPwd(rememberPwdFlag);
-                  //pushAndRemovePage(context, HomePage());
-                  RouteUtils.pushRouteNameAndRemovePage(
-                      context, RouteName.homePage);
-                  Toast.show(context, "登录成功");
-                } else {
-                  //Toast.show(context, "登录失败");
-                }
-              }
-            },
+      onPressed: model.busy ? null : onPressed,
     );
   }
 }

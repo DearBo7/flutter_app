@@ -125,7 +125,7 @@ class SettingPage extends StatelessWidget {
                 color: Theme.of(context).cardColor,
                 child: ListTile(
                   onTap: () {
-                    Toast.show(context, "打印测试...");
+                    ToastUtil.show("打印测试...");
                   },
                   title: Text("打印测试", style: TextStyles.text16),
                 ),

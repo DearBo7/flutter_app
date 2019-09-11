@@ -60,7 +60,7 @@ class AppTheme {
   static getThemeData(Brightness brightness, MaterialColor themeColor) {
     var isDark = Brightness.dark == brightness;
     var accentColor = isDark ? themeColor[700] : themeColor;
-    ThemeData themeData = ThemeData(
+    var themeData = ThemeData(
         brightness: brightness,
         // 主题颜色属于亮色系还是属于暗色系(eg:dark时,AppBarTitle文字及状态栏文字的颜色为白色,反之为黑色)
         primaryColorBrightness: Brightness.dark,
@@ -71,6 +71,10 @@ class AppTheme {
     themeData = themeData.copyWith(
       brightness: brightness,
       accentColor: accentColor,
+      cupertinoOverrideTheme: CupertinoThemeData(
+        primaryColor: themeColor,
+        brightness: brightness,
+      ),
       appBarTheme: themeData.appBarTheme.copyWith(elevation: 0),
       splashColor: themeColor.withAlpha(50),
       hintColor: themeData.hintColor.withAlpha(90),
@@ -85,13 +89,9 @@ class AppTheme {
         labelStyle: themeData.textTheme.caption,
         backgroundColor: themeData.chipTheme.backgroundColor.withOpacity(0.1),
       ),
-      cupertinoOverrideTheme: CupertinoThemeData(
-          primaryColor: themeColor,
-          brightness: brightness,
-          textTheme: CupertinoTextThemeData(brightness: Brightness.light)),
+//          textTheme: CupertinoTextThemeData(brightness: Brightness.light)
       inputDecorationTheme: ThemeHelper.inputDecorationTheme(themeData),
     );
-
     return themeData;
   }
 }
@@ -153,7 +153,7 @@ class TextStyles {
   static TextStyle textGreyC16 =
       textStyle(fontSize: Dimens.font_sp16, color: greyCColor);
   static TextStyle textBlack16 =
-  textStyle(fontSize: Dimens.font_sp16, color: Colors.black);
+      textStyle(fontSize: Dimens.font_sp16, color: Colors.black);
 
   //不是主要内容显示
   static TextStyle textGrey16 =

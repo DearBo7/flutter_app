@@ -9,17 +9,18 @@ class SplashImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.white,//背景色
       child: Image.asset("assets/images/splash.png", fit: BoxFit.fill),
     );
   }
 }
 
-class SplashPage extends StatefulWidget {
+class SplashPage extends StatefulWidget{
   @override
   _SplashPageState createState() => _SplashPageState();
 }
 
-class _SplashPageState extends State<SplashPage> {
+class _SplashPageState extends State<SplashPage>{
   @override
   void initState() {
     super.initState();
@@ -31,8 +32,19 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    /*return Container(
       child: Image.asset("assets/images/splash.png", fit: BoxFit.fill),
+    );*/
+    return Scaffold(
+      body: WillPopScope(
+        onWillPop: ()=>Future.value(false),
+        child: Stack(
+          fit: StackFit.expand,
+          children: <Widget>[
+            Image.asset("assets/images/splash.png", fit: BoxFit.fill)
+          ],
+        ),
+      ),
     );
   }
 

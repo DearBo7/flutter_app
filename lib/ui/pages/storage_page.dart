@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -6,6 +8,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../../public_index.dart';
 import '../../utils/date_format.dart';
 import '../widget/empty/empty_list_widget.dart';
+import '../widget/loading/loading_dialog.dart';
 import 'material_page.dart';
 import 'src/app_bar_preferred.dart';
 
@@ -105,6 +108,14 @@ class _StorageScreenState extends State<StorageScreen> {
                       children: <Widget>[
                         Text(S.of(context).dateTitle,
                             style: TextStyles.textGrey18),
+                        /*InkWell(
+                          onTap: () {
+                            var loadingDialog = CustomizeLoadingDialog(context).show(isShowText: true);
+                            //loadingDialog.hide();
+                            Timer(Duration(seconds: 2), () => loadingDialog.hide());
+                          },
+                          child: Icon(Icons.add),
+                        ),*/
                         Expanded(
                             child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -154,7 +165,8 @@ class _StorageScreenState extends State<StorageScreen> {
                             child: DropdownButton(
                               value: _dropdownProduceLineValue,
                               items: _dropdownProduceLineList,
-                              disabledHint: new Text(S.of(context).noDataProduceLine),
+                              disabledHint:
+                                  new Text(S.of(context).noDataProduceLine),
                               //isDense: true,
                               isExpanded: true,
                               //当没有默认值的时候可以设置的提示
@@ -192,7 +204,8 @@ class _StorageScreenState extends State<StorageScreen> {
                             child: DropdownButton(
                               value: _dropdownFormulaValue,
                               items: _dropdownFormulaList,
-                              disabledHint: new Text(S.of(context).noDataFormula),
+                              disabledHint:
+                                  new Text(S.of(context).noDataFormula),
                               //isDense: true,
                               isExpanded: true,
                               //去掉下划线
@@ -411,7 +424,7 @@ class _StorageScreenState extends State<StorageScreen> {
                 builder: (context) => MaterialPage(storeIn: storeIn)))
         .then((result) {
       if (result != null) {
-        Toast.show(context, "异步方式-返回结果:$result");
+        ToastUtil.show("异步方式-返回结果:$result");
       }
     }).catchError((error) {
       print("error===>$error");
