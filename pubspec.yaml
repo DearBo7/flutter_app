@@ -83,7 +83,7 @@ dependencies: # 应用或包依赖的其它包或插件
   image_picker: ^0.6.1+4
 
   # 图片压缩 https://github.com/crazecoder/flutter_luban
-  flutter_luban: ^0.1.7+1
+  #flutter_luban: ^0.1.7+1
 
   # 图片压缩 https://github.com/OpenFlutter/flutter_image_compress
   flutter_image_compress: ^0.6.3
@@ -104,8 +104,8 @@ dev_dependencies: # 开发环境依赖的工具包（而不是flutter应用本�
   flutter_test:
     sdk: flutter
   # Json 配置
-  build_runner: ^1.0.0
-  json_serializable: ^3.0.0
+  #build_runner: ^1.0.0
+  #json_serializable: ^3.0.0
 
 
 # For information on the generic Dart part of this file, see the

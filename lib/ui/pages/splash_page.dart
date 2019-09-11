@@ -10,7 +10,7 @@ class SplashImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,//背景色
-      child: Image.asset("assets/images/splash.png", fit: BoxFit.fill),
+      child: Image.asset("assets/images/splash_bg.png", fit: BoxFit.fill),
     );
   }
 }
@@ -33,7 +33,7 @@ class _SplashPageState extends State<SplashPage>{
   @override
   Widget build(BuildContext context) {
     /*return Container(
-      child: Image.asset("assets/images/splash.png", fit: BoxFit.fill),
+      child: Image.asset("assets/images/splash_bg.png", fit: BoxFit.fill),
     );*/
     return Scaffold(
       body: WillPopScope(
@@ -41,7 +41,7 @@ class _SplashPageState extends State<SplashPage>{
         child: Stack(
           fit: StackFit.expand,
           children: <Widget>[
-            Image.asset("assets/images/splash.png", fit: BoxFit.fill)
+            Image.asset("assets/images/splash_bg.png", fit: BoxFit.fill)
           ],
         ),
       ),

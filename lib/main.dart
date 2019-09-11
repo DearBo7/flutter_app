@@ -8,18 +8,7 @@ import 'package:flutter/services.dart';
 import 'my_app.dart';
 import 'public_index.dart';
 
-/*void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Image.asset("images/splash.png", fit: BoxFit.fill),
-    );
-  }
-}*/
-
-void main() async {
+void main() {
   setCustomErrorPage();
   _setTargetPlatformForDesktop();
   //await SpUtil.getInstance();
