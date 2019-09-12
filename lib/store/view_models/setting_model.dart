@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart' show ChangeNotifier;
 import 'package:flutter/material.dart';
+import 'package:flutter_app/store/enums/matched_pattern_enum.dart';
 
 import '../../public_index.dart';
 
@@ -47,7 +48,7 @@ class SettingModel extends ChangeNotifier {
   SettingModel() {
     _quality = SpUtil.getInt(kImgQuality, defValue: 80);
     _similarity = SpUtil.getInt(KSimilarity, defValue: 50);
-    _matchedPattern = SpUtil.getInt(kMatchedPattern, defValue: 1);
+    _matchedPattern = SpUtil.getInt(kMatchedPattern, defValue: MatchedPatternEnum.ONE.index);
     _materialBatchShowFlag =
         SpUtil.getBool(kMaterialBatchShow, defValue: false);
     _materialOrcCaseFlag = SpUtil.getBool(kMaterialOrcCase, defValue: false);
