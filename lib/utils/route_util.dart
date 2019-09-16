@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 export '../global/router_config.dart' show RouteName;
 
 class RouteUtils {
@@ -11,10 +12,12 @@ class RouteUtils {
     );
   }
 
-  static void pushRouteNameAndRemovePage(
-      BuildContext context, String routeName) {
-    Navigator.of(context)
-        .pushNamedAndRemoveUntil(routeName, (route) => route == null);
+  /// 跳转并删除之前的(不能返回),arguments传递的参数
+  static void pushRouteNameAndRemovePage(BuildContext context, String routeName,
+      {Object arguments}) {
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        routeName, (route) => route == null,
+        arguments: arguments);
   }
 
   static void pushNewPage(BuildContext context, Widget routePage,
@@ -39,8 +42,9 @@ class RouteUtils {
   }
 
   /// push和pushNamed运行效果相同
-  static void pushRouteNameNewPage(BuildContext context, String routeName) {
-    Navigator.pushNamed(context, routeName);
+  static void pushRouteNameNewPage(BuildContext context, String routeName,
+      {Object arguments}) {
+    Navigator.pushNamed(context, routeName, arguments: arguments);
   }
 
   ///pushReplacement和pushReplacementNamed一样，调用方式不同
@@ -50,7 +54,8 @@ class RouteUtils {
   }
 
   static void pushRouteNameReplacementName(
-      BuildContext context, String routeName) {
-    Navigator.pushReplacementNamed(context, routeName);
+      BuildContext context, String routeName,
+      {Object arguments}) {
+    Navigator.pushReplacementNamed(context, routeName, arguments: arguments);
   }
 }
