@@ -53,6 +53,7 @@ class RouteUtils {
         context, MaterialPageRoute(builder: (context) => routePage));
   }
 
+  /// 替换路由,返回到根路由
   static void pushRouteNameReplacementName(
       BuildContext context, String routeName,
       {Object arguments}) {
