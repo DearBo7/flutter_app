@@ -1,14 +1,14 @@
 import 'dart:async';
 
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../../public_index.dart';
-import '../../utils/date_format.dart';
+import '../widget/customize_easy_refresh.dart';
+import '../widget/customize_widgets.dart';
 import '../widget/empty/empty_list_widget.dart';
-import '../widget/loading/loading_dialog.dart';
 import 'material_page.dart';
 import 'src/app_bar_preferred.dart';
 
@@ -19,66 +19,35 @@ class StorageScreen extends StatefulWidget {
 
 class _StorageScreenState extends State<StorageScreen> {
   //列表数据
-  final List<StoreInEntity> storeInList = [];
+  final List<StoreInEntity> _storeInList = [];
 
   //产线
-  final List<DropdownMenuItem<int>> _dropdownProduceLineList = [
-    DropdownMenuItem(
-      child: Text("-全部-"),
-      value: -1,
-    )
-  ];
+  final List<DropdownMenuItem<int>> _dropdownProduceLineList = [];
   int _dropdownProduceLineValue = -1; //选中的产线id
 
   //配方
-  final List<DropdownMenuItem<int>> _dropdownFormulaList = [
-    DropdownMenuItem(
-      child: Text("-全部-"),
-      value: -1,
-    )
-  ];
+  final List<DropdownMenuItem<int>> _dropdownFormulaList = [];
   int _dropdownFormulaValue = -1; //选中的配方id
 
-  final String dateFormat = "yyyy年-MM月-dd日";
+  final String _dateFormat = "yyyy年-MM月-dd日";
 
-  final DateTimePickerTheme _dateTimePickerTheme = DateTimePickerTheme(
-      cancel: Text("取消", style: TextStyle(color: Colors.red)),
-      confirm: Text("确定", style: TextStyle(color: Colors.blue)),
-      showTitle: true);
-
-  //日期
+  //开始日期
   String startDate;
+
+  //结束日期
   String endDate;
+
+  DateTimePickerTheme _dateTimePickerTheme;
 
   //控制刷新组件-滚动控制器
   EasyRefreshController _controller;
 
   void initView() {
     _controller = EasyRefreshController();
-  }
-
-  void initData() async {
-    startDate = DateFormat.formatDateShort(
-        DateTime.now().subtract(Duration(days: 31 * 3)));
-    endDate = DateFormat.formatDateShort(DateTime.now());
-
-    List<ProduceLineEntity> thisProduceLineList =
-        await ApiService.getInstance().getListProduceLine();
-    if (thisProduceLineList.length > 0) {
-      setState(() {
-        thisProduceLineList.forEach((d) => _dropdownProduceLineList.add(
-            DropdownMenuItem(child: Text(d.produceLineName), value: d.id)));
-      });
-    }
-
-    List<FormulaEntity> thisFormulaList =
-        await ApiService.getInstance().getListFormula();
-    if (thisFormulaList.length > 0) {
-      setState(() {
-        thisFormulaList.forEach((d) => _dropdownFormulaList
-            .add(DropdownMenuItem(child: Text(d.formulaName), value: d.id)));
-      });
-    }
+    _dateTimePickerTheme = DateTimePickerTheme(
+        cancel: Text("取消", style: TextStyle(color: Colors.red)),
+        confirm: Text("确定", style: TextStyle(color: Colors.blue)),
+        showTitle: true);
   }
 
   @override
@@ -104,125 +73,108 @@ class _StorageScreenState extends State<StorageScreen> {
                 padding: EdgeInsets.all(5.0),
                 child: Column(
                   children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Text(S.of(context).dateTitle,
-                            style: TextStyles.textGrey18),
-                        /*InkWell(
-                          onTap: () {
-                            var loadingDialog = CustomizeLoadingDialog(context).show(isShowText: true);
-                            //loadingDialog.hide();
-                            Timer(Duration(seconds: 2), () => loadingDialog.hide());
-                          },
-                          child: Icon(Icons.add),
-                        ),*/
-                        Expanded(
+                    RowLabelToWidgetOne(
+                      Text(S.of(context).dateTitle,
+                          style: TextStyles.labelTitle),
+                      rightWidget: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          /*InkWell(
+                            onTap: () {
+                              var loadingDialog =
+                                  CustomizeLoadingDialog(context)
+                                      .show(isShowText: true);
+                              //loadingDialog.hide();
+                              Timer(Duration(seconds: 2),
+                                  () => loadingDialog.hide());
+                            },
+                            child: Icon(Icons.add),
+                          ),*/
+                          InkWell(
+                            onTap: () => _clickDate(true),
                             child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          //居中显示
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            InkWell(
-                              onTap: () => _clickDate(true),
-                              child: Row(
-                                children: <Widget>[
-                                  Text(startDate, style: TextStyles.textGrey18),
-                                  Icon(Icons.date_range, color: Colors.blue)
-                                ],
-                              ),
-                            ),
-                            Text("~", style: TextStyles.textGrey18),
-                            InkWell(
-                              onTap: () => _clickDate(false),
-                              child: Row(
-                                children: <Widget>[
-                                  Text(endDate, style: TextStyles.textGrey18),
-                                  Icon(Icons.date_range, color: Colors.blue)
-                                ],
-                              ),
-                            )
-                          ],
-                        ))
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Text(S.of(context).produceLineTitle,
-                            style: TextStyles.textGrey18),
-                        Expanded(
-                          child: Container(
-                            padding: EdgeInsets.only(left: 5.0, right: 5.0),
-                            margin: EdgeInsets.only(
-                                left: 5.0, top: 2.5, bottom: 2.5),
-                            height: 35.0,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.grey[400], width: 0.5),
-                              borderRadius: new BorderRadius.vertical(
-                                  top: Radius.elliptical(3, 3),
-                                  bottom: Radius.elliptical(3, 3)),
-                            ),
-                            child: DropdownButton(
-                              value: _dropdownProduceLineValue,
-                              items: _dropdownProduceLineList,
-                              disabledHint:
-                                  new Text(S.of(context).noDataProduceLine),
-                              //isDense: true,
-                              isExpanded: true,
-                              //当没有默认值的时候可以设置的提示
-                              underline: Container(),
-                              onChanged: (value) {
-                                setState(() {
-                                  if (_dropdownProduceLineValue != value) {
-                                    _dropdownProduceLineValue = value;
-                                    _controller.callRefresh();
-                                  }
-                                });
-                              },
+                              children: <Widget>[
+                                Text(startDate, style: TextStyles.labelTitle),
+                                Icon(Icons.date_range, color: Colors.blue)
+                              ],
                             ),
                           ),
-                        )
-                      ],
+                          Text("~", style: TextStyles.labelTitle),
+                          InkWell(
+                            onTap: () => _clickDate(false),
+                            child: Row(
+                              children: <Widget>[
+                                Text(endDate, style: TextStyles.labelTitle),
+                                Icon(Icons.date_range, color: Colors.blue)
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                    Row(
-                      children: <Widget>[
-                        Text(S.of(context).formulaTitle,
-                            style: TextStyles.textGrey18),
-                        Expanded(
-                          child: Container(
-                            padding: EdgeInsets.only(left: 5, right: 5),
-                            margin: EdgeInsets.only(
-                                left: 5.0, top: 2.5, bottom: 2.5),
-                            height: 35.0,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.grey[400], width: 0.5),
-                              borderRadius: new BorderRadius.vertical(
-                                  top: Radius.elliptical(3, 3),
-                                  bottom: Radius.elliptical(3, 3)),
-                            ),
-                            child: DropdownButton(
-                              value: _dropdownFormulaValue,
-                              items: _dropdownFormulaList,
-                              disabledHint:
-                                  new Text(S.of(context).noDataFormula),
-                              //isDense: true,
-                              isExpanded: true,
-                              //去掉下划线
-                              underline: Container(),
-                              onChanged: (value) {
-                                print("Formula:value:${value}");
-                                setState(() {
-                                  if (_dropdownFormulaValue != value) {
-                                    _dropdownFormulaValue = value;
-                                    _controller.callRefresh();
-                                  }
-                                });
-                              },
-                            ),
+                    RowLabelToWidgetOne(
+                      Text(S.of(context).produceLineTitle,
+                          style: TextStyles.labelTitle),
+                      rightWidget: Container(
+                        height: 35,
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 5, vertical: 2.5),
+                        padding: EdgeInsets.symmetric(horizontal: 5.0),
+                        decoration: BoxDecoration(
+                          border:
+                              Border.all(color: Colors.grey[400], width: 0.5),
+                          borderRadius: BorderRadius.all(Radius.circular(3)),
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                            value: _dropdownProduceLineValue,
+                            items: _dropdownProduceLineList,
+                            disabledHint: Text(S.of(context).noDataProduceLine),
+                            //isDense: true,
+                            isExpanded: true,
+                            onChanged: (value) {
+                              setState(() {
+                                if (_dropdownProduceLineValue != value) {
+                                  _dropdownProduceLineValue = value;
+                                  _controller.callRefresh();
+                                }
+                              });
+                            },
                           ),
                         ),
-                      ],
+                      ),
+                    ),
+                    RowLabelToWidgetOne(
+                      Text(S.of(context).formulaTitle,
+                          style: TextStyles.labelTitle),
+                      rightWidget: Container(
+                        height: 35,
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 5, vertical: 2.5),
+                        padding: EdgeInsets.symmetric(horizontal: 5.0),
+                        decoration: BoxDecoration(
+                          border:
+                              Border.all(color: Colors.grey[400], width: 0.5),
+                          borderRadius: BorderRadius.all(Radius.circular(3)),
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                            value: _dropdownFormulaValue,
+                            items: _dropdownFormulaList,
+                            disabledHint: Text(S.of(context).noDataFormula),
+                            //isDense: true,
+                            isExpanded: true,
+                            onChanged: (value) {
+                              setState(() {
+                                if (_dropdownFormulaValue != value) {
+                                  _dropdownFormulaValue = value;
+                                  _controller.callRefresh();
+                                }
+                              });
+                            },
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 )),
@@ -230,31 +182,17 @@ class _StorageScreenState extends State<StorageScreen> {
               child: EasyRefresh(
                 firstRefresh: true,
                 //是否首次刷新
-                firstRefreshWidget: _firstRefreshWidget(),
+                firstRefreshWidget:
+                    CustomizeEasyRefresh.defaultFirstRefreshWidget(context),
                 enableControlFinishRefresh: true,
                 //是否开启控制结束刷新
                 controller: _controller,
                 //控制刷新控制器
-                emptyWidget: storeInList.isEmpty ? EmptyListWidget() : null,
+                emptyWidget: _storeInList.isEmpty ? EmptyListWidget() : null,
                 bottomBouncing: false,
                 //底部回弹,默认true
                 child: _buildListView(),
-                header: ClassicalHeader(
-                  enableHapticFeedback: true,
-                  //开启震动反馈,
-                  float: true,
-                  //是否浮动
-                  refreshText: S.of(context).pullToRefresh,
-                  refreshReadyText: S.of(context).releaseToRefresh,
-                  refreshingText: S.of(context).refreshing,
-                  refreshedText: S.of(context).refreshed,
-                  refreshFailedText: S.of(context).refreshFailed,
-                  noMoreText: S.of(context).noMore,
-                  infoText: S.of(context).updateAt,
-                  textColor: Colors.white,
-                  bgColor: Colors.black87,
-                  infoColor: Colors.white70,
-                ),
+                header: CustomizeEasyRefresh.defaultClassicalHeader(context),
                 onRefresh: () async {
                   await Future.delayed(Duration(milliseconds: 300), () {
                     getStoreInList();
@@ -272,138 +210,6 @@ class _StorageScreenState extends State<StorageScreen> {
             )
           ],
         ));
-  }
-
-  //构建显示列表
-  Widget _buildListView() {
-    return ListView.separated(
-      itemCount: storeInList.length,
-      itemBuilder: (context, index) {
-        var storeIn = storeInList[index];
-        return InkWell(
-            onTap: () => _clickListItem(storeIn),
-            child: Container(
-              padding: EdgeInsets.only(left: 5.0, right: 5.0),
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text("${storeIn.billCode}-${storeIn.produceLineName}",
-                          style: TextStyles.text18),
-                      Text("${storeIn.creator}", style: TextStyles.textGrey14)
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween, //左右平分
-                    children: <Widget>[
-                      Text("${storeIn.formulaName}",
-                          style: TextStyles.textGrey14),
-                      Text("${storeIn.createDate}",
-                          style: TextStyles.textGrey14)
-                    ],
-                  )
-                ],
-              ),
-            ));
-      },
-      separatorBuilder: (BuildContext context, int index) =>
-          Divider(height: 2.0),
-    );
-  }
-
-  //加载组件
-  Widget _firstRefreshWidget() {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      child: Center(
-          child: SizedBox(
-        height: 200.0,
-        width: 300.0,
-        child: Card(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                width: 50.0,
-                height: 50.0,
-                child: SpinKitFadingCube(
-                  color: Theme.of(context).primaryColor,
-                  size: 25.0,
-                ),
-              ),
-              Container(
-                child: Text(S.of(context).loading),
-              )
-            ],
-          ),
-        ),
-      )),
-    );
-  }
-
-  //获取列表数据
-  getStoreInList() async {
-    List<StoreInEntity> thisStoreInList = await ApiService.getInstance()
-        .getListStoreIn(startDate, endDate,
-            produceLineId: _dropdownProduceLineValue,
-            formulaId: _dropdownFormulaValue);
-    setState(() {
-      if (storeInList.length > 0) {
-        storeInList.clear();
-      }
-      if (thisStoreInList.length > 0) {
-        storeInList.addAll(thisStoreInList);
-      }
-    });
-
-    _controller.resetLoadState();
-    _controller.finishRefresh();
-  }
-
-  //日期点击事件
-  void _clickDate(statusFlag) {
-    if (statusFlag) {
-      //开始日期
-      DatePicker.showDatePicker(context,
-          minDateTime: DateTime.parse("2000-01-01"),
-          maxDateTime: DateTime.parse(endDate),
-          initialDateTime: DateTime.parse(startDate),
-          dateFormat: dateFormat,
-          locale: DateTimePickerLocale.zh_cn,
-          pickerTheme: _dateTimePickerTheme,
-          onConfirm: (dateTime, List<int> index) {
-        setState(() {
-          String strDate = DateFormat.formatDateShort(dateTime);
-          if (strDate != startDate) {
-            startDate = DateFormat.formatDateShort(dateTime);
-            _controller.callRefresh();
-          }
-        });
-      });
-    } else {
-      //结束日期
-      DatePicker.showDatePicker(context,
-          minDateTime: DateTime.parse(startDate),
-          maxDateTime: DateTime.now(),
-          initialDateTime: DateTime.parse(endDate),
-          dateFormat: dateFormat,
-          locale: DateTimePickerLocale.zh_cn,
-          pickerTheme: _dateTimePickerTheme,
-          onConfirm: (dateTime, List<int> index) {
-        setState(() {
-          String strDate = DateFormat.formatDateShort(dateTime);
-          if (strDate != endDate) {
-            endDate = DateFormat.formatDateShort(dateTime);
-            _controller.callRefresh();
-          }
-        });
-      });
-    }
   }
 
   //list 条目点击事件
@@ -429,5 +235,146 @@ class _StorageScreenState extends State<StorageScreen> {
     }).catchError((error) {
       print("error===>$error");
     });
+  }
+
+  //构建显示列表
+  Widget _buildListView() {
+    return ListView.separated(
+      itemCount: _storeInList.length,
+      itemBuilder: (context, index) {
+        var storeIn = _storeInList[index];
+        return InkWell(
+            onTap: () => _clickListItem(storeIn),
+            child: Padding(
+              padding: EdgeInsets.only(left: 5.0, right: 5.0),
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text("${storeIn.billCode}-${storeIn.produceLineName}",
+                          style: TextStyles.listTitle),
+                      Text("${storeIn.creator}", style: TextStyles.listSubtitle)
+                    ],
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween, //左右平分
+                    children: <Widget>[
+                      Text("${storeIn.formulaName}",
+                          style: TextStyles.listSubtitle),
+                      Text("${storeIn.createDate}",
+                          style: TextStyles.listSubtitle)
+                    ],
+                  )
+                ],
+              ),
+            ));
+      },
+      separatorBuilder: (BuildContext context, int index) =>
+          Divider(height: 2.0),
+    );
+  }
+
+  //获取列表数据
+  getStoreInList() async {
+    List<StoreInEntity> thisStoreInList = await ApiService.getInstance()
+        .getListStoreIn(startDate, endDate,
+            produceLineId: _dropdownProduceLineValue,
+            formulaId: _dropdownFormulaValue);
+    setState(() {
+      if (_storeInList.length > 0) {
+        _storeInList.clear();
+      }
+      if (thisStoreInList.length > 0) {
+        _storeInList.addAll(thisStoreInList);
+      }
+    });
+
+    _controller.resetLoadState();
+    _controller.finishRefresh();
+  }
+
+  //日期点击事件
+  void _clickDate(statusFlag) {
+    if (statusFlag) {
+      //开始日期
+      DatePicker.showDatePicker(context,
+          minDateTime: DateTime.parse("2000-01-01"),
+          maxDateTime: DateTime.parse(endDate),
+          initialDateTime: DateTime.parse(startDate),
+          dateFormat: _dateFormat,
+          locale: DateTimePickerLocale.zh_cn,
+          pickerTheme: _dateTimePickerTheme,
+          onConfirm: (dateTime, List<int> index) {
+        setState(() {
+          String strDate =
+              DateUtil.formatDate(dateTime, format: DataFormats.y_mo_d);
+          if (strDate != startDate) {
+            startDate =
+                DateUtil.formatDate(dateTime, format: DataFormats.y_mo_d);
+            _controller.callRefresh();
+          }
+        });
+      });
+    } else {
+      //结束日期
+      DatePicker.showDatePicker(context,
+          minDateTime: DateTime.parse(startDate),
+          maxDateTime: DateTime.now(),
+          initialDateTime: DateTime.parse(endDate),
+          dateFormat: _dateFormat,
+          locale: DateTimePickerLocale.zh_cn,
+          pickerTheme: _dateTimePickerTheme,
+          onConfirm: (dateTime, List<int> index) {
+        setState(() {
+          String strDate =
+              DateUtil.formatDate(dateTime, format: DataFormats.y_mo_d);
+          if (strDate != endDate) {
+            endDate = DateUtil.formatDate(dateTime, format: DataFormats.y_mo_d);
+            _controller.callRefresh();
+          }
+        });
+      });
+    }
+  }
+
+  void initData() {
+    startDate = DateUtil.formatDate(
+        DateTime.now().subtract(Duration(days: 31 * 3)),
+        format: DataFormats.y_mo_d);
+    endDate = DateUtil.formatDate(DateTime.now(), format: DataFormats.y_mo_d);
+    _dropdownFormulaList.add(DropdownMenuItem(child: Text("-全部-"), value: -1));
+    _dropdownProduceLineList
+        .add(DropdownMenuItem(child: Text("-全部-"), value: -1));
+    getProduceLineList();
+    getFormulaList();
+  }
+
+  void getProduceLineList() async {
+    List<ProduceLineEntity> thisProduceLineList =
+        await ApiService.getInstance().getListProduceLine();
+    if (thisProduceLineList.length > 0) {
+      setState(() {
+        _dropdownProduceLineList.addAll(thisProduceLineList
+            .map((item) => DropdownMenuItem(
+                child: Text(item.produceLineName), value: item.id))
+            .toList());
+      });
+    }
+  }
+
+  void getFormulaList() async {
+    List<FormulaEntity> thisFormulaList =
+        await ApiService.getInstance().getListFormula();
+    if (thisFormulaList.length > 0) {
+      setState(() {
+        _dropdownFormulaList.addAll(thisFormulaList
+            .map((item) =>
+                DropdownMenuItem(child: Text(item.formulaName), value: item.id))
+            .toList());
+      });
+    }
   }
 }

@@ -97,6 +97,18 @@ class AppTheme {
 }
 
 class TextStyles {
+  //输入框前面的描述信息
+  static const TextStyle labelTitle =
+      TextStyle(fontSize: Dimens.font_sp18, color: Colors.grey);
+
+  //列表主要内容显示
+  static const TextStyle listTitle =
+      TextStyle(fontSize: Dimens.font_sp18, color: Colors.black);
+
+  //列表不是主要内容显示
+  static const TextStyle listSubtitle =
+      TextStyle(fontSize: Dimens.font_sp14, color: Colors.grey);
+
   static TextStyle textStyle(
       {double fontSize: Dimens.font_sp12,
       Color color: Colors.white,

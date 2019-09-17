@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../public_index.dart';
 import '../../utils/file_utils.dart';
+import '../widget/customize_widgets.dart';
 import '../widget/empty/empty_list_widget.dart';
 import '../widget/loading/loading_dialog.dart';
 
@@ -22,7 +23,7 @@ class MaterialPage extends StatefulWidget {
 class _MaterialPageState extends State<MaterialPage> {
   //列表数据
   final List<MaterialEntity> materialList = [];
-  File _imageFile = null;
+  File _imageFile;
 
   @override
   void initState() {
@@ -86,49 +87,30 @@ class _MaterialPageState extends State<MaterialPage> {
               padding: EdgeInsets.all(10.0),
               child: Column(
                 children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(top: 5.0, bottom: 10.0),
-                    child: Row(
-                      children: <Widget>[
-                        Text("名称:", style: TextStyles.textGrey18),
-                        Expanded(
-                          child: MaterialContainer(
-                            backgroundColor: Colors.grey[300],
-                            child:
-                                Text("名称", style: TextStyle(color: Colors.red)),
-                          ),
-                        )
-                      ],
+                  SizedBox(height: 10),
+                  RowLabelToWidgetOne(
+                    Text("名称:", style: TextStyles.labelTitle),
+                    rightWidget: MaterialContainer(
+                      backgroundColor: Colors.grey[300],
+                      child: Text("名称", style: TextStyle(color: Colors.red)),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(top: 5.0, bottom: 10.0),
-                    child: Row(
-                      children: <Widget>[
-                        Text("批次:", style: TextStyles.textGrey18),
-                        Expanded(
-                          child: MaterialContainer(
-                            child: Text("批次内容"),
-                          ),
-                        )
-                      ],
+                  SizedBox(height: 15),
+                  RowLabelToWidgetOne(
+                    Text("批次:", style: TextStyles.labelTitle),
+                    rightWidget: MaterialContainer(
+                      child: Text("批次内容"),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                    child: Row(
-                      children: <Widget>[
-                        Text("包数:", style: TextStyles.textGrey18),
-                        Expanded(
-                          child: MaterialContainer(
-                            backgroundColor: Colors.grey[300],
-                            child:
-                                Text("1", style: TextStyle(color: Colors.red)),
-                          ),
-                        )
-                      ],
+                  SizedBox(height: 15),
+                  RowLabelToWidgetOne(
+                    Text("包数:", style: TextStyles.labelTitle),
+                    rightWidget: MaterialContainer(
+                      backgroundColor: Colors.grey[300],
+                      child: Text("1", style: TextStyle(color: Colors.red)),
                     ),
                   ),
+                  SizedBox(height: 10),
                   Center(
                     child: RaisedButton(
                       onPressed: () {
@@ -141,7 +123,7 @@ class _MaterialPageState extends State<MaterialPage> {
                           : Colors.white,
                       child: Text("提交"),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -176,18 +158,18 @@ class _MaterialPageState extends State<MaterialPage> {
             child: Column(
               children: <Widget>[
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text("${material.materialName}", style: TextStyles.text18),
+                    Text("${material.materialName}",
+                        style: TextStyles.listTitle),
                     Text("${material.storeQuantity}",
-                        style: TextStyles.textGrey14)
+                        style: TextStyles.listSubtitle)
                   ],
                 ),
                 Row(
                   children: <Widget>[
                     Text("${material.materialBatch}",
-                        style: TextStyles.textGrey14),
+                        style: TextStyles.listSubtitle),
                   ],
                 )
               ],
@@ -199,10 +181,7 @@ class _MaterialPageState extends State<MaterialPage> {
   }
 
   Future getCameraImage() async {
-    var loadingDialog=CustomizeLoadingDialog(context).show();
-    //ShowParam showParam;
-    /*LoadingDialogUtil.showTextLoadingDialog(
-        context, showParam = new ShowParam());*/
+    var loadingDialog = CustomizeLoadingDialog(context).show();
     File image = await ImagePicker.pickImage(source: ImageSource.camera);
     if (image != null) {
       String orcFilePath = await FileUtils.getOrcFilePath();
@@ -217,10 +196,8 @@ class _MaterialPageState extends State<MaterialPage> {
       loadingDialog.hide();
       setState(() {
         _imageFile = result;
-        //showParam.pop();
       });
     } else {
-      //showParam.pop();
       loadingDialog.hide();
     }
   }

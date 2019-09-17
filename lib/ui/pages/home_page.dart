@@ -47,8 +47,8 @@ class _HomePageState extends State<HomePage> {
             itemBuilder: (ctx, index) => childWidgetList[index],
             itemCount: childWidgetList.length,
             controller: _pageController,
-            physics: NeverScrollableScrollPhysics(),
             // 禁止滑动
+            physics: NeverScrollableScrollPhysics(),
             onPageChanged: (index) {
               setState(() {
                 _childIndex = index;

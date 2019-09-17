@@ -3,83 +3,6 @@ import 'package:flutter/material.dart';
 
 import '../../generated/i18n.dart';
 
-/*class LoginSelectUser<T extends InputSelectEntity> extends StatefulWidget {
-  final String label;
-  final IconData icon;
-  final List<T> items;
-
-  LoginSelectUser({Key key, this.label, this.icon, @required this.items})
-      : super(key: key);
-
-  @override
-  _LoginSelectUserState createState() => _LoginSelectUserState();
-}
-
-class _LoginSelectUserState extends State<LoginSelectUser> {
-  String _selectValue = "";
-  List<DropdownMenuItem<String>> dropdownMenuItemList = [];
-
-  @override
-  void initState() {
-    super.initState();
-    getDropdownMenuItemList();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var theme = Theme.of(context);
-    return dropdownMenuItemList.isEmpty
-        ? Text("暂无数据")
-        : Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            child: InputDecorator(
-              decoration: InputDecoration(
-                prefixIcon: Icon(
-                  Icons.person_outline,
-                  color: Theme.of(context).accentColor,
-                  size: 20,
-                ),
-                errorText: _selectValue == null ? "请选择用户" : null,
-                hintText: "hint Text",
-                hintStyle: TextStyle(fontSize: 15),
-              ).applyDefaults(Theme.of(context).inputDecorationTheme),
-              child: DropdownButton<String>(
-                  value: _selectValue,
-                  isDense: true,
-                  isExpanded: true,
-                  underline: Container(),
-                  onChanged: (newValue) {
-                    setState(() {
-                      _selectValue = newValue;
-                    });
-                  },
-                  //无内容显示
-                  disabledHint: Text("暂无账号信息"),
-                  //无匹配显示
-                  hint: Text("请选择账号"),
-                  items: dropdownMenuItemList),
-            ),
-          );
-  }
-
-  void getDropdownMenuItemList() {
-    if (widget.items != null && widget.items.isNotEmpty) {
-      List<DropdownMenuItem<String>> thisList = widget.items
-          .map(
-            (value) => DropdownMenuItem<String>(
-              value: value.getShowValue(),
-              child: Text(value.getShowLabel()),
-            ),
-          )
-          .toList();
-      dropdownMenuItemList.addAll(thisList);
-      *//*setState(() {
-
-      });*//*
-    }
-  }
-}*/
-
 /// 登录页面表单字段框封装类
 class LoginTextField extends StatefulWidget {
   final String label;
@@ -87,7 +10,9 @@ class LoginTextField extends StatefulWidget {
   final bool obscureText;
   final TextEditingController controller;
   final FormFieldValidator<String> validator;
+  final FocusNode focusNode;
   final TextInputAction textInputAction;
+  final ValueChanged<String> onFieldSubmitted;
   final int maxLength;
 
   LoginTextField(
@@ -96,7 +21,9 @@ class LoginTextField extends StatefulWidget {
       this.controller,
       this.obscureText: false,
       this.validator,
+      this.focusNode,
       this.textInputAction,
+      this.onFieldSubmitted,
       this.maxLength});
 
   @override
@@ -130,7 +57,7 @@ class _LoginTextFieldState extends State<LoginTextField> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: ValueListenableBuilder(
         valueListenable: obscureNotifier,
         builder: (context, value, child) => TextFormField(
@@ -143,21 +70,19 @@ class _LoginTextFieldState extends State<LoginTextField> {
                 ? validator(text)
                 : S.of(context).fieldNotNull;
           },
+          focusNode: widget.focusNode,
           textInputAction: widget.textInputAction,
+          onFieldSubmitted: widget.onFieldSubmitted,
           decoration: InputDecoration(
-            prefixIcon: Icon(
-              widget.icon,
-              color: theme.accentColor,
-              size: 20,
-            ),
+            prefixIcon: Icon(widget.icon, color: theme.accentColor, size: 22),
             hintText: widget.label,
-            hintStyle: TextStyle(fontSize: 15),
+            hintStyle: TextStyle(fontSize: 16),
             suffixIcon: LoginTextFieldSuffixIcon(
               controller: controller,
               obscureText: widget.obscureText,
               obscureNotifier: obscureNotifier,
             ),
-          ).applyDefaults(theme.inputDecorationTheme),
+          ),
         ),
       ),
     );
@@ -180,6 +105,7 @@ class LoginTextFieldSuffixIcon extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Offstage(
           offstage: !obscureText,
@@ -244,7 +170,9 @@ class _LoginTextFieldClearIconState extends State<LoginTextFieldClearIcon> {
       },
       child: InkWell(
           onTap: () {
-            widget.controller.clear();
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              widget.controller.clear();
+            });
           },
           child: Icon(CupertinoIcons.clear,
               size: 30, color: Theme.of(context).hintColor)),

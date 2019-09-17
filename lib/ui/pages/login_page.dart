@@ -151,9 +151,9 @@ class _LoginPageState extends State<LoginPage> {
                             textInputAction: TextInputAction.next,
                           ),*/
                           LoginTextField(
-                            controller: _passwordController,
                             label: S.of(context).password,
                             icon: Icons.lock_outline,
+                            controller: _passwordController,
                             obscureText: true,
                             maxLength: 16,
                             textInputAction: TextInputAction.done,
