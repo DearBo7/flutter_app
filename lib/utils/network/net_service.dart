@@ -5,10 +5,10 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-import '../../global/config.dart';
 import 'http_status_code.dart';
 import 'result_data.dart';
 import 'session_manager.dart';
+import 'net_log_utils.dart';
 
 export 'result_data.dart';
 
@@ -89,7 +89,7 @@ class NetService {
       }
 
       // 打印网络日志
-      printLog(
+      NetLogUtils.printLog(
           " \n$_TAG baseUrl：$baseUrl,method:【$method】\n$_TAG Url: $url ,params:${json.encode(params)}");
 
       switch (method) {
@@ -117,7 +117,7 @@ class NetService {
       }
       return await handleDataSource(response, method, url: url);
     } on DioError catch (exception) {
-      printLog("$_TAG net exception= ${exception.toString()}");
+      NetLogUtils.printLog("$_TAG net exception= ${exception.toString()}");
       String msg = formatError(exception);
       return ResultData(msg, false, url: url);
     }
@@ -129,7 +129,7 @@ class NetService {
     String errorMsg = "";
     int statusCode;
     statusCode = response.statusCode;
-    printLog("$_TAG statusCode:【${statusCode.toString()}】");
+    NetLogUtils.printLog("$_TAG statusCode:【${statusCode.toString()}】");
     if (method == Method.DOWNLOAD) {
       if (statusCode == 200) {
         /// 下载成功
@@ -145,8 +145,8 @@ class NetService {
       } else {
         data = json.decode(response.data);
       }
-      if (isPrint()) {
-        printLog("$_TAG data: ${json.encode(data)}");
+      if (NetLogUtils.isPrint()) {
+        NetLogUtils.printLog("$_TAG data: ${json.encode(data)}");
         //printBigLog("$_TAG data: ", json.encode(data));
       }
 
@@ -198,50 +198,4 @@ class NetService {
     return "未知错误";
   }
 
-  static void printLog(String log, {tag}) {
-    if (isPrint()) {
-      String tagLog;
-      if (tag != null) {
-        tagLog = tag + log;
-      } else {
-        tagLog = log;
-      }
-      debugPrint(tagLog);
-    }
-  }
-
-  static void printBigLog(String tag, String log) {
-    //log = TEST_POEM;
-    bool print = isPrint();
-    const MAX_COUNT = 3000;
-    if (print) {
-      if (log != null && log.length > MAX_COUNT) {
-        // 超过 MAX_COUNT 就分次打印
-        int len = log.length;
-        int paragraphCount = ((len / MAX_COUNT) + 1).toInt();
-        for (int i = 0; i < paragraphCount; i++) {
-          int printCount = MAX_COUNT;
-          if (i == paragraphCount - 1) {
-            printCount = len - (MAX_COUNT * (paragraphCount - 1));
-          }
-          String finalTag = "" + tag + "\n";
-          printLog(
-              log.substring(i * MAX_COUNT, i * MAX_COUNT + printCount) + "\n",
-              tag: finalTag);
-        }
-      } else {
-        String tagLog;
-        if (tag == null) {
-          tagLog = tag + log;
-        } else {
-          tagLog = log;
-        }
-        printLog(tagLog);
-      }
-    }
-  }
-
-  static bool isPrint() {
-    return Config.NET_DEBUG;
-  }
 }

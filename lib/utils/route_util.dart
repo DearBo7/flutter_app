@@ -30,7 +30,7 @@ class RouteUtils {
     });
   }
 
-  static void pushNewPageBack(BuildContext context, Widget routePage,
+  static void pushOfNewPage(BuildContext context, Widget routePage,
       {Function callBack}) {
     Navigator.of(context)
         .push(CupertinoPageRoute(builder: (context) => routePage))

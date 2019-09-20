@@ -4,11 +4,14 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 
 import '../ui/widget/loading/loading_dialog.dart';
+import '../utils/network/net_log_utils.dart';
 import '../utils/network/net_service.dart';
 
 export '../utils/network/result_data.dart';
 
 class BasicNetService extends NetService {
+  static const String _TAG = "BasicNetService";
+
   BasicNetService();
 
   @override
@@ -34,6 +37,7 @@ class BasicNetService extends NetService {
     if (showLoad) {
       loadingDialog = CustomizeLoadingDialog(context).show(isShowText: true);
     }
+    int startTime = DateTime.now().millisecondsSinceEpoch;
     ResultData resultData = await super.request(url,
         method: method,
         params: params,
@@ -41,9 +45,13 @@ class BasicNetService extends NetService {
         file: file,
         fileName: fileName,
         fileSavePath: fileSavePath);
+    NetLogUtils.printLog(
+        " 耗时:${DateTime.now().millisecondsSinceEpoch - startTime} 毫秒",
+        tag: _TAG);
     if (loadingDialog != null) {
       loadingDialog.hide();
     }
+
     /// 当apiToken 过期或者错误时的提示码
     //if (0 == resultData.code && context != null) {
     // 退出登录并跳转到登录界面

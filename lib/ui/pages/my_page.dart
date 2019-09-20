@@ -21,47 +21,47 @@ class _MyPageState extends State<MyPage> {
           SliverAppBar(
             actions: <Widget>[
               Store.connect<UserModel>(
-                  builder: (context, model, child) => Offstage(
-                        offstage: !model.hasUser,
-                        child: IconButton(
-                          tooltip: S.of(context).logout,
-                          icon: Icon(Icons.exit_to_app),
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                //弹出框外不能取消
-                                barrierDismissible: false,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: Text("提示"),
-                                    //内容
-                                    content: Text("是否退出登录?"),
-                                    actions: <Widget>[
-                                      //操作按钮数组
-                                      FlatButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text('取消'),
-                                      ),
-                                      FlatButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                          Store.value<UserModel>(context)
-                                              .clearUser();
-                                          Store.value<LoginModel>(context)
-                                              .setAutoLogin(false);
-                                          RouteUtils.pushRouteNameAndRemovePage(
-                                              context, RouteName.login);
-                                        },
-                                        child: Text('确定'),
-                                      ),
-                                    ],
-                                  );
-                                });
-                          },
-                        ),
-                      ))
+                builder: (context, model, child) {
+                  if (model.hasUser) {
+                    return IconButton(
+                      tooltip: S.of(context).logout,
+                      icon: Icon(Icons.exit_to_app),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            //弹出框外不能取消
+                            barrierDismissible: false,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text("提示"),
+                                content: Text("是否退出登录?"),
+                                actions: <Widget>[
+                                  //操作按钮数组
+                                  FlatButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: Text('取消'),
+                                  ),
+                                  FlatButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      Store.value<UserModel>(context)
+                                          .clearUser();
+                                      Store.value<LoginModel>(context)
+                                          .setAutoLogin(false);
+                                      RouteUtils.pushRouteNameAndRemovePage(
+                                          context, RouteName.login);
+                                    },
+                                    child: Text('确定'),
+                                  ),
+                                ],
+                              );
+                            });
+                      },
+                    );
+                  }
+                  return SizedBox.shrink();
+                },
+              )
             ],
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             expandedHeight: 220,

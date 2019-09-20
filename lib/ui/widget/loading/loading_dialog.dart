@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 /// 当前是否已经显示
@@ -14,6 +16,9 @@ bool _isShowText;
 
 // 显示背景-true
 bool _isShowBackground;
+
+//延迟显示dialog,如果为true,即将显示dialog
+bool _delayDialogFlag = false;
 
 class CustomizeLoadingDialog {
   // 空白区域/返回键 点击后是否消失-false
@@ -37,11 +42,14 @@ class CustomizeLoadingDialog {
 
   /// 显示
   CustomizeLoadingDialog show(
-      {Text text, String contentText, bool isShowText: false}) {
+      {Text text,
+      String contentText,
+      bool isShowText: false,
+      Duration delay: const Duration(milliseconds: 0)}) {
     //如果当前是显示,取消之前的显示
     if (_isShow) {
       //hide();
-      print("CustomizeLoadingDialog-->is show...");
+      debugPrint("CustomizeLoadingDialog-->is show...");
       return this;
     }
     _isShow = true;
@@ -56,20 +64,30 @@ class CustomizeLoadingDialog {
         _text = text;
       }
     }
-    showDialog<dynamic>(
-        context: _context, //BuildContext对象
-        barrierDismissible: _isBarrierDismissible,
-        builder: (BuildContext context) {
-          if (_isShow) {
-            _dismissingContext = context;
-          }
-          return WillPopScope(
-            child: LoadingDialog(child: _dialogBody = _DialogBody()),
-            onWillPop: () async {
-              return Future.value(_isBarrierDismissible && _isShow);
-            },
-          );
-        });
+    _delayDialogFlag = false;
+    //延迟100毫秒,预计250毫秒才会加载动画
+    Timer(delay, () {
+      if (!_isShow) {
+        debugPrint("CustomizeLoadingDialog-->show()--end...");
+        return;
+      }
+      _delayDialogFlag = true;
+      debugPrint("CustomizeLoadingDialog-->show()--showDialog...");
+      showDialog<dynamic>(
+          context: _context, //BuildContext对象
+          barrierDismissible: _isBarrierDismissible,
+          builder: (BuildContext context) {
+            if (_isShow) {
+              _dismissingContext = context;
+            }
+            return WillPopScope(
+              child: LoadingDialog(child: _dialogBody = _DialogBody()),
+              onWillPop: () async {
+                return Future.value(_isBarrierDismissible && _isShow);
+              },
+            );
+          });
+    });
     return this;
   }
 
@@ -81,12 +99,13 @@ class CustomizeLoadingDialog {
   void hide() {
     if (_isShow) {
       try {
-        debugPrint('CustomizeLoadingDialog--->[hide]:$_isShow}');
+        debugPrint(
+            'CustomizeLoadingDialog--->[hide]:$_isShow,_dismissingContext is null:${_dismissingContext == null}');
         _isShow = false;
         if (_dismissingContext != null) {
           Navigator.of(_dismissingContext).pop();
           _dismissingContext = null;
-        } else {
+        } else if (_delayDialogFlag) {
           Navigator.of(_context).pop();
         }
         if (_dialogBody != null) {
