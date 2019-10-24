@@ -3,11 +3,11 @@ import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 
-import '../ui/widget/loading/loading_dialog.dart';
-import '../utils/network/net_log_utils.dart';
-import '../utils/network/net_service.dart';
+import '../../ui/widget/loading/loading_dialog.dart';
+import '../../utils/network/net_log_utils.dart';
+import '../../utils/network/net_service.dart';
 
-export '../utils/network/result_data.dart';
+export '../../utils/network/result_data.dart';
 
 class BasicNetService extends NetService {
   static const String _TAG = "BasicNetService";

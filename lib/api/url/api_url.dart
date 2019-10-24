@@ -1,7 +1,8 @@
-import '../utils/sp_util.dart';
+import '../../utils/sp_util.dart';
 
-class ApiUrl {
-  static const String kRestUrl = 'api_rest_url';
+///FormulaUrl
+class FormulaApiUrl {
+  static const String kRestUrl = 'formula_rest_url';
   static const String RestUrl = "http://ocr.xtits.cn:8896";
 
   static String getRestUrl() {
@@ -44,6 +45,34 @@ class ApiUrl {
   static String getGetStoreInListByStoreInId() {
     return getRestUrl() + "/default/getStoreInListByStoreInId";
   }
+}
 
+///百姓生活Url
+class PeopleApiUrl {
+  static const String kPeopleRestUrl = 'people_rest_url';
+  static const String PeopleRestUrl =
+      "http://v.jspang.com:8088/baixing/wxmini";
 
+  static String getRestUrl() {
+    return SpUtil.getString(kPeopleRestUrl, defValue: PeopleRestUrl);
+  }
+
+  /// 百姓生活分类数据接口,一级分类,二级分类
+  static String getCategoryUrl() {
+    return getRestUrl() + "/getCategory";
+  }
+
+  /// 百姓生活分类商品数据接口
+  /// "page": page,
+  //  "categoryId": categoryId,
+  //  "categorySubId": categorySubId,
+  static String getCategoryGoodsUrl() {
+    return getRestUrl() + "/getMallGoods";
+  }
+
+  /// 百姓生活分类商品数据接口
+  /// "goodId": goodId
+  static String getGoodsDetailUrl() {
+    return getRestUrl() + "/getGoodDetailById";
+  }
 }

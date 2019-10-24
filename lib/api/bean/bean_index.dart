@@ -1,8 +1,9 @@
 export '../../utils/json_utils.dart';
 export 'key_entity.dart';
-export 'dome/formula.dart';
-export 'dome/material.dart';
-export 'dome/ocr_result.dart';
-export 'dome/produce_line.dart';
-export 'dome/store_in.dart';
-export 'dome/user.dart';
+export 'formula/formula.dart';
+export 'formula/material.dart';
+export 'formula/ocr_result.dart';
+export 'formula/produce_line.dart';
+export 'formula/store_in.dart';
+export 'formula/user.dart';
+export 'people/category.dart';

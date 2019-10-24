@@ -7,7 +7,7 @@ import '../toast_utils.dart';
 class ResultData {
   Map<String, dynamic> response; // 所有返回值
   dynamic data; // 请求回来的data, 可能是list也可能是map
-  int code; // 服务器的状态码
+  String code; // 服务器的状态码
   String msg; // 服务器给的提示信息
   /// true 请求成功 false 请求失败
   bool result = true; // 客户端是否请求成功false: HTTP错误
@@ -19,7 +19,8 @@ class ResultData {
   ResultData(this.msg, this.result, this.responseStatus, {this.url = ""});
 
   ResultData.response(this.response, {this.url = ""}) {
-    this.code = this.response["code"];
+    var codeTemp = this.response["code"];
+    this.code = codeTemp == null ? "" : codeTemp.toString();
     this.msg = this.response["msg"] ?? null;
     this.data = this.response["data"] ?? null;
   }
@@ -32,8 +33,8 @@ class ResultData {
     return _resultData;
   }
 
-  bool isFail() {
-    bool success = result && code == 1;
+  bool isFail({String successCode: "1"}) {
+    bool success = result && code == successCode;
     if (!success) {
       mDebugPrint(
           "ResultData-[isFail]->Not error for $url:$result,code:$code,msg:$msg");
@@ -41,8 +42,8 @@ class ResultData {
     return !success;
   }
 
-  bool isSuccess() {
-    bool success = result && code == 1;
+  bool isSuccess({String successCode: "1"}) {
+    bool success = result && code == successCode;
     if (!success) {
       mDebugPrint(
           "ResultData-[isSuccess]->Not success for $url:$result,code:$code,msg:$msg");
@@ -76,12 +77,12 @@ class ResultData {
   }
 
   /// 失败情况下弹提示
-  bool toast({String errorMsg}) {
-    if (isFail()) {
+  bool toast({String errorMsg, String successCode: "1"}) {
+    if (isFail(successCode: successCode)) {
       _toast(errorMsg: errorMsg);
       return false;
     }
-    return isSuccess();
+    return isSuccess(successCode: successCode);
   }
 
   //弹框

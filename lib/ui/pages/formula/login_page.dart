@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
       getUserList(initLoginDataFlag: true);
     });
     apiRestUrlValue =
-        SpUtil.getString(ApiUrl.kRestUrl, defValue: ApiUrl.RestUrl);
+        SpUtil.getString(FormulaApiUrl.kRestUrl, defValue: FormulaApiUrl.RestUrl);
   }
 
   @override
@@ -170,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
                                                     RowLabelToWidgetOne(
                                                       Text("默认Api接口:"),
                                                       rightWidget:
-                                                          Text(ApiUrl.RestUrl),
+                                                          Text(FormulaApiUrl.RestUrl),
                                                     ),
                                                     Container(
                                                       margin:
@@ -219,7 +219,7 @@ class _LoginPageState extends State<LoginPage> {
                                                     if (url != null) {
                                                       apiRestUrlValue = url;
                                                       SpUtil.setString(
-                                                          ApiUrl.kRestUrl,
+                                                          FormulaApiUrl.kRestUrl,
                                                           apiRestUrlValue);
                                                       Navigator.pop(context);
                                                     }
@@ -234,7 +234,7 @@ class _LoginPageState extends State<LoginPage> {
                                                     if (url != null) {
                                                       apiRestUrlValue = url;
                                                       SpUtil.setString(
-                                                          ApiUrl.kRestUrl,
+                                                          FormulaApiUrl.kRestUrl,
                                                           apiRestUrlValue);
                                                       getUserList(
                                                           reloadFlag: true);
@@ -352,7 +352,7 @@ class _LoginPageState extends State<LoginPage> {
         loginModel.userList.clear();
       }
       thisUserList =
-          await ApiService.getInstance().getListUser(context: context);
+          await FormulaApiService.getInstance().getListUser(context: context);
       if (thisUserList.length > 0) {
         loginModel.setUserList(thisUserList);
       }
@@ -399,7 +399,7 @@ class _LoginPageState extends State<LoginPage> {
         loginModel.setAutoLogin(_autoLoginFlag);
         loginModel.setRememberPwd(_rememberPwdFlag);
         //pushAndRemovePage(context, HomePage());
-        RouteUtils.pushRouteNameAndRemovePage(context, RouteName.home);
+        RouteUtils.pushRouteNameAndRemovePage(context, RouteName.homeIndex);
         ToastUtil.show("登录成功");
       } else {
         //ToastUtil.show("登录失败");

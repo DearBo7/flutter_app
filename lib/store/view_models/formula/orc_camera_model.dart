@@ -6,10 +6,10 @@ import 'package:flutter_app/utils/network/net_log_utils.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../provider/view_state_model.dart';
-import '../../public_index.dart';
-import '../../ui/widget/loading/loading_dialog.dart';
-import '../../utils/date_utils.dart';
+import '../../../provider/view_state_model.dart';
+import '../../../public_index.dart';
+import '../../../ui/widget/loading/loading_dialog.dart';
+import '../../../utils/date_utils.dart';
 
 typedef OrcImageCallback(
     OcrResultEntity data, CustomizeLoadingDialog loadingDialog);
@@ -53,7 +53,7 @@ class OrcCameraModel extends ViewStateModel {
   /// 请求识别token
   Future<String> getOrcRequestAccessToken({BuildContext context}) async {
     setBusy(true);
-    String authToken = await ApiService.getInstance()
+    String authToken = await FormulaApiService.getInstance()
         .getAuthToken(context: context, loadingText: "获取token中.");
     if (ObjectUtils.isNotBlank(authToken)) {
       setBusy(false);
@@ -104,7 +104,7 @@ class OrcCameraModel extends ViewStateModel {
       }
       //String accessToken = "24.4182004e3db54d2aa06f0fc1f2070fa3.2592000.1573292821.282335-17374454";
       loadingDialog.update(contentText: "识别中...");
-      OcrResultEntity ocrResultEntity = await ApiService.getInstance()
+      OcrResultEntity ocrResultEntity = await FormulaApiService.getInstance()
           .basicGeneral(accessToken, imageFile: result);
       if (ocrResultEntity != null && orcImageCallback != null) {
         orcImageCallback(ocrResultEntity, loadingDialog);

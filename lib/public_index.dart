@@ -1,5 +1,6 @@
 export 'generated/i18n.dart';
-export 'api/api_service.dart';
+export 'api/formula_api_service.dart';
+export 'api/people_api_service.dart';
 
 export 'global/config.dart';
 export 'global/router_config.dart';

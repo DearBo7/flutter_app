@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart' show ChangeNotifier;
 import 'package:flutter/material.dart';
 
-import '../../public_index.dart';
+import '../../../public_index.dart';
 
 class PrintModel extends ChangeNotifier {
   /// 是否打印

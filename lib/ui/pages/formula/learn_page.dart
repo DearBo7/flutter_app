@@ -7,7 +7,7 @@ import '../../widget/expand/drop_down_menu.dart';
 import '../../widget/expand/expand_view.dart';
 import 'package:lpinyin/lpinyin.dart';
 import '../../../public_index.dart';
-import '../../../api/api_service.dart';
+import '../../../api/formula_api_service.dart';
 import '../../../res/styles.dart';
 import '../src/app_bar_preferred.dart';
 
@@ -177,7 +177,7 @@ class _LearnPageState extends State<LearnPage> {
   //原料列表数据
   void _getMaterialData() async {
     List<MaterialEntity> thisMaterialList =
-    await ApiService.getInstance().getListMaterial(context: context);
+    await FormulaApiService.getInstance().getListMaterial(context: context);
     if (thisMaterialList.length > 0) {
       //排序
       thisMaterialList.sort((a, b) => a.materialName.compareTo(b.materialName));

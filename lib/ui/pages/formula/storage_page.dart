@@ -262,7 +262,7 @@ class _StoragePageState extends State<StoragePage> {
     }).catchError((error) {
       print("error===>$error");
     });*/
-    RouteUtils.pushRouteNameNewPage(context, RouteName.material,
+    RouteUtils.pushRouteNameNewPage(context, RouteName.formulaMaterial,
         arguments: storeIn, callBack: (result) {
           if (result is bool) {
             if (result) {
@@ -279,7 +279,7 @@ class _StoragePageState extends State<StoragePage> {
 
   //获取列表数据
   getStoreInList() async {
-    List<StoreInEntity> thisStoreInList = await ApiService.getInstance()
+    List<StoreInEntity> thisStoreInList = await FormulaApiService.getInstance()
         .getListStoreIn(startDate, endDate,
         produceLineId: _dropdownProduceLineValue,
         formulaId: _dropdownFormulaValue);
@@ -354,7 +354,7 @@ class _StoragePageState extends State<StoragePage> {
 
   void getProduceLineList() async {
     List<ProduceLineEntity> thisProduceLineList =
-    await ApiService.getInstance().getListProduceLine();
+    await FormulaApiService.getInstance().getListProduceLine();
     if (thisProduceLineList.length > 0) {
       setState(() {
         _dropdownProduceLineList.addAll(thisProduceLineList
@@ -367,7 +367,7 @@ class _StoragePageState extends State<StoragePage> {
 
   void getFormulaList() async {
     List<FormulaEntity> thisFormulaList =
-    await ApiService.getInstance().getListFormula();
+    await FormulaApiService.getInstance().getListFormula();
     if (thisFormulaList.length > 0) {
       setState(() {
         _dropdownFormulaList.addAll(thisFormulaList

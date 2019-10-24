@@ -68,7 +68,7 @@ class _MaterialPageState extends State<MaterialPage> {
                 size: 30.0,
               ),
               onPressed: () async {
-                //String authToken = await ApiService.getInstance().getAuthToken();
+                //String authToken = await FormulaApiService.getInstance().getAuthToken();
                 //print('authToken:$authToken');
                 //拍照-识别-匹配原料
                 _getCameraImageAndOrcMaterial(context);
@@ -314,7 +314,7 @@ class _MaterialPageState extends State<MaterialPage> {
 
   /// 初始化加载数据
   void initData({bool showLoad: true}) async {
-    ResultData result = await ApiService.getInstance()
+    ResultData result = await FormulaApiService.getInstance()
         .getGetStoreInListByStoreInId(widget.storeIn.id,
             context: context, showLoad: showLoad);
     setState(() {

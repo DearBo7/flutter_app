@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart' show ChangeNotifier;
 import 'package:flutter/material.dart';
 import 'package:flutter_app/store/enums/matched_pattern_enum.dart';
 
-import '../../public_index.dart';
+import '../../../public_index.dart';
 
 class SettingModel extends ChangeNotifier {
   /// 图片质量

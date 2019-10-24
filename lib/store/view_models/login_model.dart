@@ -1,6 +1,6 @@
 import 'package:flutter_app/public_index.dart';
 
-import '../../api/api_service.dart';
+import '../../api/formula_api_service.dart';
 import '../../provider/view_state_model.dart';
 
 class LoginModel extends ViewStateModel {
@@ -47,7 +47,7 @@ class LoginModel extends ViewStateModel {
     setBusy(true);
     try {
       UserEntity userEntity =
-          await ApiService.getInstance().getLogin(loginName, password);
+          await FormulaApiService.getInstance().getLogin(loginName, password);
       setBusy(false);
       return userEntity;
     } catch (e) {

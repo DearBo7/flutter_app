@@ -1,4 +1,4 @@
-import '../../api/bean/dome/user.dart';
+import '../../api/bean/formula/user.dart';
 import '../../global/storage_manager.dart';
 import '../../provider/view_state_model.dart';
 

@@ -1,18 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/ui/pages/dome/login_page.dart';
 
-import '../ui/pages/dome/page_index.dart';
-import '../ui/pages/dome/setting_page.dart';
+import '../ui/pages/formula/formula_page_index.dart';
+import '../ui/pages/formula/login_page.dart';
+import '../ui/pages/home_index_page.dart';
+import '../ui/pages/splash_page.dart';
 
 class RouteName {
   static const String login = 'login';
-
   static const String splash = 'splash';
-  static const String setting = 'setting';
-
-  static const String home = '/';
-  static const String material = 'material';
+  static const String homeIndex = '/';
+  static const String formulaHome = 'formula';
+  static const String formulaSetting = 'formula_setting';
+  static const String formulaMaterial = 'formula_material';
 }
 
 class Router {
@@ -22,11 +22,13 @@ class Router {
         return NoAnimRouteBuilder(SplashPage());
       case RouteName.login:
         return CupertinoPageRoute(builder: (_) => LoginPage());
-      case RouteName.setting:
+      case RouteName.homeIndex:
+        return CupertinoPageRoute(builder: (_) => HomeIndexPage());
+      case RouteName.formulaSetting:
         return CupertinoPageRoute(builder: (_) => SettingPage());
-      case RouteName.home:
+      case RouteName.formulaHome:
         return CupertinoPageRoute(builder: (_) => HomePage());
-      case RouteName.material:
+      case RouteName.formulaMaterial:
         return CupertinoPageRoute(
             builder: (_) => MaterialPage(storeIn: settings.arguments));
       default:

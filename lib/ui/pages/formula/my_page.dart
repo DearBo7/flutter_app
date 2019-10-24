@@ -177,7 +177,8 @@ class UserListWidget extends StatelessWidget {
             SettingThemeWidget(),
             ListTile(
               onTap: () {
-                RouteUtils.pushRouteNameNewPage(context, RouteName.setting);
+                RouteUtils.pushRouteNameNewPage(
+                    context, RouteName.formulaSetting);
               },
               title: Text(S.of(context).setting),
               leading: Icon(Icons.settings, color: iconColor),
@@ -193,6 +194,12 @@ class UserListWidget extends StatelessWidget {
                   return Text(snapshot.hasData ? snapshot.data : "");
                 },
               ),
+            ),
+            ListTile(
+              leading: Icon(Icons.settings_backup_restore, color: iconColor),
+              onTap: () => RouteUtils.pushRouteNameAndRemovePage(
+                  context, RouteName.homeIndex),
+              title: Text("返回主页"),
             ),
           ]),
         ));

@@ -2,27 +2,27 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import '../public_index.dart';
 
+import '../public_index.dart';
 import '../utils/base64_util.dart';
 import '../utils/toast_utils.dart';
-import 'api_url.dart';
-import 'basic_net_service.dart';
+import 'base/basic_net_service.dart';
 import 'bean/bean_index.dart';
+import 'url/api_url.dart';
 
-export 'api_url.dart';
-export 'basic_net_service.dart';
+export '../utils/network/result_data.dart';
 export 'bean/bean_index.dart';
+export 'url/api_url.dart';
 
-class ApiService extends BasicNetService {
+class FormulaApiService extends BasicNetService {
   //私有_
-  ApiService._();
+  FormulaApiService._();
 
-  static ApiService _apiService;
+  static FormulaApiService _apiService;
 
-  static ApiService getInstance() {
+  static FormulaApiService getInstance() {
     if (_apiService == null) {
-      _apiService = ApiService._();
+      _apiService = FormulaApiService._();
     }
     return _apiService;
   }
@@ -31,8 +31,8 @@ class ApiService extends BasicNetService {
   Future<UserEntity> getLogin(String userName, String pwd,
       {BuildContext context}) async {
     Map<String, dynamic> params = {"userName": userName, "pwd": pwd};
-    ResultData resultData =
-    await post(ApiUrl.getLoginUrl(), params: params, context: context);
+    ResultData resultData = await post(FormulaApiUrl.getLoginUrl(),
+        params: params, context: context);
     if (resultData.toast()) {
       return UserEntity.fromJson(resultData.data);
     }
@@ -41,7 +41,8 @@ class ApiService extends BasicNetService {
 
   ///获取用户列表
   Future<List<UserEntity>> getListUser({BuildContext context}) async {
-    ResultData resultData = await get(ApiUrl.getListUser(), context: context);
+    ResultData resultData =
+        await get(FormulaApiUrl.getListUser(), context: context);
     if (resultData.toast()) {
       return JsonUtils.parseList(
           resultData.data, (v) => UserEntity.fromJson(v));
@@ -53,7 +54,7 @@ class ApiService extends BasicNetService {
   Future<List<ProduceLineEntity>> getListProduceLine(
       {BuildContext context}) async {
     ResultData resultData =
-    await get(ApiUrl.getListProduceLine(), context: context);
+        await get(FormulaApiUrl.getListProduceLine(), context: context);
     if (resultData.toast()) {
       return JsonUtils.parseList(
           resultData.data, (v) => ProduceLineEntity.fromJson(v));
@@ -64,7 +65,7 @@ class ApiService extends BasicNetService {
   /// 获取配方列表
   Future<List<FormulaEntity>> getListFormula({BuildContext context}) async {
     ResultData resultData =
-    await get(ApiUrl.getListFormula(), context: context);
+        await get(FormulaApiUrl.getListFormula(), context: context);
     if (resultData.toast()) {
       return JsonUtils.parseList(
           resultData.data, (v) => FormulaEntity.fromJson(v));
@@ -76,9 +77,9 @@ class ApiService extends BasicNetService {
   /// 参数：[startDate:,endDate:]必传,produceLineId,formulaId
   Future<List<StoreInEntity>> getListStoreIn(String startDate, String endDate,
       {int produceLineId,
-        int formulaId,
-        BuildContext context,
-        bool showLoad}) async {
+      int formulaId,
+      BuildContext context,
+      bool showLoad}) async {
     Map<String, dynamic> params = {};
     params["startDate"] = startDate;
     params["endDate"] = endDate;
@@ -88,7 +89,7 @@ class ApiService extends BasicNetService {
     if (formulaId != null && formulaId > 0) {
       params["formulaId"] = formulaId;
     }
-    ResultData resultData = await get(ApiUrl.getListStoreIn(),
+    ResultData resultData = await get(FormulaApiUrl.getListStoreIn(),
         params: params, context: context, showLoad: showLoad);
     if (resultData.toast()) {
       return JsonUtils.parseList(
@@ -100,7 +101,7 @@ class ApiService extends BasicNetService {
   /// 获取所有原料
   Future<List<MaterialEntity>> getListMaterial({BuildContext context}) async {
     ResultData resultData =
-    await get(ApiUrl.getListMaterial(), context: context);
+        await get(FormulaApiUrl.getListMaterial(), context: context);
     if (resultData.toast()) {
       return JsonUtils.parseList(
           resultData.data, (v) => MaterialEntity.fromJson(v));
@@ -112,8 +113,11 @@ class ApiService extends BasicNetService {
   Future<ResultData> getGetStoreInListByStoreInId(int storeInId,
       {BuildContext context, bool showLoad}) async {
     Map<String, dynamic> params = {"id": storeInId};
-    ResultData resultData = await get(ApiUrl.getGetStoreInListByStoreInId(),
-        params: params, context: context, showLoad: showLoad);
+    ResultData resultData = await get(
+        FormulaApiUrl.getGetStoreInListByStoreInId(),
+        params: params,
+        context: context,
+        showLoad: showLoad);
     if (resultData.toast()) {
       resultData.setResultData(JsonUtils.parseList(
           resultData.data, (v) => MaterialEntity.fromJson(v)));
@@ -127,9 +131,9 @@ class ApiService extends BasicNetService {
   //获取百度识别token
   Future<String> getAuthToken(
       {String ak: "79rZISjsTMAoE6oaV1qwPlSK",
-        String sk: "QXzPAgmfbu54Uvek29OsfirZWBFb5OBP",
-        BuildContext context,
-        String loadingText}) async {
+      String sk: "QXzPAgmfbu54Uvek29OsfirZWBFb5OBP",
+      BuildContext context,
+      String loadingText}) async {
     // 获取token地址
     String tokenUrl = "https://aip.baidubce.com/oauth/2.0/token";
     //var ak = "79rZISjsTMAoE6oaV1qwPlSK";
@@ -161,9 +165,9 @@ class ApiService extends BasicNetService {
   //文字识别
   Future<OcrResultEntity> basicGeneral(String accessToken,
       {File imageFile,
-        String url,
-        BuildContext context,
-        String loadingText}) async {
+      String url,
+      BuildContext context,
+      String loadingText}) async {
     String orcUrl = "https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic";
     Map<String, dynamic> params = {"access_token": accessToken};
     if (imageFile != null) {
