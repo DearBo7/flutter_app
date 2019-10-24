@@ -1,6 +1,4 @@
-import 'base/input_select_entity.dart';
-
-class UserEntity extends InputSelectEntity {
+class UserEntity {
   int id;
   String userName;
   String userCode;
@@ -22,15 +20,5 @@ class UserEntity extends InputSelectEntity {
     data['userCode'] = this.userCode;
     data['department'] = this.department;
     return data;
-  }
-
-  @override
-  String getShowLabel() {
-    return this.userName;
-  }
-
-  @override
-  String getShowValue() {
-    return this.userCode;
   }
 }

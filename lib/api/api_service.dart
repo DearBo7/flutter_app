@@ -124,43 +124,6 @@ class ApiService extends BasicNetService {
     return resultData;
   }
 
-  /// 获取物料批次规则列表
-  Future<List<MaterialBatchFormatEntity>> getListMaterialBatchFormat(
-      {BuildContext context}) async {
-    ResultData resultData =
-    await get(ApiUrl.getListMaterialBatchFormat(), context: context);
-    if (resultData.toast()) {
-      return JsonUtils.parseList(
-          resultData.data, (v) => MaterialBatchFormatEntity.fromJson(v));
-    }
-    return [];
-  }
-
-  /// 修改原料OrcKey,修改学习界面保存按钮信息
-  Future<ResultData> getUpdateMaterialOcrKey(Map<String, dynamic> params,
-      {BuildContext context}) async {
-    ResultData resultData = await post(ApiUrl.getUpdateMaterialOcrKey(),
-        params: params, context: context);
-    resultData.toast(errorMsg: "提交失败");
-    return resultData;
-  }
-
-  /// 单个物料复核并打印接口
-  Future<ResultData> getVerifyStoreIn(
-      int id, String materialBatch, int packageCount, String creator,
-      {BuildContext context}) async {
-    Map<String, dynamic> params = {
-      "id": id,
-      "materialBatch": materialBatch,
-      "packageCount": packageCount,
-      "creator": creator
-    };
-    ResultData resultData =
-    await post(ApiUrl.getVerifyStoreIn(), params: params, context: context);
-    resultData.toast(errorMsg: "提交失败");
-    return resultData;
-  }
-
   //获取百度识别token
   Future<String> getAuthToken(
       {String ak: "79rZISjsTMAoE6oaV1qwPlSK",

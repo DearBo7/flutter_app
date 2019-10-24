@@ -252,12 +252,7 @@ class _MaterialPageState extends State<MaterialPage> {
   //提交原料数据
   _submitData(int id, String materialBatch, int packageCount) async {
     String userName = Store.value<UserModel>(context).user.userName;
-    ResultData resultData = await ApiService.getInstance()
-        .getVerifyStoreIn(id, materialBatch, packageCount, userName);
-    if (resultData.isSuccess()) {
-      initData();
-      ToastUtil.show("提交成功!");
-    }
+    ToastUtil.show("提交成功!userName:$userName");
   }
 
   ///拍照后处理

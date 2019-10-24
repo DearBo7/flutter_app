@@ -367,8 +367,8 @@ class _LoginPageState extends State<LoginPage> {
     if (thisUserList != null && thisUserList.length > 0) {
       List<DropdownMenuItem<String>> thisDropdownMenuItemList = thisUserList
           .map((value) => DropdownMenuItem<String>(
-                value: value.getShowValue(),
-                child: Text(value.getShowLabel()),
+                value: value.userCode,
+                child: Text(value.userName),
               ))
           .toList();
       setState(() {

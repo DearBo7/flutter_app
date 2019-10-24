@@ -45,20 +45,5 @@ class ApiUrl {
     return getRestUrl() + "/default/getStoreInListByStoreInId";
   }
 
-  /// 获取物料批次规则列表-by:2019年2月14日16:09:47 新增
-  static String getListMaterialBatchFormat() {
-    return getRestUrl() + "/default/listMaterialBatchFormat";
-  }
 
-  /// 修改原料OrcKey
-  /// {materialId:1506,ocrKey:"xxxxxxxxxx"}
-  static String getUpdateMaterialOcrKey() {
-    return getRestUrl() + "/default/updateMaterialOcrKey";
-  }
-
-  /// 单个物料复核并打印接口-by2019年5月28日15:24:23 新增
-  /// 参数: id,materialBatch,packageCount,creator
-  static String getVerifyStoreIn() {
-    return getRestUrl() + "/default/verifyStoreIn";
-  }
 }
