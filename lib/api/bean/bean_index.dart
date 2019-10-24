@@ -1,5 +1,10 @@
+export '../../utils/json_utils.dart';
 export 'formula.dart';
+export 'key_entity.dart';
 export 'material.dart';
+export 'material_batch_format.dart';
+export 'ocr_result.dart';
 export 'produce_line.dart';
 export 'store_in.dart';
+export 'store_in_material.dart';
 export 'user.dart';

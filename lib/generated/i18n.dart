@@ -21,38 +21,63 @@ class S implements WidgetsLocalizations {
   @override
   TextDirection get textDirection => TextDirection.ltr;
 
-  String get age => "Age";
-  String get appName => "AppName";
+  String get all => "All";
+  String get appName => "智慧仓储";
   String get autoLoad => "Auto load";
   String get autoLoadDescribe => "Automatically refresh the slide to the bottom";
-  String get city => "City";
+  String get batchRuleTitle => "Batch Rule:";
+  String get batchTitle => "Batch:";
+  String get btnAdd => "Add";
+  String get btnCancel => "Cancel";
+  String get btnClose => "Close";
+  String get btnConfirm => "Confirm";
+  String get btnKeyword => "Enter keywords";
+  String get btnKeywordTest => "Keyword Test";
+  String get btnSave => "Save";
+  String get btnSubmit => "Submit";
+  String get btnUpdate => "Update";
   String get completeLoad => "Load done";
   String get completeRefresh => "Refresh done";
   String get darkMode => "Dark Mode";
   String get dateTitle => "Date:";
-  String get email => "E-Mail";
+  String get dialogConfirmSubmitMsg => "Are you sure to submit?";
+  String get dialogExitLogin => "Whether to log out?";
+  String get dialogNotUserMsg => "No user information, reload?";
+  String get dialogPrompt => "Prompt";
   String get emptyWidget => "Empty widget";
   String get fieldNotNull => "not empty";
   String get firstRefresh => "First refresh";
   String get formulaTitle => "Formula:";
+  String get keywordRemarkLearn => "- A [B,C]D Match ABD/ACD";
+  String get labNo => "No";
+  String get labYes => "Yes";
+  String get labelFeatureTitle => "Label Feature:";
   String get loadFailed => "Load failed";
   String get loadMoreLoading => "Loading...";
   String get loadMoreNoData => "No more data";
   String get loaded => "Load completed";
   String get loading => "Loading...";
   String get logout => "Sign Out";
-  String get materialList => "Material List";
-  String get me => "Me";
-  String get more => "More";
-  String get name => "Name";
+  String get materialKeywordTitle => "Material Keyword:";
+  String get materialListTitle => "Material List";
+  String get materialTitle => "Material:";
+  String get nameTitle => "Name:";
+  String get noBatch => "No Batch Data";
   String get noData => "No data...";
   String get noDataFormula => "No Formula data...";
   String get noDataProduceLine => "No Produce Line data...";
+  String get noKeyword => "No keywords";
   String get noLogin => "Not logged in";
+  String get noMaterial => "No Material Data";
   String get noMore => "No more";
+  String get packageTitle => "Package:";
   String get password => "Password";
-  String get phone => "Phone";
+  String get print => "Print";
   String get produceLineTitle => "ProduceLine:";
+  String get promptBatchRule => "Please select a batch rule";
+  String get promptExit => "Press again to exit";
+  String get promptKeyWords => "Please enter key words";
+  String get promptSelectMaterial => "Please select the materials";
   String get pullToRefresh => "Pull to refresh";
   String get pushToLoad => "Pull to load";
   String get refresh => "Refresh";
@@ -61,11 +86,11 @@ class S implements WidgetsLocalizations {
   String get refreshing => "Refreshing...";
   String get releaseToLoad => "Release to load";
   String get releaseToRefresh => "Release to refresh";
-  String get send => "Send";
   String get setting => "Setting";
   String get signIn => "Sign Up";
-  String get style => "Style";
+  String get submit => "Submit";
   String get theme => "Theme";
+  String get titleKeywordEntry => "Keyword entry";
   String get updateAt => "Update at %T";
   String get userName => "Username";
   String get version => "Version";
@@ -82,101 +107,151 @@ class $zh_CN extends S {
   TextDirection get textDirection => TextDirection.ltr;
 
   @override
-  String get dateTitle => "日期:";
-  @override
-  String get noMore => "没有更多数据";
-  @override
-  String get city => "城市";
-  @override
-  String get emptyWidget => "空视图";
-  @override
-  String get materialList => "原料列表";
+  String get btnKeywordTest => "关键字测试";
   @override
   String get autoLoad => "自动加载";
-  @override
-  String get noDataFormula => "暂无配方数据...";
   @override
   String get updateAt => "上次更新 %T";
   @override
   String get releaseToLoad => "释放加载";
   @override
-  String get setting => "设置";
+  String get btnConfirm => "确定";
   @override
   String get noDataProduceLine => "暂无产线数据...";
   @override
+  String get setting => "设置";
+  @override
   String get loaded => "加载完成";
   @override
-  String get logout => "退出登录";
+  String get materialTitle => "原料:";
+  @override
+  String get password => "密码";
   @override
   String get noLogin => "未登录";
   @override
-  String get password => "密码";
+  String get logout => "退出登录";
   @override
   String get refreshFailed => "刷新失败";
   @override
   String get pushToLoad => "拉动加载";
   @override
-  String get releaseToRefresh => "释放立即刷新";
+  String get titleKeywordEntry => "关键字录入";
   @override
-  String get me => "我";
+  String get dialogNotUserMsg => "暂无用户信息,是否重新加载?";
+  @override
+  String get dialogConfirmSubmitMsg => "确定提交么?";
+  @override
+  String get promptSelectMaterial => "请选择原料";
+  @override
+  String get all => "全部";
+  @override
+  String get loadFailed => "加载失败";
+  @override
+  String get loading => "正在加载...";
+  @override
+  String get version => "版本号";
+  @override
+  String get labNo => "否";
+  @override
+  String get completeLoad => "完成加载";
+  @override
+  String get btnSave => "保存";
+  @override
+  String get formulaTitle => "配方:";
+  @override
+  String get promptKeyWords => "请输入关键字";
+  @override
+  String get dialogExitLogin => "是否退出登录?";
+  @override
+  String get dateTitle => "日期:";
+  @override
+  String get noMore => "没有更多数据";
+  @override
+  String get submit => "提交";
+  @override
+  String get promptExit => "再按一次退出";
+  @override
+  String get emptyWidget => "空视图";
+  @override
+  String get noDataFormula => "暂无配方数据...";
+  @override
+  String get btnUpdate => "修改";
+  @override
+  String get materialListTitle => "原料列表";
+  @override
+  String get labYes => "是";
+  @override
+  String get packageTitle => "包数:";
+  @override
+  String get batchRuleTitle => "批次规则:";
+  @override
+  String get releaseToRefresh => "释放立即刷新";
   @override
   String get theme => "色彩主题";
   @override
   String get fieldNotNull => "不能为空";
   @override
+  String get batchTitle => "批次:";
+  @override
   String get completeRefresh => "完成刷新";
   @override
-  String get email => "邮箱";
+  String get noBatch => "暂无批次信息";
+  @override
+  String get noKeyword => "暂无关键字";
+  @override
+  String get noMaterial => "暂无原料数据";
   @override
   String get loadMoreLoading => "加载中...";
   @override
+  String get btnClose => "关闭";
+  @override
   String get refreshed => "刷新完成";
+  @override
+  String get btnKeyword => "录入关键字";
+  @override
+  String get labelFeatureTitle => "标签特征:";
   @override
   String get appName => "智慧仓储";
   @override
-  String get more => "更多";
+  String get nameTitle => "名称:";
   @override
   String get pullToRefresh => "下拉刷新";
   @override
-  String get loadFailed => "加载失败";
-  @override
   String get refresh => "刷新";
   @override
-  String get loading => "正在加载...";
+  String get dialogPrompt => "提示";
   @override
   String get userName => "用户名";
   @override
-  String get version => "版本号";
-  @override
   String get firstRefresh => "首次刷新";
   @override
-  String get completeLoad => "完成加载";
+  String get btnCancel => "取消";
   @override
-  String get phone => "电话";
+  String get materialKeywordTitle => "原料关键字:";
+  @override
+  String get print => "打印";
+  @override
+  String get btnAdd => "添加";
   @override
   String get refreshing => "正在刷新...";
   @override
+  String get promptBatchRule => "请选择批次规则";
+  @override
   String get signIn => "登录";
-  @override
-  String get name => "名字";
-  @override
-  String get formulaTitle => "配方:";
-  @override
-  String get style => "样式";
   @override
   String get noData => "暂无数据...";
   @override
-  String get darkMode => "黑夜模式";
+  String get keywordRemarkLearn => "- A [B,C]D代表匹配ABD或 ACD";
   @override
   String get produceLineTitle => "产线:";
+  @override
+  String get darkMode => "黑夜模式";
   @override
   String get autoLoadDescribe => "滑到底部自动刷新";
   @override
   String get loadMoreNoData => "没有更多数据了";
   @override
-  String get send => "发送";
-  @override
-  String get age => "年龄";
+  String get btnSubmit => "提交";
 }
 
 class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {

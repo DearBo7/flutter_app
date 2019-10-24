@@ -12,8 +12,15 @@ class MaterialEntity {
 
   /// 批号-原料列表显示
   String materialBatch;
+
   /// 原料列表显示
   double storeQuantity;
+
+  //原料id-识别原料有用
+  int materialId;
+
+  //原料相似度-识别使用
+  double similarity;
 
   MaterialEntity(
       {this.ocrKey,
@@ -26,7 +33,9 @@ class MaterialEntity {
       this.id,
       this.tareWeight,
       this.materialTypeName,
-      this.materialBatch});
+      this.materialBatch,
+      this.materialId,
+      this.similarity});
 
   MaterialEntity.fromJson(Map<String, dynamic> json) {
     ocrKey = json['ocrKey'];
@@ -41,14 +50,7 @@ class MaterialEntity {
     materialTypeName = json['materialTypeName'];
     materialBatch = json['materialBatch'];
     storeQuantity = json['storeQuantity'];
-  }
-
-  static List<MaterialEntity> fromJsonList(dynamic mapList) {
-    List<MaterialEntity> list = List(mapList.length);
-    for (int i = 0; i < mapList.length; i++) {
-      list[i] = MaterialEntity.fromJson(mapList[i]);
-    }
-    return list;
+    materialId = json['materialId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -65,6 +67,7 @@ class MaterialEntity {
     data['materialTypeName'] = this.materialTypeName;
     data['materialBatch'] = this.materialBatch;
     data['storeQuantity'] = this.storeQuantity;
+    data['materialId'] = this.materialId;
     return data;
   }
 }

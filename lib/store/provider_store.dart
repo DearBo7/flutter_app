@@ -13,7 +13,8 @@ class Store {
         ChangeNotifierProvider(builder: (_) => UserModel()),
         ChangeNotifierProvider(builder: (_) => SettingModel()),
         ChangeNotifierProvider(builder: (_) => PrintModel()),
-        ChangeNotifierProvider(builder: (_) => LoginModel())
+        ChangeNotifierProvider(builder: (_) => LoginModel()),
+        ChangeNotifierProvider(builder: (_) => OrcCameraModel())
       ],
       child: child,
     );
@@ -27,14 +28,14 @@ class Store {
   //  通过Consumer获取状态数据
   static Consumer connect<T>(
       {Function(BuildContext context, T value, Widget child) builder,
-      Widget child}) {
+        Widget child}) {
     return Consumer<T>(builder: builder, child: child);
   }
 
   //  通过Consumer获取状态数据
   static Consumer2 connect2<A, B>(
       {Function(BuildContext context, A value, B value2, Widget child) builder,
-      Widget child}) {
+        Widget child}) {
     return Consumer2<A, B>(builder: builder, child: child);
   }
 }

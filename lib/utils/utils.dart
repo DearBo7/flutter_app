@@ -19,6 +19,17 @@ class Utils {
     return HSVColor.fromAHSV(1.0, hue, 0.4, 0.90).toColor();
   }
 
+  /// 16进制转Color-#AABBCC
+  static Color hexToColor(String s) {
+    // 如果传入的十六进制颜色值不符合要求，返回默认值
+    if (s == null ||
+        s.length != 7 ||
+        int.tryParse(s.substring(1, 7), radix: 16) == null) {
+      return null;
+    }
+    return Color(int.parse(s.substring(1, 7), radix: 16) + 0xFF000000);
+  }
+
   /// 随机颜色
   static Color randomColor() {
     return Color.fromARGB(255, Random().nextInt(255), Random().nextInt(255),
@@ -37,11 +48,13 @@ class Utils {
     return mediaQuery.size.height;
   }
 
+  /// 标题栏高度（包括状态栏）
   static double get navigationBarHeight {
     MediaQueryData mediaQuery = MediaQueryData.fromWindow(ui.window);
     return mediaQuery.padding.top + kToolbarHeight;
   }
 
+  /// 状态栏高度
   static double get topSafeHeight {
     MediaQueryData mediaQuery = MediaQueryData.fromWindow(ui.window);
     return mediaQuery.padding.top;
@@ -52,5 +65,4 @@ class Utils {
     if (text == null) return;
     Clipboard.setData(new ClipboardData(text: text));
   }
-
 }

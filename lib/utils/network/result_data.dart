@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../global/config.dart';
+import '../object_utils.dart';
+import '../toast_utils.dart';
 
 class ResultData {
   Map<String, dynamic> response; // 所有返回值
@@ -10,15 +11,17 @@ class ResultData {
   String msg; // 服务器给的提示信息
   /// true 请求成功 false 请求失败
   bool result = true; // 客户端是否请求成功false: HTTP错误
+  //服务器返回状态码
+  int responseStatus;
   String url = "";
   dynamic _resultData;
 
-  ResultData(this.msg, this.result, {this.url = ""});
+  ResultData(this.msg, this.result, this.responseStatus, {this.url = ""});
 
   ResultData.response(this.response, {this.url = ""}) {
     this.code = this.response["code"];
-    this.msg = this.response["msg"];
-    this.data = this.response["data"];
+    this.msg = this.response["msg"] ?? null;
+    this.data = this.response["data"] ?? null;
   }
 
   void setResultData<T>(T resultData) {
@@ -47,13 +50,46 @@ class ResultData {
     return success;
   }
 
+  /// 百度识别,如果请求成功,并且返回结果不为null就为成功
+  bool isBaiDuSuccess() {
+    bool success = result && response != null;
+    if (!success) {
+      mDebugPrint(
+          "ResultData-[isBaiDuSuccess]->Not success for $url:$result,code:$code,msg:$msg");
+    }
+    return success;
+  }
+
+  /// 百度识别错误提示.
+  void toastBaiDuError({String errorMsg}) {
+    //如果请求成功
+    if (result &&
+        response != null &&
+        (response.containsKey("error_code") ||
+            response.containsKey("error_msg"))) {
+      msg =
+          "识别失败[${response['error_code'] ?? ''}],${response['error_msg'] ?? ''}";
+      mDebugPrint(
+          "ResultData-[toastBaiDuError]->Not error for $url:$result,responseStatus:$responseStatus,msg:$msg");
+    }
+    _toast(errorMsg: errorMsg);
+  }
+
   /// 失败情况下弹提示
-  bool toast() {
+  bool toast({String errorMsg}) {
     if (isFail()) {
-      Fluttertoast.showToast(msg: msg ?? "请求失败,未返回错误提示.");
+      _toast(errorMsg: errorMsg);
       return false;
     }
     return isSuccess();
+  }
+
+  //弹框
+  _toast({String errorMsg}) {
+    errorMsg = ObjectUtils.isNotBlank(msg)
+        ? msg
+        : ObjectUtils.isNotBlank(errorMsg) ? errorMsg : "服务端返回结果错误.";
+    ToastUtil.show(errorMsg);
   }
 
   mDebugPrint(String log) {

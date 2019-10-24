@@ -1,14 +1,12 @@
-library msnetservice;
-
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import 'http_status_code.dart';
+import 'net_log_utils.dart';
 import 'result_data.dart';
 import 'session_manager.dart';
-import 'net_log_utils.dart';
 
 export 'result_data.dart';
 
@@ -26,13 +24,19 @@ class NetService {
   get(String url,
       {Map<String, dynamic> params,
       Map<String, dynamic> headers,
+      String contentType,
       BuildContext context,
+      String loadingText,
+      Duration delay,
       bool showLoad: true}) async {
     return await request(url,
         method: Method.GET,
         params: params,
         headers: headers,
+        contentType: contentType,
         context: context,
+        loadingText: loadingText,
+        delay: delay,
         showLoad: showLoad);
   }
 
@@ -40,23 +44,32 @@ class NetService {
   post(String url,
       {Map<String, dynamic> params,
       Map<String, dynamic> headers,
+      String contentType,
       BuildContext context,
+      String loadingText,
+      Duration delay,
       bool showLoad: true}) async {
     return await request(url,
         method: Method.POST,
         params: params,
         headers: headers,
+        contentType: contentType,
         context: context,
+        loadingText: loadingText,
+        delay: delay,
         showLoad: showLoad);
   }
 
   /// 附件上传
   upLoad(var file, String fileName, String url,
-      {Map<String, dynamic> params, Map<String, dynamic> headers}) async {
+      {Map<String, dynamic> params,
+      Map<String, dynamic> headers,
+      String contentType}) async {
     return await request(url,
         method: Method.UPLOAD,
         params: params,
         headers: headers,
+        contentType: contentType,
         file: file,
         fileName: fileName);
   }
@@ -74,7 +87,10 @@ class NetService {
       var file,
       String fileName,
       String fileSavePath,
+      String contentType,
       BuildContext context,
+      String loadingText,
+      Duration delay,
       bool showLoad: false}) async {
     try {
       Response response;
@@ -83,15 +99,18 @@ class NetService {
       if (headers != null) {
         sessionManager.options.headers = headers;
       }
+      if (contentType != null) {
+        sessionManager.options.contentType = contentType;
+      }
       var baseUrl = await getBasicUrl();
       if (baseUrl != null) {
         sessionManager.options.baseUrl = baseUrl;
       }
 
       // 打印网络日志
-      NetLogUtils.printLog(
-          " \n$_TAG baseUrl：$baseUrl,method:【$method】\n$_TAG Url: $url ,params:${json.encode(params)}");
-
+      NetLogUtils.printLog("baseUrl：$baseUrl,method:【$method】", tag: _TAG);
+      NetLogUtils.printLog("Url: $url ,params:${json.encode(params)}",
+          tag: _TAG);
       switch (method) {
         case Method.GET:
           response = await sessionManager.get(url, queryParameters: params);
@@ -101,13 +120,16 @@ class NetService {
           break;
         case Method.UPLOAD:
           {
-            FormData formData = new FormData();
+            FormData formData;
             if (params != null) {
-              formData = FormData.from(params);
+              formData = FormData.fromMap(params);
+            } else {
+              formData = new FormData();
             }
-            formData.add(fileName, UploadFileInfo.fromBytes(file, fileName));
-
-            /// 第一个fileName是参数名, 必须和接口一致, 第二个fileName是文件的文件名
+            if (file != null) {
+              formData.files.add(MapEntry("files",
+                  MultipartFile.fromFileSync(file, filename: fileName)));
+            }
             response = await sessionManager.post(url, data: formData);
             break;
           }
@@ -117,9 +139,15 @@ class NetService {
       }
       return await handleDataSource(response, method, url: url);
     } on DioError catch (exception) {
-      NetLogUtils.printLog("$_TAG net exception= ${exception.toString()}");
+      NetLogUtils.printLog("net exception= ${exception.toString()}", tag: _TAG);
+      //服务器响应时，但状态不正确
+      if (exception.type == DioErrorType.RESPONSE) {
+        int statusCode = exception.response.statusCode;
+        String errorMsg = HttpStatusCode.getHttpStatusMsg(statusCode);
+        return ResultData(errorMsg, false, statusCode, url: url);
+      }
       String msg = formatError(exception);
-      return ResultData(msg, false, url: url);
+      return ResultData(msg, false, null, url: url);
     }
   }
 
@@ -129,14 +157,14 @@ class NetService {
     String errorMsg = "";
     int statusCode;
     statusCode = response.statusCode;
-    NetLogUtils.printLog("$_TAG statusCode:【${statusCode.toString()}】");
+    NetLogUtils.printLog("statusCode:【${statusCode.toString()}】", tag: _TAG);
     if (method == Method.DOWNLOAD) {
       if (statusCode == 200) {
         /// 下载成功
-        resultData = ResultData('下载成功', true);
+        resultData = ResultData('下载成功', true, statusCode);
       } else {
         /// 下载失败
-        resultData = ResultData('下载失败', false);
+        resultData = ResultData('下载失败', false, statusCode);
       }
     } else {
       Map<String, dynamic> data;
@@ -146,20 +174,21 @@ class NetService {
         data = json.decode(response.data);
       }
       if (NetLogUtils.isPrint()) {
-        NetLogUtils.printLog("$_TAG data: ${json.encode(data)}");
-        //printBigLog("$_TAG data: ", json.encode(data));
+        NetLogUtils.printLog("data: ${json.encode(data)}", tag: _TAG);
+        //NetLogUtils.printBigLog(_TAG, "data: ${json.encode(data)}");
       }
 
       //处理错误部分
       if (statusCode != 200) {
         errorMsg = HttpStatusCode.getHttpStatusMsg(statusCode);
         //errorMsg = "网络请求错误,状态码:" + statusCode.toString();
-        resultData = ResultData(errorMsg, false, url: url);
+        resultData = ResultData(errorMsg, false, statusCode, url: url);
       } else {
         try {
           resultData = ResultData.response(data);
         } catch (exception) {
-          resultData = ResultData(exception.toString(), true, url: url);
+          resultData =
+              ResultData(exception.toString(), true, statusCode, url: url);
         }
       }
     }
@@ -186,9 +215,6 @@ class NetService {
     } else if (e.type == DioErrorType.RECEIVE_TIMEOUT) {
       //It occurs when receiving timeout
       return "响应超时";
-    } else if (e.type == DioErrorType.RESPONSE) {
-      // When the server response, but with a incorrect status, such as 404, 503...
-      return "服务器内部错误";
     } else if (e.type == DioErrorType.CANCEL) {
       // When the request is cancelled, dio will throw a error with this type.
       return "请求取消";
@@ -197,5 +223,4 @@ class NetService {
     }
     return "未知错误";
   }
-
 }

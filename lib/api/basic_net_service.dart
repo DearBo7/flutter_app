@@ -17,13 +17,16 @@ class BasicNetService extends NetService {
   @override
   request(String url,
       {Method method,
-      Map<String, dynamic> params,
-      Map<String, dynamic> headers,
-      var file,
-      String fileName,
-      String fileSavePath,
-      BuildContext context,
-      bool showLoad: false}) async {
+        Map<String, dynamic> params,
+        Map<String, dynamic> headers,
+        String contentType,
+        var file,
+        String fileName,
+        String fileSavePath,
+        BuildContext context,
+        String loadingText,
+        Duration delay: const Duration(milliseconds: 120),
+        bool showLoad: false}) async {
     /// 传参进行统一处理, 加上基本参数
     //Map<String, dynamic> basicParam = await getBasicParam();
     //basicParam["timeStamp"] = (new DateTime.now().millisecondsSinceEpoch ~/ 1000).toString();
@@ -35,13 +38,15 @@ class BasicNetService extends NetService {
     }
     CustomizeLoadingDialog loadingDialog;
     if (showLoad) {
-      loadingDialog = CustomizeLoadingDialog(context).show(isShowText: true);
+      loadingDialog = CustomizeLoadingDialog(context)
+          .show(isShowText: true, contentText: loadingText, delay: delay);
     }
     int startTime = DateTime.now().millisecondsSinceEpoch;
     ResultData resultData = await super.request(url,
         method: method,
         params: params,
         headers: headers,
+        contentType: contentType,
         file: file,
         fileName: fileName,
         fileSavePath: fileSavePath);
@@ -49,7 +54,7 @@ class BasicNetService extends NetService {
         " 耗时:${DateTime.now().millisecondsSinceEpoch - startTime} 毫秒",
         tag: _TAG);
     if (loadingDialog != null) {
-      loadingDialog.hide();
+      await loadingDialog.hide();
     }
 
     /// 当apiToken 过期或者错误时的提示码

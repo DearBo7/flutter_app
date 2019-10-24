@@ -1,12 +1,9 @@
 import 'matched_pattern_enum.dart';
-
+import '../../api/bean/key_entity.dart';
 export 'matched_pattern_enum.dart';
-
-class EnumEntity {
-  int index;
-  String label;
-
-  EnumEntity(this.index, this.label);
+export '../../api/bean/key_entity.dart';
+class EnumEntity extends KeyEntity<int, String>{
+  EnumEntity(int code, String label) : super(code: code, label: label);
 
   static List<EnumEntity> toMatchedPatternList() {
     //bool flag = matchedPatternList[0].index == MatchedPatternEnum.ONE.index;

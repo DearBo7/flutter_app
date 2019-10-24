@@ -8,10 +8,13 @@ import 'package:flutter/services.dart';
 import 'my_app.dart';
 import 'public_index.dart';
 
-void main() {
+void main() async{
   setCustomErrorPage();
   _setTargetPlatformForDesktop();
-  //await SpUtil.getInstance();
+  //在插件初始化期间,那么您需要显式调用`WidgetsFlutterBinding.ensureInitialized()
+  WidgetsFlutterBinding.ensureInitialized();
+  await StorageManager.init();
+  //运行崩溃收集
   runZoned(() {
     //强制横屏
     // SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
@@ -20,7 +23,7 @@ void main() {
     SystemChrome.setPreferredOrientations(
             [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp])
         .then((_) {
-      runApp(MyApp(future: StorageManager.init()));
+      runApp(MyApp());
 
       if (Platform.isAndroid) {
         // 以下两行 设置android状态栏为透明的沉浸。写在组件渲染之后，是为了在渲染后进行set赋值，覆盖状态栏，写在渲染之前MaterialApp组件会覆盖掉这个值。

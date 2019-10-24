@@ -11,14 +11,6 @@ class FormulaEntity {
     formulaName = json['formulaName'];
   }
 
-  static List<FormulaEntity> fromJsonList(dynamic mapList) {
-    List<FormulaEntity> list = List(mapList.length);
-    for (int i = 0; i < mapList.length; i++) {
-      list[i] = FormulaEntity.fromJson(mapList[i]);
-    }
-    return list;
-  }
-
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['Id'] = this.id;

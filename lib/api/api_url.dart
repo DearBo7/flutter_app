@@ -1,8 +1,11 @@
+import '../utils/sp_util.dart';
+
 class ApiUrl {
-  static String REST_URL = "http://ocr.xtits.cn:8896";
+  static const String kRestUrl = 'api_rest_url';
+  static const String RestUrl = "http://ocr.xtits.cn:8896";
 
   static String getRestUrl() {
-    return REST_URL;
+    return SpUtil.getString(kRestUrl, defValue: RestUrl);
   }
 
   /// 登录验证  参数:userName,pwd
@@ -40,5 +43,22 @@ class ApiUrl {
   /// 参数：id=1
   static String getGetStoreInListByStoreInId() {
     return getRestUrl() + "/default/getStoreInListByStoreInId";
+  }
+
+  /// 获取物料批次规则列表-by:2019年2月14日16:09:47 新增
+  static String getListMaterialBatchFormat() {
+    return getRestUrl() + "/default/listMaterialBatchFormat";
+  }
+
+  /// 修改原料OrcKey
+  /// {materialId:1506,ocrKey:"xxxxxxxxxx"}
+  static String getUpdateMaterialOcrKey() {
+    return getRestUrl() + "/default/updateMaterialOcrKey";
+  }
+
+  /// 单个物料复核并打印接口-by2019年5月28日15:24:23 新增
+  /// 参数: id,materialBatch,packageCount,creator
+  static String getVerifyStoreIn() {
+    return getRestUrl() + "/default/verifyStoreIn";
   }
 }

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import '../../generated/i18n.dart';
+import '../../../generated/i18n.dart';
 
-class CustomizeEasyRefresh {
+class CustomEasyRefresh {
   //下拉刷新列表首次加载组件
   static Widget defaultFirstRefreshWidget(BuildContext context) {
     return Container(
@@ -37,6 +37,7 @@ class CustomizeEasyRefresh {
     );
   }
 
+  //下拉刷新默认
   static ClassicalHeader defaultClassicalHeader(BuildContext context) {
     return ClassicalHeader(
       enableHapticFeedback: true,

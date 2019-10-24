@@ -34,11 +34,11 @@ dependencies: # 应用或包依赖的其它包或插件
   # 用插件生成的
   #flutter_i18n: ^0.6.3
 
-  # 数据管理层
-  provider: ^3.1.0
+  # 数据管理层 https://pub.flutter-io.cn/packages/provider
+  provider: ^3.1.0+1
 
   # SP
-  shared_preferences: ^0.5.3+4
+  shared_preferences: ^0.5.4
 
   # UI
   # 吐丝 https://pub.flutter-io.cn/packages/oktoast
@@ -57,30 +57,30 @@ dependencies: # 应用或包依赖的其它包或插件
   flutter_spinkit: ^4.0.0
 
   # 处理键盘事件 https://github.com/diegoveloper/flutter_keyboard_actions
-  keyboard_actions: ^2.1.1+1
+  keyboard_actions: ^2.1.2
 
   # 获取设备信息 https://pub.dev/packages/device_info,https://pub.dev/packages/android_device_info
-  device_info: ^0.4.0+2
+  device_info: ^0.4.1
   # 获取app信息 https://pub.dev/packages/package_info
-  package_info: ^0.4.0+6
+  package_info: ^0.4.0+9
 
   # 汉字转拼音库 https://github.com/flutterchina/lpinyin
   lpinyin: ^1.0.7
 
   # http请求框架
-  dio: ^2.1.16
+  dio: ^3.0.3
 
   # 日期选择 https://github.com/wuzhendev/flutter-cupertino-date-picker
   flutter_cupertino_date_picker: ^1.0.12
 
   # 下拉菜单 https://github.com/GanZhiXiong/gzx_dropdown_menu
-  gzx_dropdown_menu: ^1.0.1
+  #gzx_dropdown_menu: ^1.0.3
 
   # 下拉刷新 https://github.com/xuelongqy/flutter_easyrefresh
   flutter_easyrefresh: ^2.0.4
 
   # 图片选择器,拍照,视频等
-  image_picker: ^0.6.1+4
+  image_picker: ^0.6.1+8
 
   # 图片压缩 https://github.com/crazecoder/flutter_luban
   #flutter_luban: ^0.1.7+1
@@ -89,10 +89,13 @@ dependencies: # 应用或包依赖的其它包或插件
   flutter_image_compress: ^0.6.3
 
   # 获取手机目录
-  path_provider: ^1.2.0
+  path_provider: ^1.4.0
 
   # 工具类 时间、日期、日志等 https://github.com/Sky24n/flustars
   flustars: ^0.2.6+1
+
+  # 下拉选择菜单 https://github.com/HussainTaj-W/flutter-package-selection_menu
+  selection_menu: ^0.8.1
 
   # 更新应用 https://pub.flutter-io.cn/packages/ota_update
   #ota_update: ^2.0.1

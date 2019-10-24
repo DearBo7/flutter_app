@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../generated/i18n.dart';
+import '../../../public_index.dart';
 
 /// 登录页面表单字段框封装类
 class LoginTextField extends StatefulWidget {
@@ -12,8 +12,10 @@ class LoginTextField extends StatefulWidget {
   final FormFieldValidator<String> validator;
   final FocusNode focusNode;
   final TextInputAction textInputAction;
-  final ValueChanged<String> onFieldSubmitted;
   final int maxLength;
+  final EdgeInsetsGeometry padding;
+  final String errorText;
+  final EdgeInsetsGeometry contentPadding;
 
   LoginTextField(
       {this.label,
@@ -22,9 +24,11 @@ class LoginTextField extends StatefulWidget {
       this.obscureText: false,
       this.validator,
       this.focusNode,
-      this.textInputAction,
-      this.onFieldSubmitted,
-      this.maxLength});
+      this.textInputAction: TextInputAction.done,
+      this.maxLength,
+      this.padding: const EdgeInsets.only(),
+      this.errorText,
+      this.contentPadding});
 
   @override
   _LoginTextFieldState createState() => _LoginTextFieldState();
@@ -57,7 +61,7 @@ class _LoginTextFieldState extends State<LoginTextField> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: widget.padding,
       child: ValueListenableBuilder(
         valueListenable: obscureNotifier,
         builder: (context, value, child) => TextFormField(
@@ -68,13 +72,15 @@ class _LoginTextFieldState extends State<LoginTextField> {
             var validator = widget.validator ?? (_) => null;
             return text.trim().length > 0
                 ? validator(text)
-                : S.of(context).fieldNotNull;
+                : widget.errorText ?? S.of(context).fieldNotNull;
           },
           focusNode: widget.focusNode,
           textInputAction: widget.textInputAction,
-          onFieldSubmitted: widget.onFieldSubmitted,
           decoration: InputDecoration(
-            prefixIcon: Icon(widget.icon, color: theme.accentColor, size: 22),
+            contentPadding: widget.contentPadding,
+            prefixIcon: widget.icon == null
+                ? null
+                : Icon(widget.icon, color: theme.accentColor, size: 22),
             hintText: widget.label,
             hintStyle: TextStyle(fontSize: 16),
             suffixIcon: LoginTextFieldSuffixIcon(
@@ -154,7 +160,7 @@ class _LoginTextFieldClearIconState extends State<LoginTextFieldClearIcon> {
 
   @override
   void dispose() {
-    notifier.dispose();
+    //notifier.dispose();
     super.dispose();
   }
 

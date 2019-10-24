@@ -23,9 +23,9 @@ class RouteUtils {
   static void pushNewPage(BuildContext context, Widget routePage,
       {Function callBack}) {
     Navigator.push(context, MaterialPageRoute(builder: (context) => routePage))
-        .then((value) {
-      if (value != null) {
-        callBack(value);
+        .then((result) {
+      if (callBack != null) {
+        callBack(result);
       }
     });
   }
@@ -34,26 +34,30 @@ class RouteUtils {
       {Function callBack}) {
     Navigator.of(context)
         .push(CupertinoPageRoute(builder: (context) => routePage))
-        .then((data) {
-      if (data != null) {
-        callBack(data);
+        .then((result) {
+      if (callBack != null) {
+        callBack(result);
       }
     });
   }
 
   /// push和pushNamed运行效果相同
   static void pushRouteNameNewPage(BuildContext context, String routeName,
-      {Object arguments}) {
-    Navigator.pushNamed(context, routeName, arguments: arguments);
+      {Object arguments, Function callBack}) {
+    Navigator.pushNamed(context, routeName, arguments: arguments)
+        .then((result) {
+      if (callBack != null) {
+        callBack(result);
+      }
+    });
   }
 
-  ///pushReplacement和pushReplacementNamed一样，调用方式不同
+  /// 替换路由,返回到根路由,pushReplacement和pushReplacementNamed一样，调用方式不同
   static void pushReplacement(BuildContext context, Widget routePage) {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => routePage));
   }
 
-  /// 替换路由,返回到根路由
   static void pushRouteNameReplacementName(
       BuildContext context, String routeName,
       {Object arguments}) {

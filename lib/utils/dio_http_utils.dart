@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -47,15 +46,14 @@ class DioHttpUtils {
         "version": "1.0.0"
       },
       //请求的Content-Type，默认值是[ContentType.json]. 也可以用ContentType.parse("application/x-www-form-urlencoded")
-      contentType:
-          ContentType('application', CONTENT_TYPE_FORM, charset: 'utf-8'),
+      contentType: Headers.formUrlEncodedContentType,
       //表示期望以那种格式(方式)接受响应数据。接受4种类型 `json`, `stream`, `plain`, `bytes`. 默认值是 `json`,
       responseType: ResponseType.json,
     );
 
     _dio = new Dio(options);
     //Cookie管理
-    _dio.interceptors.add(CookieManager(CookieJar()));
+    //dio.interceptors.add(CookieManager(CookieJar()));
 
     /// 添加拦截器
     if (Config.NET_DEBUG) {
@@ -74,7 +72,6 @@ class DioHttpUtils {
           debugPrint("\n================== 错误响应数据 ======================");
           debugPrint("type = ${e.type}");
           debugPrint("message = ${e.message}");
-          debugPrint("stackTrace = ${e.stackTrace}");
           debugPrint("\n");
         }))
 

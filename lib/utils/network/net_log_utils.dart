@@ -1,11 +1,14 @@
-import '../../global/config.dart';
 import 'package:flutter/material.dart';
-class NetLogUtils{
+
+import '../../global/config.dart';
+
+class NetLogUtils {
   static void printLog(String log, {tag}) {
     if (isPrint()) {
       String tagLog;
       if (tag != null) {
         tagLog = "【$tag】=> $log";
+        //tagLog = tag + log;
       } else {
         tagLog = log;
       }
@@ -15,9 +18,8 @@ class NetLogUtils{
 
   static void printBigLog(String tag, String log) {
     //log = TEST_POEM;
-    bool print = isPrint();
-    const MAX_COUNT = 3000;
-    if (print) {
+    if (isPrint()) {
+      const MAX_COUNT = 1000;
       if (log != null && log.length > MAX_COUNT) {
         // 超过 MAX_COUNT 就分次打印
         int len = log.length;

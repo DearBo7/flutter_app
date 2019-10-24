@@ -23,14 +23,6 @@ class StoreInEntity {
     createDate = json['createDate'];
   }
 
-  static List<StoreInEntity> fromJsonList(dynamic mapList) {
-    List<StoreInEntity> list = List(mapList.length);
-    for (int i = 0; i < mapList.length; i++) {
-      list[i] = StoreInEntity.fromJson(mapList[i]);
-    }
-    return list;
-  }
-
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['formulaName'] = this.formulaName;

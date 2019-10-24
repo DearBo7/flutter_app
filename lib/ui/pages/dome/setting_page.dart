@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../public_index.dart';
-import '../../store/enums/enum_index.dart';
-import '../widget/input/spinner_input.dart';
+import '../../../public_index.dart';
+import '../../../store/enums/enum_index.dart';
+import '../../widget/input_text/spinner_input.dart';
 //import 'package:spinner_input/spinner_input.dart';
 
 class SettingPage extends StatelessWidget {
@@ -22,13 +22,14 @@ class SettingPage extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Container(
+                  margin: EdgeInsets.symmetric(vertical: 2.5),
                   alignment: Alignment.centerLeft,
-                  child: Text("识别设置", style: TextStyles.text12)),
-              SizedBox(height: 5, child: Divider(height: 1)),
-              Material(
+                  child: Text("识别设置", style: TextStyles.settingGroupTitle)),
+              Dividers.setDivider(),
+              Container(
                 color: Theme.of(context).cardColor,
                 child: ListTile(
-                  title: Text("图片质量(20-100):", style: TextStyles.text16),
+                  title: Text("图片质量(20-100):", style: TextStyles.settingTitle),
                   trailing: SpinnerInput(
                     spinnerValue: Store.value<SettingModel>(context).quality,
                     minValue: 20,
@@ -42,11 +43,11 @@ class SettingPage extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 5, child: Divider(height: 1)),
-              Material(
+              Dividers.setDivider(),
+              Container(
                 color: Theme.of(context).cardColor,
                 child: ListTile(
-                  title: Text("匹配相似度(1-100):", style: TextStyles.text16),
+                  title: Text("匹配相似度(1-100):", style: TextStyles.settingTitle),
                   trailing: SpinnerInput(
                     spinnerValue: Store.value<SettingModel>(context).similarity,
                     minValue: 1,
@@ -58,19 +59,19 @@ class SettingPage extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 5, child: Divider(height: 1)),
-              Material(
+              Dividers.setDivider(),
+              Container(
                 color: Theme.of(context).cardColor,
                 child: ExpansionTile(
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text("匹配模式:", style: TextStyles.text16),
+                      Text("匹配模式:", style: TextStyles.settingTitle),
                       Text(
                           getMatchedPatternLabel(
                               Store.value<SettingModel>(context)
                                   .matchedPattern),
-                          style: TextStyles.text16)
+                          style: TextStyles.settingTitle)
                     ],
                   ),
                   children: <Widget>[
@@ -84,34 +85,35 @@ class SettingPage extends StatelessWidget {
                             value: index,
                             onChanged: (index) {
                               model.setMatchedPattern(
-                                  matchedPatternList[index].index);
+                                  matchedPatternList[index].code);
                             },
                             groupValue: model.matchedPattern,
                             title: Text(matchedPatternList[index].label,
-                                style: TextStyles.text16),
+                                style: TextStyles.settingTitle),
                           );
                         })
                   ],
                 ),
               ),
-              SizedBox(height: 5, child: Divider(height: 1)),
+              Dividers.setDivider(),
               Container(
+                  margin: EdgeInsets.symmetric(vertical: 2.5),
                   alignment: Alignment.centerLeft,
-                  child: Text("打印设置", style: TextStyles.text12)),
-              SizedBox(height: 5, child: Divider(height: 1)),
-              Material(
+                  child: Text("打印设置", style: TextStyles.settingGroupTitle)),
+              Dividers.setDivider(),
+              Container(
                 color: Theme.of(context).cardColor,
                 child: ListTile(
-                  title: Text("蓝牙默认名称", style: TextStyles.text16),
+                  title: Text("蓝牙默认名称", style: TextStyles.settingTitle),
                   trailing: Text(Store.value<PrintModel>(context).bluetoothName,
-                      style: TextStyles.text16),
+                      style: TextStyles.settingTitle),
                 ),
               ),
-              SizedBox(height: 5, child: Divider(height: 1)),
-              Material(
+              Dividers.setDivider(),
+              Container(
                 color: Theme.of(context).cardColor,
                 child: ListTile(
-                  title: Text("打印标签", style: TextStyles.text16),
+                  title: Text("打印标签", style: TextStyles.settingTitle),
                   trailing: CupertinoSwitch(
                       value: Store.value<PrintModel>(context).printAutoFlag,
                       onChanged: (value) {
@@ -120,25 +122,26 @@ class SettingPage extends StatelessWidget {
                       }),
                 ),
               ),
-              SizedBox(height: 5, child: Divider(height: 1)),
-              Material(
+              Dividers.setDivider(),
+              Container(
                 color: Theme.of(context).cardColor,
                 child: ListTile(
                   onTap: () {
                     ToastUtil.show("打印测试...");
                   },
-                  title: Text("打印测试", style: TextStyles.text16),
+                  title: Text("打印测试", style: TextStyles.settingTitle),
                 ),
               ),
-              SizedBox(height: 5, child: Divider(height: 1)),
+              Dividers.setDivider(),
               Container(
+                  margin: EdgeInsets.symmetric(vertical: 2.5),
                   alignment: Alignment.centerLeft,
-                  child: Text("其他设置", style: TextStyles.text12)),
-              SizedBox(height: 5, child: Divider(height: 1)),
-              Material(
+                  child: Text("其他设置", style: TextStyles.settingGroupTitle)),
+              Dividers.setDivider(),
+              Container(
                 color: Theme.of(context).cardColor,
                 child: ListTile(
-                  title: Text("显示批次规则", style: TextStyles.text16),
+                  title: Text("显示批次规则", style: TextStyles.settingTitle),
                   trailing: CupertinoSwitch(
                       value: Store.value<SettingModel>(context)
                           .materialBatchShowFlag,
@@ -148,11 +151,11 @@ class SettingPage extends StatelessWidget {
                       }),
                 ),
               ),
-              SizedBox(height: 5, child: Divider(height: 1)),
-              Material(
+              Dividers.setDivider(),
+              Container(
                 color: Theme.of(context).cardColor,
                 child: ListTile(
-                  title: Text("区分大小写", style: TextStyles.text16),
+                  title: Text("区分大小写", style: TextStyles.settingTitle),
                   trailing: CupertinoSwitch(
                       value: Store.value<SettingModel>(context)
                           .materialOrcCaseFlag,
@@ -162,7 +165,6 @@ class SettingPage extends StatelessWidget {
                       }),
                 ),
               ),
-
             ],
           ),
         ),
@@ -172,7 +174,7 @@ class SettingPage extends StatelessWidget {
 
   String getMatchedPatternLabel(int keyIndex) {
     for (var item in matchedPatternList) {
-      if (item.index == keyIndex) {
+      if (item.code == keyIndex) {
         return item.label;
       }
     }
