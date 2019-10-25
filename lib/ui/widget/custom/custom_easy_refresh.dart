@@ -38,7 +38,7 @@ class CustomEasyRefresh {
   }
 
   //下拉刷新默认
-  static ClassicalHeader defaultClassicalHeader(BuildContext context) {
+  static ClassicalHeader defaultHeader(BuildContext context) {
     return ClassicalHeader(
       enableHapticFeedback: true,
       //开启震动反馈,
@@ -54,6 +54,20 @@ class CustomEasyRefresh {
       textColor: Colors.white,
       bgColor: Colors.black87,
       infoColor: Colors.white70,
+    );
+  }
+
+  //上拉刷新默认
+  static ClassicalFooter defaultFooter(BuildContext context) {
+    return ClassicalFooter(
+      enableInfiniteLoad: true,
+        loadText: S.of(context).pushToLoad,
+        loadReadyText: S.of(context).releaseToLoad,
+        loadingText: S.of(context).loading,
+        loadedText: S.of(context).loaded,
+        loadFailedText: S.of(context).loadFailed,
+        noMoreText: S.of(context).noMore,
+        infoText: S.of(context).updateAt
     );
   }
 }

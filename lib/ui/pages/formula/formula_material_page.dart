@@ -9,16 +9,16 @@ import '../../widget/custom/custom_widgets.dart';
 import '../../widget/edit_drop_select.dart';
 import '../../widget/loading/loading_dialog.dart';
 
-class MaterialPage extends StatefulWidget {
+class FormulaMaterialPage extends StatefulWidget {
   final StoreInEntity storeIn;
 
-  const MaterialPage({Key key, this.storeIn}) : super(key: key);
+  const FormulaMaterialPage({Key key, this.storeIn}) : super(key: key);
 
   @override
-  _MaterialPageState createState() => _MaterialPageState();
+  _FormulaMaterialPageState createState() => _FormulaMaterialPageState();
 }
 
-class _MaterialPageState extends State<MaterialPage> {
+class _FormulaMaterialPageState extends State<FormulaMaterialPage> {
   //列表数据
   final List<MaterialEntity> materialListGlobal = [];
 

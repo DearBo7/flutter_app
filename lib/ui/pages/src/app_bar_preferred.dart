@@ -18,12 +18,14 @@ class AppBackPressed extends StatelessWidget {
   final Widget child;
   final Duration duration;
   final String showMsg;
+  final bool backFlag;
 
   AppBackPressed(
       {Key key,
       this.child,
       this.duration: const Duration(seconds: 1),
-      this.showMsg: "再按一次退出"})
+      this.showMsg: "再按一次退出",
+      this.backFlag: false})
       : super(key: key);
 
   @override
@@ -40,6 +42,9 @@ class AppBackPressed extends StatelessWidget {
   /// 监听返回键，点击两下退出程序
   Future<bool> _onBackPressed() async {
     print("AppBackPressed===>_onBackPressed:_lastPressedAt:$_lastPressedAt");
+    if (backFlag) {
+      return backFlag;
+    }
     if (_lastPressedAt == null ||
         DateTime.now().difference(_lastPressedAt) > duration) {
       //两次点击间隔超过1秒则重新计时-默认

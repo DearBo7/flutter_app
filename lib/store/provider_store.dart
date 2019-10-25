@@ -11,10 +11,11 @@ class Store {
       providers: [
         ChangeNotifierProvider<ConfigModel>.value(value: ConfigModel()),
         ChangeNotifierProvider(builder: (_) => UserModel()),
+        ChangeNotifierProvider(builder: (_) => LoginModel()),
         ChangeNotifierProvider(builder: (_) => SettingModel()),
         ChangeNotifierProvider(builder: (_) => PrintModel()),
-        ChangeNotifierProvider(builder: (_) => LoginModel()),
-        ChangeNotifierProvider(builder: (_) => OrcCameraModel())
+        ChangeNotifierProvider(builder: (_) => OrcCameraModel()),
+        ChangeNotifierProvider(builder: (_) => CategoryModel())
       ],
       child: child,
     );

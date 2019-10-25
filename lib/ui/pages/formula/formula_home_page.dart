@@ -5,24 +5,24 @@ import 'package:flutter/material.dart';
 import '../../../public_index.dart';
 import '../../../utils/toast_utils.dart';
 import '../../widget/wrap_keep_state.dart';
-import 'learn_page.dart';
-import 'my_page.dart';
-import 'storage_page.dart';
+import 'tab/learn_page.dart';
+import 'tab/my_page.dart';
+import 'tab/storage_page.dart';
 import 'test_page.dart';
 
-class HomePage extends StatefulWidget {
+class FormulaHomePage extends StatefulWidget {
   final int childIndex;
 
-  HomePage({Key key, this.childIndex: 0}) : super(key: key);
+  FormulaHomePage({Key key, this.childIndex: 0}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState(childIndex);
+  _FormulaHomePageState createState() => _FormulaHomePageState(childIndex);
 }
 
-class _HomePageState extends State<HomePage> {
+class _FormulaHomePageState extends State<FormulaHomePage> {
   int _childIndex;
 
-  _HomePageState(int childIndex) {
+  _FormulaHomePageState(int childIndex) {
     this._childIndex = childIndex;
   }
 

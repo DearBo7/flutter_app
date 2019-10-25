@@ -32,4 +32,21 @@ class PeopleApiService extends BasicNetService {
     }
     return [];
   }
+
+  /// 根据分类获取商品列表
+  Future<List<MallGoodEntity>> getMallGoodByCategoryList(
+      int page, String categoryId,
+      {String categorySubId, BuildContext context}) async {
+    Map<String, dynamic> params = {"page": page, "categoryId": categoryId};
+    if (ObjectUtils.isNotBlank(categorySubId)) {
+      params["categorySubId"] = categorySubId;
+    }
+    ResultData resultData = await post(PeopleApiUrl.getMallGoodsUrl(),
+        params: params, context: context);
+    if (resultData.toast(successCode: "0")) {
+      return JsonUtils.parseList(
+          resultData.data, (v) => MallGoodEntity.fromJson(v));
+    }
+    return [];
+  }
 }

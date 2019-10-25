@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/store/enums/enum_index.dart';
 import 'package:flutter_app/ui/widget/custom/custom_empty_widget.dart';
 import 'package:flutter_app/ui/widget/loading/loading_dialog.dart';
-import '../../widget/expand/drop_down_menu.dart';
-import '../../widget/expand/expand_view.dart';
+import '../../../widget/expand/drop_down_menu.dart';
+import '../../../widget/expand/expand_view.dart';
 import 'package:lpinyin/lpinyin.dart';
-import '../../../public_index.dart';
-import '../../../api/formula_api_service.dart';
-import '../../../res/styles.dart';
-import '../src/app_bar_preferred.dart';
+import '../../../../public_index.dart';
+import '../../../../api/formula_api_service.dart';
+import '../../../../res/styles.dart';
+import '../../src/app_bar_preferred.dart';
 
 /// SizedBox(width: 20),//SizedBox 能强制子控件具有特定宽度、高度或两者都有,使子控件设置的宽高失效
 class LearnPage extends StatefulWidget {

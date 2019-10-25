@@ -3,8 +3,8 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../public_index.dart';
-import '../../../utils/platform_utils.dart';
+import '../../../../public_index.dart';
+import '../../../../utils/platform_utils.dart';
 
 class MyPage extends StatefulWidget {
   @override

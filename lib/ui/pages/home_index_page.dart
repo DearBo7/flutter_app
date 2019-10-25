@@ -10,17 +10,6 @@ class HomeIndexPage extends StatefulWidget {
 
 class _HomeIndexPageState extends State<HomeIndexPage> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  void _init() async {
-    List<CategoryEntity> categoryList =
-        await PeopleApiService.getInstance().getCategoryList();
-    print("categoryList:${categoryList.length}");
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarPreferred.getPreferredSize(context),
@@ -37,7 +26,8 @@ class _HomeIndexPageState extends State<HomeIndexPage> {
                     child: Text("Formula-Dome", style: TextStyles.listTitle),
                   ),
                   RowButton(
-                    onPressed: () => _init(),
+                    onPressed: () => RouteUtils.pushRouteNameNewPage(
+                        context, RouteName.peopleHome),
                     child: Text("其他", style: TextStyles.listTitle),
                   ),
                 ],

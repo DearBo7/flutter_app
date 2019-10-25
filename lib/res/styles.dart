@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'colors.dart';
 import 'dimens.dart';
@@ -41,7 +42,7 @@ class AppTheme {
       cursorColor: accentColor,
       textTheme: themeData.textTheme.copyWith(
 
-        /// 解决中文hint不居中的问题 https://github.com/flutter/flutter/issues/40248
+          /// 解决中文hint不居中的问题 https://github.com/flutter/flutter/issues/40248
           subhead: themeData.textTheme.subhead
               .copyWith(textBaseline: TextBaseline.alphabetic)),
       textSelectionColor: accentColor.withAlpha(60),
@@ -61,6 +62,22 @@ class AppTheme {
 }
 
 class TextStyles {
+  ///使用前ScreenUtil必须初始化
+  static TextStyle textScreenStyle(
+      {double fontSize: Dimens.font_sp14,
+      Color color,
+      TextDecoration decoration,
+      Color decorationColor,
+      FontWeight fontWeight}) {
+    return textStyle(
+      fontSize: ScreenUtil().setSp(fontSize),
+      color: color,
+      decoration: decoration,
+      decorationColor: decorationColor,
+      fontWeight: fontWeight,
+    );
+  }
+
   static TextStyle textStyleTheme(BuildContext context,
       {double fontSize, FontWeight fontWeight}) {
     return textStyle(
@@ -70,37 +87,43 @@ class TextStyles {
   }
 
   static TextStyle textStyle(
-      {double fontSize: Dimens.font_sp14, Color color, FontWeight fontWeight}) {
+      {double fontSize: Dimens.font_sp14,
+      Color color,
+      TextDecoration decoration: TextDecoration.none,
+      Color decorationColor,
+      FontWeight fontWeight}) {
     return TextStyle(
-        fontSize: fontSize,
-        color: color,
-        decoration: TextDecoration.none,
-        fontWeight: fontWeight);
+      fontSize: fontSize,
+      color: color,
+      decoration: decoration,
+      decorationColor: decorationColor,
+      fontWeight: fontWeight,
+    );
   }
 
   //输入框前面的描述信息
   static const TextStyle errorStyle =
-  TextStyle(fontSize: Dimens.font_sp14, color: Colors.red);
+      TextStyle(fontSize: Dimens.font_sp14, color: Colors.red);
 
   //输入框前面的描述信息
   static const TextStyle labelTitle =
-  TextStyle(fontSize: Dimens.font_sp18, color: Colors.grey);
+      TextStyle(fontSize: Dimens.font_sp18, color: Colors.grey);
 
   //描述-备注信息
   static const TextStyle labelRemark =
-  TextStyle(fontSize: Dimens.font_sp16, color: Colors.grey);
+      TextStyle(fontSize: Dimens.font_sp16, color: Colors.grey);
 
   //列表主要内容显示
   static const TextStyle listTitle =
-  TextStyle(fontSize: Dimens.font_sp18, color: Colors.black);
+      TextStyle(fontSize: Dimens.font_sp18, color: Colors.black);
 
   //列表不是主要内容显示
   static const TextStyle listSubtitle =
-  TextStyle(fontSize: Dimens.font_sp14, color: Colors.grey);
+      TextStyle(fontSize: Dimens.font_sp14, color: Colors.grey);
 
   //设置分组字体大小
   static const TextStyle settingGroupTitle =
-  TextStyle(fontSize: Dimens.font_sp12);
+      TextStyle(fontSize: Dimens.font_sp12);
 
   //设置标题大小
   static const TextStyle settingTitle = TextStyle(fontSize: Dimens.font_sp16);
@@ -190,4 +213,3 @@ class ThemeHelper {
     );
   }
 }
-

@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
-import '../../../public_index.dart';
-import '../../widget/custom/custom_easy_refresh.dart';
-import '../../widget/custom/custom_empty_widget.dart';
-import '../../widget/custom/custom_widgets.dart';
-import 'material_page.dart';
-import '../src/app_bar_preferred.dart';
+import '../../../../public_index.dart';
+import '../../../widget/custom/custom_easy_refresh.dart';
+import '../../../widget/custom/custom_empty_widget.dart';
+import '../../../widget/custom/custom_widgets.dart';
+import '../formula_material_page.dart';
+import '../../src/app_bar_preferred.dart';
 
 class StoragePage extends StatefulWidget {
   @override
@@ -190,7 +190,7 @@ class _StoragePageState extends State<StoragePage> {
               //底部回弹,默认true
               bottomBouncing: false,
               child: _buildListView(),
-              header: CustomEasyRefresh.defaultClassicalHeader(context),
+              header: CustomEasyRefresh.defaultHeader(context),
               onRefresh: () async {
                 await Future.delayed(Duration(milliseconds: 300), () {
                   getStoreInList();

@@ -6,7 +6,7 @@ import '../../../store/enums/enum_index.dart';
 import '../../widget/input_text/spinner_input.dart';
 //import 'package:spinner_input/spinner_input.dart';
 
-class SettingPage extends StatelessWidget {
+class FormulaSettingPage extends StatelessWidget {
   final List<EnumEntity> matchedPatternList = EnumEntity.toMatchedPatternList();
 
   @override

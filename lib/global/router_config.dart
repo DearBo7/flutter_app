@@ -1,10 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../ui/pages/formula/formula_page_index.dart';
-import '../ui/pages/formula/login_page.dart';
-import '../ui/pages/home_index_page.dart';
-import '../ui/pages/splash_page.dart';
+import '../ui/pages/page_index.dart';
 
 class RouteName {
   static const String login = 'login';
@@ -13,6 +10,7 @@ class RouteName {
   static const String formulaHome = 'formula';
   static const String formulaSetting = 'formula_setting';
   static const String formulaMaterial = 'formula_material';
+  static const String peopleHome = 'people';
 }
 
 class Router {
@@ -25,12 +23,14 @@ class Router {
       case RouteName.homeIndex:
         return CupertinoPageRoute(builder: (_) => HomeIndexPage());
       case RouteName.formulaSetting:
-        return CupertinoPageRoute(builder: (_) => SettingPage());
+        return CupertinoPageRoute(builder: (_) => FormulaSettingPage());
       case RouteName.formulaHome:
-        return CupertinoPageRoute(builder: (_) => HomePage());
+        return CupertinoPageRoute(builder: (_) => FormulaHomePage());
       case RouteName.formulaMaterial:
         return CupertinoPageRoute(
-            builder: (_) => MaterialPage(storeIn: settings.arguments));
+            builder: (_) => FormulaMaterialPage(storeIn: settings.arguments));
+      case RouteName.peopleHome:
+        return CupertinoPageRoute(builder: (_) => PeopleHomePage());
       default:
         return CupertinoPageRoute(
             builder: (_) => Scaffold(

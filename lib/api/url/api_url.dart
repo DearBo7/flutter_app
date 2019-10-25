@@ -62,11 +62,11 @@ class PeopleApiUrl {
     return getRestUrl() + "/getCategory";
   }
 
-  /// 百姓生活分类商品数据接口
+  /// 百姓生活商品分类
   /// "page": page,
   //  "categoryId": categoryId,
   //  "categorySubId": categorySubId,
-  static String getCategoryGoodsUrl() {
+  static String getMallGoodsUrl() {
     return getRestUrl() + "/getMallGoods";
   }
 

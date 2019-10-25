@@ -31,6 +31,9 @@ dependencies: # 应用或包依赖的其它包或插件
   # Json 配置
   #json_annotation: ^2.4.0
 
+  # 处理double /
+  #decimal: ^0.3.5
+
   # 用插件生成的
   #flutter_i18n: ^0.6.3
 
@@ -51,7 +54,7 @@ dependencies: # 应用或包依赖的其它包或插件
   #progress_dialog: ^1.2.0
 
   # 本地json对象存储
-  localstorage: ^2.0.0
+  localstorage: ^3.0.0+2
 
   # 加载动画组件 https://pub.flutter-io.cn/packages/flutter_spinkit
   flutter_spinkit: ^4.0.0
@@ -79,7 +82,7 @@ dependencies: # 应用或包依赖的其它包或插件
   # 下拉刷新 https://github.com/xuelongqy/flutter_easyrefresh
   flutter_easyrefresh: ^2.0.4
 
-  # 图片选择器,拍照,视频等
+  # 图片选择器,拍照,视频等-官方
   image_picker: ^0.6.1+8
 
   # 图片压缩 https://github.com/crazecoder/flutter_luban
@@ -97,11 +100,17 @@ dependencies: # 应用或包依赖的其它包或插件
   # 下拉选择菜单 https://github.com/HussainTaj-W/flutter-package-selection_menu
   selection_menu: ^0.8.1
 
+  # 屏幕适配 https://github.com/OpenFlutter/flutter_screenutil
+  flutter_screenutil: ^0.6.0
+
   # 更新应用 https://pub.flutter-io.cn/packages/ota_update
   #ota_update: ^2.0.1
 
   # 输入框 https://github.com/Ali-Azmoud/spinner_input (本地以复制源码)
   #spinner_input: ^0.1.2
+
+  # 蓝牙 https://github.com/pauldemarco/flutter_blue
+  #flutter_blue: ^0.6.2
 
 dev_dependencies: # 开发环境依赖的工具包（而不是flutter应用本身依赖的包）
   flutter_test:

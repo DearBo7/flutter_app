@@ -7,3 +7,4 @@ export 'formula/produce_line.dart';
 export 'formula/store_in.dart';
 export 'formula/user.dart';
 export 'people/category.dart';
+export 'people/mall_good.dart';

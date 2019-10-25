@@ -1,16 +1,16 @@
 class CategoryEntity {
-  List<CategoryBxMallSubDto> bxMallSubDto;
+  List<CategoryBxMallSubDto> bxMallSubDtoList;
   String mallCategoryId;
   String mallCategoryName;
 
   CategoryEntity(
-      {this.bxMallSubDto, this.mallCategoryId, this.mallCategoryName});
+      {this.bxMallSubDtoList, this.mallCategoryId, this.mallCategoryName});
 
   CategoryEntity.fromJson(Map<String, dynamic> json) {
     if (json['bxMallSubDto'] != null) {
-      bxMallSubDto = new List<CategoryBxMallSubDto>();
+      bxMallSubDtoList = new List<CategoryBxMallSubDto>();
       (json['bxMallSubDto'] as List).forEach((v) {
-        bxMallSubDto.add(new CategoryBxMallSubDto.fromJson(v));
+        bxMallSubDtoList.add(new CategoryBxMallSubDto.fromJson(v));
       });
     }
     mallCategoryId = json['mallCategoryId'];
@@ -19,8 +19,8 @@ class CategoryEntity {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.bxMallSubDto != null) {
-      data['bxMallSubDto'] = this.bxMallSubDto.map((v) => v.toJson()).toList();
+    if (this.bxMallSubDtoList != null) {
+      data['bxMallSubDto'] = this.bxMallSubDtoList.map((v) => v.toJson()).toList();
     }
     data['mallCategoryId'] = this.mallCategoryId;
     data['mallCategoryName'] = this.mallCategoryName;
