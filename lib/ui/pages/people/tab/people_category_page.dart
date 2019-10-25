@@ -198,12 +198,13 @@ class CategoryGoodList extends StatefulWidget {
 class _CategoryGoodListState extends State<CategoryGoodList> {
   //控制刷新组件-滚动控制器
   EasyRefreshController _refreshController;
-  ScrollController _listController = ScrollController();
+  ScrollController _listController;
 
   @override
   void initState() {
     super.initState();
     _refreshController = EasyRefreshController();
+    _listController = ScrollController();
   }
 
   @override
