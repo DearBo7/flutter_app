@@ -94,7 +94,7 @@ class ResultData {
   }
 
   mDebugPrint(String log) {
-    if (Config.NET_DEBUG) {
+    if (Config.NetDebug) {
       debugPrint(log);
     }
   }

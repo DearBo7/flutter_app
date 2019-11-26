@@ -1,6 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../../res/styles.dart';
+
+typedef ShowCallback(CustomProgressLoadingState progressLoadingState);
+typedef ShowProgress(ProgressLoading progressLoading);
 
 class CustomProgressLoading extends StatefulWidget {
   final Text title;
@@ -16,6 +21,8 @@ class CustomProgressLoading extends StatefulWidget {
   //是否显示最大和当前值
   final bool showMinMax;
 
+  final ShowCallback showCallback;
+
   CustomProgressLoading(
       {Key key,
       @required this.progress,
@@ -23,32 +30,25 @@ class CustomProgressLoading extends StatefulWidget {
       this.showMinMax: false,
       this.title,
       this.content,
-      this.contentStyle})
+      this.contentStyle,
+      this.showCallback})
       : assert(max != null && max > 0),
         assert(progress != null && progress > -1),
         super(key: key);
 
-  update(
-      {int progress, int max, String content, TextStyle contentStyle}) {
-    _customProgressLoadingState.update(
-        progress: progress,
-        max: max,
-        content: content,
-        contentStyle: contentStyle);
-  }
-
-  final _CustomProgressLoadingState _customProgressLoadingState =
-      _CustomProgressLoadingState();
-
   @override
-  _CustomProgressLoadingState createState() => _customProgressLoadingState;
+  CustomProgressLoadingState createState() => CustomProgressLoadingState();
 }
 
-class _CustomProgressLoadingState extends State<CustomProgressLoading> {
+class CustomProgressLoadingState extends State<CustomProgressLoading> {
   int _progress;
   int _max;
   String _content;
   TextStyle _contentStyle;
+
+  ValueNotifier<int> _progressNotifier;
+
+  //ValueNotifier<String> _contentNotifier;
 
   @override
   void initState() {
@@ -59,15 +59,25 @@ class _CustomProgressLoadingState extends State<CustomProgressLoading> {
         : widget.contentStyle;
     _progress = widget.progress;
     _max = widget.max;
+    _progressNotifier = ValueNotifier<int>(_progress);
+    //_contentNotifier = ValueNotifier<String>(_content);
+    if (widget.showCallback != null) {
+      Timer.run(() {
+        widget.showCallback(this);
+      });
+    }
   }
 
-  update(
-      {int progress, int max, String content, TextStyle contentStyle}) {
-    if (progress != null && progress > -1) {
+  updateProgress(int progress) {
+    if (progress > 0) {
+      _progressNotifier.value = progress;
       _progress = progress;
     }
-    if (max != null && max > 0) {
-      _max = max;
+  }
+
+  update({int progress, String content, TextStyle contentStyle}) {
+    if (progress != null && progress > -1) {
+      _progress = progress;
     }
     if (content != null) {
       _content = content;
@@ -75,10 +85,74 @@ class _CustomProgressLoadingState extends State<CustomProgressLoading> {
     if (contentStyle != null) {
       _contentStyle = contentStyle;
     }
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          widget.title == null
+              ? SizedBox.shrink()
+              : Padding(
+                  padding: EdgeInsets.only(left: 10, top: 5, bottom: 15),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: widget.title,
+                  ),
+                ),
+          _content == null
+              ? SizedBox.shrink()
+              : Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: Text(_content, style: _contentStyle)),
+          ValueListenableBuilder(
+            valueListenable: _progressNotifier,
+            builder: (context, progressValue, child) {
+              return Column(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: LinearProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(Colors.red),
+                      backgroundColor: Colors.redAccent[100],
+                      value: _calculateTheValue(progressValue, _max),
+                    ),
+                  ),
+                  Gaps.hGap4,
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          "${_calculateThePercentage(progressValue, _max).toStringAsFixed(0)} %",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        widget.showMinMax
+                            ? Text("$progressValue / $_max")
+                            : SizedBox.shrink(),
+                      ],
+                    ),
+                  ),
+                  Gaps.hGap20,
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  /*@override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
@@ -129,7 +203,7 @@ class _CustomProgressLoadingState extends State<CustomProgressLoading> {
         ],
       ),
     );
-  }
+  }*/
 
   /// 计算进度条值
   double _calculateTheValue(int progress, int max) {
@@ -162,7 +236,8 @@ class ProgressLoading {
   /// 当前是否已经显示
   bool _isShow = false;
 
-  CustomProgressLoading _customProgressLoading;
+  /// 加载框内容key-用于动态更新
+  CustomProgressLoadingState _progressLoadingState;
 
   ProgressLoading(BuildContext context) {
     _context = context;
@@ -176,17 +251,12 @@ class ProgressLoading {
       TextStyle contentStyle,
       List<Widget> actions,
       bool showMinMax: true,
-      bool isBarrierDismissible: false}) {
+      bool isBarrierDismissible: false,
+      ShowProgress showProgress}) {
     if (_isShow) {
       return;
     }
-    _customProgressLoading = CustomProgressLoading(
-        progress: progress,
-        max: max,
-        showMinMax: showMinMax,
-        title: title,
-        content: content,
-        contentStyle: contentStyle);
+    _progressLoadingState = null;
     _isShow = true;
     showDialog(
         context: _context,
@@ -198,30 +268,40 @@ class ProgressLoading {
             child: AlertDialog(
               contentPadding: EdgeInsets.only(),
               titlePadding: EdgeInsets.only(),
-              content: _customProgressLoading,
+              content: CustomProgressLoading(
+                progress: progress,
+                max: max,
+                showMinMax: showMinMax,
+                title: title,
+                content: content,
+                contentStyle: contentStyle,
+                showCallback: (progressLoadingState) {
+                  _progressLoadingState = progressLoadingState;
+                  if (showProgress != null) {
+                    showProgress(this);
+                  }
+                },
+              ),
               actions: actions,
             ),
           );
         });
   }
 
-  bool update(
-      {int progress, int max, String content, TextStyle contentStyle}) {
-    if (_isShow && _customProgressLoading != null) {
-      _customProgressLoading.update(
-          progress: progress,
-          max: max,
-          content: content,
-          contentStyle: contentStyle);
-      return true;
+  void updateProgress(int progress) {
+    if (_isShow && _progressLoadingState != null) {
+      _progressLoadingState.updateProgress(progress);
     }
-    return false;
+  }
+
+  void update({int progress, String content, TextStyle contentStyle}) {
+    if (_isShow && _progressLoadingState != null) {
+      _progressLoadingState.update(
+          content: content, contentStyle: contentStyle, progress: progress);
+    }
   }
 
   void hide() {
-    if (_customProgressLoading != null) {
-      _customProgressLoading = null;
-    }
     if (!_isShow) {
       return;
     }
@@ -230,6 +310,9 @@ class ProgressLoading {
       Navigator.of(_dismissingContext).pop();
     } else {
       Navigator.of(_context).pop();
+    }
+    if (_progressLoadingState != null) {
+      _progressLoadingState = null;
     }
   }
 }

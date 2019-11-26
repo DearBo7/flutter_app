@@ -56,7 +56,7 @@ class DioHttpUtils {
     //dio.interceptors.add(CookieManager(CookieJar()));
 
     /// 添加拦截器
-    if (Config.NET_DEBUG) {
+    if (Config.NetDebug) {
       _dio.interceptors
         ..add(InterceptorsWrapper(onRequest: (RequestOptions options) {
           debugPrint("\n================== 请求数据 ==========================");

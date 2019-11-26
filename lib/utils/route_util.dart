@@ -20,6 +20,14 @@ class RouteUtils {
         arguments: arguments);
   }
 
+  /// 跳转并等待返回结果
+  static Future<T> pushPageWaitResult<T extends Object>(
+      BuildContext context, Widget routePage) {
+    return Navigator.push(
+        context, MaterialPageRoute(builder: (context) => routePage));
+  }
+
+
   static void pushNewPage(BuildContext context, Widget routePage,
       {Function callBack}) {
     Navigator.push(context, MaterialPageRoute(builder: (context) => routePage))

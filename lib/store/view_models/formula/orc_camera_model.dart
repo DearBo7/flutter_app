@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/utils/file_utils.dart';
 import 'package:flutter_app/utils/network/net_log_utils.dart';
@@ -95,9 +96,9 @@ class OrcCameraModel extends ViewStateModel {
       File result = await FlutterImageCompress.compressAndGetFile(
         image.path,
         orcFilePath,
-        minWidth: 960,
-        minHeight: 540,
-        quality: 60,
+        minWidth: 640,
+        minHeight: 640,
+        quality: 80,
       );
       if (result != null) {
         image.deleteSync();
@@ -118,5 +119,20 @@ class OrcCameraModel extends ViewStateModel {
         onCancel();
       }
     }
+  }
+
+  /// 相机
+  List<CameraDescription> _cameraDescriptionList = [];
+
+  Future<List<CameraDescription>> _getCameras() async {
+    if (_cameraDescriptionList.length > 0) {
+      return _cameraDescriptionList;
+    }
+    await availableCameras().then((cameraList) {
+      _cameraDescriptionList.addAll(cameraList);
+    }).catchError((e) {
+      print("ERROR CAMERA: $e");
+    });
+    return _cameraDescriptionList;
   }
 }

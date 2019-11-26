@@ -23,12 +23,12 @@ class NetService {
   /// get请求
   get(String url,
       {Map<String, dynamic> params,
-      Map<String, dynamic> headers,
-      String contentType,
-      BuildContext context,
-      String loadingText,
-      Duration delay,
-      bool showLoad: true}) async {
+        Map<String, dynamic> headers,
+        String contentType,
+        BuildContext context,
+        String loadingText,
+        Duration delay,
+        bool showLoad: true}) async {
     return await request(url,
         method: Method.GET,
         params: params,
@@ -43,12 +43,12 @@ class NetService {
   /// post请求
   post(String url,
       {Map<String, dynamic> params,
-      Map<String, dynamic> headers,
-      String contentType,
-      BuildContext context,
-      String loadingText,
-      Duration delay,
-      bool showLoad: true}) async {
+        Map<String, dynamic> headers,
+        String contentType,
+        BuildContext context,
+        String loadingText,
+        Duration delay,
+        bool showLoad: true}) async {
     return await request(url,
         method: Method.POST,
         params: params,
@@ -63,8 +63,8 @@ class NetService {
   /// 附件上传
   upLoad(var file, String fileName, String url,
       {Map<String, dynamic> params,
-      Map<String, dynamic> headers,
-      String contentType}) async {
+        Map<String, dynamic> headers,
+        String contentType}) async {
     return await request(url,
         method: Method.UPLOAD,
         params: params,
@@ -82,29 +82,38 @@ class NetService {
   ///  请求部分
   request(String url,
       {Method method,
-      Map<String, dynamic> params,
-      Map<String, dynamic> headers,
-      var file,
-      String fileName,
-      String fileSavePath,
-      String contentType,
-      BuildContext context,
-      String loadingText,
-      Duration delay,
-      bool showLoad: false}) async {
+        Map<String, dynamic> params,
+        Map<String, dynamic> headers,
+        var file,
+        String fileName,
+        String fileSavePath,
+        String contentType,
+        BuildContext context,
+        String loadingText,
+        Duration delay,
+        bool showLoad: false}) async {
     try {
       Response response;
 
       SessionManager sessionManager = SessionManager();
       if (headers != null) {
-        sessionManager.options.headers = headers;
+        sessionManager.options.headers.addAll(headers);
+      } else if (sessionManager.options.headers != null &&
+          sessionManager.options.headers.isNotEmpty) {
+        sessionManager.options.headers.clear();
       }
       if (contentType != null) {
         sessionManager.options.contentType = contentType;
+      } else if (sessionManager.options.contentType == null ||
+          sessionManager.options.contentType !=
+              Headers.formUrlEncodedContentType) {
+        sessionManager.options.contentType = Headers.formUrlEncodedContentType;
       }
       var baseUrl = await getBasicUrl();
       if (baseUrl != null) {
         sessionManager.options.baseUrl = baseUrl;
+      } else if (sessionManager.options.baseUrl != null) {
+        sessionManager.options.baseUrl = null;
       }
 
       // 打印网络日志

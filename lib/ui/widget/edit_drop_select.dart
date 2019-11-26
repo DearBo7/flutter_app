@@ -49,7 +49,6 @@ class AutoSelectTextField<T> extends StatefulWidget {
   final TextInputAction textInputAction;
   final TextCapitalization textCapitalization;
   final TextEditingController controller;
-  final FocusNode focusNode;
 
   //是否禁用输入-默认true,不禁用
   final bool enabled;
@@ -69,62 +68,36 @@ class AutoSelectTextField<T> extends StatefulWidget {
 
   AutoSelectTextField(
       {GlobalKey<AutoSelectTextFieldState<T>> key,
-      this.items,
-      this.itemBuilder,
-      this.itemFilter,
-      this.itemSorter,
-      this.itemSubmitted,
-      this.downHeight: 100,
-      this.maxCount,
-      this.minLength: 1,
-      this.textChanged,
-      this.textSubmitted,
-      this.onFocusChanged,
-      this.submitOnSuggestionTap: true,
-      this.clearOnSubmit: true,
-      this.inputFormatters,
-      this.itemShowValue,
-      this.style,
-      this.keyboardType: TextInputType.text,
-      this.textInputAction: TextInputAction.done,
-      this.textCapitalization: TextCapitalization.none,
-      this.enabled: true,
-      this.enabledDrop: true,
-      this.controller,
-      this.focusNode,
-      this.contentPadding: const EdgeInsets.all(8.0),
-      this.padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 5),
-      this.filterFlag: true})
+        this.items,
+        this.itemBuilder,
+        this.itemFilter,
+        this.itemSorter,
+        this.itemSubmitted,
+        this.downHeight: 100,
+        this.maxCount,
+        this.minLength: 1,
+        this.textChanged,
+        this.textSubmitted,
+        this.onFocusChanged,
+        this.submitOnSuggestionTap: true,
+        this.clearOnSubmit: true,
+        this.inputFormatters,
+        this.itemShowValue,
+        this.style,
+        this.keyboardType: TextInputType.text,
+        this.textInputAction: TextInputAction.done,
+        this.textCapitalization: TextCapitalization.none,
+        this.enabled: true,
+        this.enabledDrop: true,
+        this.controller,
+        this.contentPadding: const EdgeInsets.all(8.0),
+        this.padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 5),
+        this.filterFlag: true})
       : assert(downHeight != null && downHeight > -1),
         super(key: key);
 
-/*  //添加单条
-  void add(T item) => _autoSelectTextFieldState.add(item);
-
-  //添加多条
-  void addAll(List<T> dataList) => _autoSelectTextFieldState.addAll(dataList);
-
-  //删除
-  void remove(T suggestion) => _autoSelectTextFieldState.remove(suggestion);
-
-  //根据下标删除
-  void removeAt(int index) => _autoSelectTextFieldState.removeAt(index);
-
-  //重新设置下拉框数据源,并且清空之前的
-  void setItems(List<T> dataList) =>
-      _autoSelectTextFieldState.setItems(dataList);
-
-  //清空当前输入的值,解除聚焦
-  void clearValue() => _autoSelectTextFieldState.clearValue();
-
-  //清空下拉框数据源
-  void clearItems() => _autoSelectTextFieldState.clearItems();*/
-
-  final AutoSelectTextFieldState<T> _autoSelectTextFieldState =
-      AutoSelectTextFieldState();
-
   @override
-  AutoSelectTextFieldState createState() => _autoSelectTextFieldState;
+  AutoSelectTextFieldState<T> createState() => AutoSelectTextFieldState<T>();
 }
 
 class AutoSelectTextFieldState<T> extends State<AutoSelectTextField> {
@@ -142,12 +115,13 @@ class AutoSelectTextFieldState<T> extends State<AutoSelectTextField> {
   Filter<T> _itemFilter;
   GetShowValue<T> _itemShowValue;
   AutoCompleteOverlayItemBuilder<T> _itemBuilder;
+  FocusNode _focusNode;
 
   bool _clearOnSubmit;
   bool _submitOnSuggestionTap;
 
   //是否聚焦
-  bool _hasFocusFlag = false;
+  final ValueNotifier<bool> _hasFocusNotifier = ValueNotifier<bool>(false);
 
   //是否筛选,如果不筛选,下拉列表显示最大条数
   bool _filterFlag;
@@ -179,7 +153,7 @@ class AutoSelectTextFieldState<T> extends State<AutoSelectTextField> {
     } else {
       _itemFilter = widget.itemFilter;
     }
-
+    _focusNode = FocusNode();
     _textField = TextField(
       inputFormatters: widget.inputFormatters,
       textCapitalization: widget.textCapitalization,
@@ -187,7 +161,7 @@ class AutoSelectTextFieldState<T> extends State<AutoSelectTextField> {
       enabled: widget.enabled,
       style: widget.style,
       keyboardType: widget.keyboardType,
-      focusNode: widget.focusNode ?? FocusNode(),
+      focusNode: _focusNode,
       controller: widget.controller ?? TextEditingController(),
       textInputAction: widget.textInputAction,
       //输入文本发生变化时的回调
@@ -212,15 +186,14 @@ class AutoSelectTextFieldState<T> extends State<AutoSelectTextField> {
     if (this._controller != null && this._controller.text != null) {
       _currentText = this._controller.text;
     }
-
     //监听聚焦事件
     _textField.focusNode.addListener(() {
+      //print("addListener====init...");
+      _hasFocusNotifier.value = _textField.focusNode.hasFocus;
       if (widget.onFocusChanged != null) {
         widget.onFocusChanged(_textField.focusNode.hasFocus);
       }
-      setState(() {
-        _hasFocusFlag = _textField.focusNode.hasFocus;
-      });
+      //print("addListener=====>_focusNode:${_focusNode.hasFocus},(_textField.focusNode.hasFocus:${_textField.focusNode.hasFocus}");
       //文本框聚焦
       if (_textField.focusNode.hasFocus) {
         updateOverlayValue(_currentText);
@@ -233,50 +206,55 @@ class AutoSelectTextFieldState<T> extends State<AutoSelectTextField> {
   @override
   void initState() {
     super.initState();
-    //print("AutoSelectTextFieldState===========initState");
     _init();
   }
 
   @override
   Widget build(BuildContext context) {
-    //print("AutoSelectTextFieldState===========build");
     return CompositedTransformTarget(
       link: _layerLink,
-      child: InkWell(
-        onTap: _hasFocusFlag || !widget.enabledDrop
-            ? null
-            : () {
-                //获取焦点
-                FocusScope.of(context).requestFocus(_textField.focusNode);
-              },
-        child: Container(
-          padding: widget.padding,
-          decoration: BoxDecoration(
-            color: !widget.enabledDrop ? Colors.grey[300] : null,
-            border: Border.all(
-                color: _hasFocusFlag ? Colors.blue : Colors.grey[400]),
-            borderRadius: BorderRadius.all(Radius.circular(3)),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Expanded(child: _textField),
-              InkWell(
-                onTap: !_hasFocusFlag ? null : () => _clearOverlay(),
-                child: Icon(
-                    _hasFocusFlag ? Icons.arrow_drop_down : Icons.arrow_left),
-              )
-            ],
-          ),
-        ),
+      child: ValueListenableBuilder(
+        valueListenable: _hasFocusNotifier,
+        builder: (context, hasFocusValue, child) {
+          return GestureDetector(
+            onTap: hasFocusValue || !widget.enabledDrop
+                ? null
+                : () {
+              print("获取焦点");
+              //获取焦点
+              FocusScope.of(context).requestFocus(_textField.focusNode);
+            },
+            child: Container(
+              padding: widget.padding,
+              decoration: BoxDecoration(
+                color: !widget.enabledDrop ? Colors.grey[300] : null,
+                border: Border.all(
+                    color: hasFocusValue ? Colors.blue : Colors.grey[400]),
+                borderRadius: BorderRadius.all(Radius.circular(3)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Expanded(child: _textField),
+                  InkWell(
+                    onTap: !hasFocusValue ? null : () => _clearOverlay(),
+                    child: Icon(hasFocusValue
+                        ? Icons.arrow_drop_down
+                        : Icons.arrow_left),
+                  )
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
 
   @override
   void dispose() {
-    if (widget.focusNode == null) {
-      _textField.focusNode.dispose();
+    if (_focusNode != null) {
+      _focusNode.dispose();
     }
     if (widget.controller == null) {
       _textField.controller.dispose();
@@ -323,7 +301,7 @@ class AutoSelectTextFieldState<T> extends State<AutoSelectTextField> {
                                       String showValue = _itemShowValue(item);
                                       _textField.controller.text = showValue;
                                       _currentText = showValue;
-                                      _textField.focusNode.unfocus();
+                                      _focusNode.unfocus();
                                       if (widget.itemSubmitted != null) {
                                         widget.itemSubmitted(item);
                                       }
@@ -354,7 +332,8 @@ class AutoSelectTextFieldState<T> extends State<AutoSelectTextField> {
           ),
         );
       });
-      WidgetsBinding.instance.addPostFrameCallback((_) => Overlay.of(context).insert(_overlayEntryItems));
+      WidgetsBinding.instance.addPostFrameCallback(
+              (_) => Overlay.of(context).insert(_overlayEntryItems));
     }
     _filterItems = _getFilterData(widget.items, widget.itemSorter, _itemFilter,
         widget.maxCount, query, _filterFlag);

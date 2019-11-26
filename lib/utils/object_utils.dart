@@ -2,29 +2,26 @@ import 'dart:collection';
 import 'dart:convert';
 
 class ObjectUtils {
-  /// 传递中文参数前，先转换，不支持中文传递
-  static String stringCnParamsEncode(String originalCn) {
-    return jsonEncode(Utf8Encoder().convert(originalCn));
+  static bool isNotTrue(bool flag) {
+    return flag == null || !flag;
   }
 
-  /// 传递后取出参数，解析
-  static String stringCnParamsDecode(String encodeCn) {
-    var list = List<int>();
+  static bool isTrue(bool flag) {
+    return flag != null && flag;
+  }
 
-    ///字符串解码
-    jsonDecode(encodeCn).forEach(list.add);
-    String value = Utf8Decoder().convert(list);
-    return value;
+  static bool isFalse(bool flag) {
+    return flag != null && !flag;
   }
 
   /// object 转为 string json
-  static String objectToJson<T>(T t) {
-    return stringCnParamsEncode(jsonEncode(t));
+  static String objectToJson(Object value) {
+    return jsonEncode(value);
   }
 
   /// string json 转为 map
-  static Map<String, dynamic> jsonToMap(String strJson) {
-    return json.decode(stringCnParamsDecode(strJson));
+  static dynamic jsonToObject(String strJson) {
+    return jsonDecode(strJson);
   }
 
   /// string 转为 bool

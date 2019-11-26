@@ -40,6 +40,6 @@ class NetLogUtils {
   }
 
   static bool isPrint() {
-    return Config.NET_DEBUG;
+    return Config.NetDebug;
   }
 }

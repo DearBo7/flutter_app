@@ -19,9 +19,6 @@ bool _isShowText;
 // 显示背景-true
 bool _isShowBackground;
 
-//延迟显示dialog,如果为true,即将显示dialog
-//bool _delayDialogFlag = false;
-
 class CustomizeLoadingDialog {
   // 空白区域/返回键 点击后是否消失-false
   bool _isBarrierDismissible;
@@ -29,7 +26,11 @@ class CustomizeLoadingDialog {
   /// 传过来的 Context
   BuildContext _context;
 
-  _DialogBody _dialogBody;
+  /// 加载框内容key-用于动态更新
+  GlobalKey<DialogBodyState> _dialogBodyStateKey;
+
+  /// Dialog是否隐藏-当前执行hide方法时,设置成true
+  bool _isDialogHide = false;
 
   //显示时间
   int showStartTime = 0;
@@ -68,6 +69,7 @@ class CustomizeLoadingDialog {
       return this;
     }
     _isShow = true;
+    _isDialogHide = false;
     _isShowText = isShowText;
     if (isShowText) {
       if (text == null) {
@@ -79,30 +81,45 @@ class CustomizeLoadingDialog {
         _text = text;
       }
     }
-    _dialogBody = _DialogBody(
-        showWidget: showWidget,
-        showWidgetColor: Theme.of(_context).accentColor);
-    showDialog(
-        context: _context,
-        barrierDismissible: _isBarrierDismissible,
-        builder: (BuildContext context) {
-          _dismissingContext = context;
-          return WillPopScope(
-            child: DialogTransparent(
-                child: _dialogBody == null ? SizedBox.shrink() : _dialogBody),
-            onWillPop: () async {
-              return Future.value(_isBarrierDismissible && _isShow);
-            },
-          );
-        });
+    _showDialog(showWidget);
     return this;
+  }
+
+  _showDialog(Widget showWidget) {
+    _dialogBodyStateKey = GlobalKey<DialogBodyState>();
+    _dismissingContext = null;
+    try {
+      showDialog(
+          context: _context,
+          barrierDismissible: _isBarrierDismissible,
+          builder: (BuildContext context) {
+            _dismissingContext = context;
+            return WillPopScope(
+              child: DialogTransparent(
+                child: _DialogBody(
+                    key: _dialogBodyStateKey,
+                    isDialogHide: _isDialogHide,
+                    showWidget: showWidget,
+                    showWidgetColor: Theme.of(_context).accentColor),
+              ),
+              onWillPop: () async {
+                return Future.value(_isBarrierDismissible);
+              },
+            );
+          });
+    } on Exception catch (e) {
+      print("异常了.......");
+    }
   }
 
   bool get isShow => _isShow;
 
   //隐藏
   Future<bool> hide() async {
-    if (_isShow) {
+    if (!_isDialogHide) {
+      _isDialogHide = true;
+    }
+    if (_isShow && _dialogBodyStateKey != null) {
       int showEndTime = DateTime.now().millisecondsSinceEpoch - showStartTime;
       //判断是否需要延时隐藏,需要延时
       if (_delay.inMilliseconds > 0 && showEndTime < _delay.inMilliseconds) {
@@ -119,7 +136,7 @@ class CustomizeLoadingDialog {
 
   void update(
       {Text text, String contentText, bool isShowText, Widget showWidget}) {
-    if (_isShow && _dialogBody != null) {
+    if (_isShow && _dialogBodyStateKey != null) {
       if (text != null) {
         _text = text;
       } else if (contentText != null) {
@@ -128,7 +145,9 @@ class CustomizeLoadingDialog {
       if (isShowText != null) {
         _isShowText = isShowText;
       }
-      _dialogBody.update(showWidget: showWidget);
+      if (_dialogBodyStateKey.currentState != null) {
+        _dialogBodyStateKey.currentState.update(showWidget: showWidget);
+      }
     }
   }
 
@@ -137,14 +156,16 @@ class CustomizeLoadingDialog {
       debugPrint(
           'CustomizeLoadingDialog--->[hide]:$_isShow,_dismissingContext is null:${_dismissingContext == null}');
       _isShow = false;
-      if (_dismissingContext != null &&
-          Navigator.of(_dismissingContext).canPop()) {
+      if (_dialogBodyStateKey.currentState == null) {
+        return false;
+      }
+      if (_dismissingContext != null) {
         Navigator.of(_dismissingContext).pop();
       } else {
         Navigator.of(_context).pop();
       }
-      if (_dialogBody != null) {
-        _dialogBody = null;
+      if (_dialogBodyStateKey != null) {
+        _dialogBodyStateKey = null;
       }
       debugPrint('CustomizeLoadingDialog--->[hide]:End...');
       return true;
@@ -166,29 +187,32 @@ class _DialogBody extends StatefulWidget {
   //加载的动画
   final Widget showWidget;
   final Color showWidgetColor;
-  final _DialogBodyState _dialogBodyState = _DialogBodyState();
+
+  //用于判断调用的dialog是否已经调用hide方法,如果已经隐藏(true),加载完成后执行Navigator.of(context).pop();
+  final bool isDialogHide;
 
   _DialogBody(
-      {Key key, this.showWidget, this.showWidgetColor: const Color(0xFF6278FF)})
+      {Key key,
+      this.showWidget,
+      this.showWidgetColor: const Color(0xFF6278FF),
+      this.isDialogHide: false})
       : super(key: key);
 
-  update({Widget showWidget}) {
-    _dialogBodyState.update(showWidget: showWidget);
-  }
-
   @override
-  _DialogBodyState createState() => _dialogBodyState;
+  DialogBodyState createState() => DialogBodyState();
 }
 
-class _DialogBodyState extends State<_DialogBody> {
+class DialogBodyState extends State<_DialogBody> {
   Widget _showWidget;
 
   update({Widget showWidget}) {
     if (showWidget != null) {
       _showWidget = showWidget;
     }
-
-    setState(() {});
+    //没有执行initState方法时,mounted为false
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -202,22 +226,15 @@ class _DialogBodyState extends State<_DialogBody> {
     } else {
       _showWidget = widget.showWidget;
     }
+    Timer.run(() {
+      if (widget.isDialogHide) {
+        debugPrint(
+            'CustomizeLoadingDialog---->DialogBody Hide isDialogHide:${widget.isDialogHide}');
+        _isShow = false;
+        Navigator.of(context).pop();
+      }
+    });
   }
-
-/*  @override
-  void dispose() {
-    if (_isShow) {
-      _isShow = false;
-      debugPrint('CustomizeLoadingDialog--> _DialogBody dispose...');
-      //判断当前页面能否进行pop操作，并返回bool值
-      try {
-        if (Navigator.of(_dismissingContext).canPop()) {
-          Navigator.of(_dismissingContext).pop();
-        }
-      } catch (_) {}
-    }
-    super.dispose();
-  }*/
 
   @override
   Widget build(BuildContext context) {
